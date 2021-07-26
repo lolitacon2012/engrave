@@ -1,0 +1,35 @@
+.container {
+    width: 100%;
+    height:48px;
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    background-image: linear-gradient(to right, var(--cafe-colors-cyan-700), var(--cafe-colors-purple-500));
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+}
+.rightContainer {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.rightContainer > * {
+    margin-right: 12px;
+}
+.rightContainer :last-child{
+    margin-right: 0;
+}
+
+.logo {
+    font-weight: 900;
+    font-size: 1.2rem;
+}
+.avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 20px;
+}

@@ -1,0 +1,22 @@
+{
+    "general_hello": {
+        "EN_US": "Hello!",
+        "ZH_CN": "你好！"
+    },
+    "homepage_title": {
+        "EN_US": "Welcome to Qahva!",
+        "ZH_CN": "欢迎使用Qahva！"
+    },
+    "global_app_name": {
+        "EN_US": "Qahva",
+        "ZH_CN": "Qahva"
+    },
+    "navbar_signin": {
+        "EN_US": "Sign In",
+        "ZH_CN": "登录"
+    },
+    "navbar_signout": {
+        "EN_US": "Sign Out",
+        "ZH_CN": "退出登录"
+    }
+}
