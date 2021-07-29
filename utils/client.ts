@@ -25,15 +25,15 @@ class HttpClient {
       const parsedResult = JSON.parse(localStorage.getItem(`_request_cahce_${uniqueRequestId}`) || 'null');
       if (!parsedResult) {
         const result = await axios.post('/api/rpc', data);
-        localStorage.setItem(`_request_cahce_${uniqueRequestId}`, JSON.stringify({ ...result.data, _cached: true, _cachedTime: new Date().getTime() }));
+        localStorage.setItem(`_request_cahce_${uniqueRequestId}`, JSON.stringify({ data: result.data }));
         onNewResultReceived && onNewResultReceived(result.data);
         return result.data;
       } else {
         axios.post('/api/rpc', data).then((result) => {
-          uniqueRequestId && localStorage.setItem(`_request_cahce_${uniqueRequestId}`, JSON.stringify({ ...result.data, _cached: true, _cachedTime: new Date().getTime() }));
+          uniqueRequestId && localStorage.setItem(`_request_cahce_${uniqueRequestId}`, JSON.stringify({ data: result.data }));
           onNewResultReceived && onNewResultReceived(result.data);
         })
-        return parsedResult;
+        return parsedResult.data;
       }
 
     } else {

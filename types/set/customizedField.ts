@@ -9,6 +9,8 @@ type CustomizedField = {
     name: string;
     type: CustomizedFieldType;
     creator_id: string;
+    creator_name: string;
+    creator_avatar?: string;
     customized_field_options?: string[];
 }
 

@@ -6,12 +6,13 @@
     box-shadow: 12px 12px rgba(0, 0, 0, 0.12);
     overflow: hidden;
     cursor: pointer;
-    transition: transform 0.3s;
+    transition: all 0.3s;
 }
 
 
 .deckCard:hover {
-    transform: scale(1.04);
+    transform: translateX(-4px) translateY(-4px);
+    box-shadow: 18px 18px 4px 2px rgba(0, 0, 0, 0.12);
 }
 
 .deckCard > .imageContainer {

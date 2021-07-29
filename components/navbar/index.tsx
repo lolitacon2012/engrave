@@ -9,7 +9,7 @@ const Navbar = () => {
     const { loading, name, email, avatar} = store.user || {};
     return <div className={styles.container}>
         <span className={styles.logo}>{t('global_app_name')} ☕</span>
-        {!loading && <div className={styles.rightContainer}>
+        {(loading===false) && <div className={styles.rightContainer}>
             {name && <span>{name}</span>}
             {!name && <Button onClick={() => {
                 signIn();

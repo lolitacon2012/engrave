@@ -18,5 +18,29 @@
     "navbar_signout": {
         "EN_US": "Sign Out",
         "ZH_CN": "退出登录"
+    },
+    "deck_page_continue_study": {
+        "EN_US": "Continue Study",
+        "ZH_CN": "继续学习"
+    },
+    "deck_page_flashcard": {
+        "EN_US": "Flashcard",
+        "ZH_CN": "单词卡片"
+    },
+    "deck_page_settings": {
+        "EN_US": "Settings",
+        "ZH_CN": "进度设置"
+    },
+    "deck_page_edit": {
+        "EN_US": "Edit Deck",
+        "ZH_CN": "编辑词库"
+    },
+    "deck_page_created_by": {
+        "EN_US": "Created by ",
+        "ZH_CN": "词库作者："
+    },
+    "general_anonymous": {
+        "EN_US": "Anonymous",
+        "ZH_CN": "匿名"
     }
 }

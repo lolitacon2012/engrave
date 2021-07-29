@@ -1,4 +1,3 @@
-import Navbar from "cafe-components/navbar";
 import Container from "cafe-ui/pageContainer";
 import styles from "./home.module.css";
 import { useRouter } from 'next/router'
@@ -21,22 +20,23 @@ export default function Home() {
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {
                     ids: allDecks
                 }
-            }).then((result: Deck[]) => {
+            }, `RPC_GET_DECK_BY_IDS[${allDecks.join(',')}]`, ((result: Deck[]) => {
+                setDecks(result);
+            })).then((result: Deck[]) => {
                 setDecks(result);
             })
         }
     }, [store.user])
-
     const renderDeckCard = () => {
         return decks.map((deck) => {
             return <div className={styles.deckCard} key={`deck_card_${deck.id}`} onClick={() => {
-                router.push(`/study_set/${deck.id}`)
+                router.push(`/deck/${deck.id}`)
             }}>
                 <div className={styles.imageContainer}>
                     <div className={styles.titleImage}>
                         {
-                        // eslint-disable-next-line @next/next/no-img-element
-                        deck.avatar.length > 2 ? <img src={deck.avatar} /> : <span>{deck.avatar}</span>
+                            // eslint-disable-next-line @next/next/no-img-element
+                            deck.avatar.length > 2 ? <img src={deck.avatar} /> : <span>{deck.avatar}</span>
                         }
                     </div>
                 </div>
@@ -52,11 +52,10 @@ export default function Home() {
 
     return (
         <>
-            <Navbar />
             <Container>
                 <h2>Currently Learning</h2>
                 <div className={styles.deckCardsRow}>
-                {renderDeckCard()}
+                    {renderDeckCard()}
                 </div>
             </Container>
         </>

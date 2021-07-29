@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import styles from './index.module.css'
 import t from 'cafe-utils/i18n';
-import Navbar from 'cafe-components/navbar';
 import { useRouter } from 'next/router'
 
 export default function Home() {
@@ -13,7 +12,6 @@ export default function Home() {
         <meta name="description" content="Qahva - Free flashcard" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <Navbar />
       <div className={styles.container}>
         <main className={styles.main}>
           <h1 className={styles.title}>

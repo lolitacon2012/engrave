@@ -3,6 +3,8 @@ type StudyProgress = {
     deck_id: string;
     started_at: number;
     creator_id: string;
+    creator_name: string;
+    creator_avatar: string;
     single_section_size: number;
     progress: {
         word_id: string;
