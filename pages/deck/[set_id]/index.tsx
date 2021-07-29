@@ -84,7 +84,7 @@ export default function DeckPage() {
             }} />
         </div>
         <div className={styles.wordListContainer}>
-            {searchKeyword && <h2>Showing {sortedFilteredWordList.length} results for keyword "{searchKeyword}"</h2>}
+            {searchKeyword && <h2>Showing {sortedFilteredWordList.length} results for keyword &quot;{searchKeyword}&quot;:</h2>}
             <AutoSizer>
                 {({ height, width }) => (
                     <List
