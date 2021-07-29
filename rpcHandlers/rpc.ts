@@ -1,0 +1,4 @@
+export const RPC = {
+    RPC_GET_DECK_BY_IDS: 'RPC_GET_DECK_BY_IDS',
+    RPC_GET_USER_INFO: 'RPC_GET_USER_INFO'
+}

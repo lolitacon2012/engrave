@@ -19,6 +19,9 @@
       "cafe-components/*": ["components/*"],
       "cafe-utils/*": ["utils/*"],
       "cafe-ui/*": ["ui-framework/*"],
+      "cafe-rpc/*": ["rpcHandlers/*"],
+      "cafe-middleware/*": ["middleware/*"],
+      "cafe-store/*": ["storeContext/*"],
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

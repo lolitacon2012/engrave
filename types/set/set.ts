@@ -6,6 +6,8 @@ type Deck = {
     created_at: number;
     edited_at: number;
     words: Word[];
+    name: string;
+    avatar: string;
 }
 
 export type { Deck };

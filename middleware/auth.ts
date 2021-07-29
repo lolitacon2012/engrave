@@ -5,7 +5,7 @@ const withAuth = (handler: NextApiHandler) => {
     return async (req: NextApiRequest,
         res: NextApiResponse) => {
         const session = await getSession({ req });
-        if (!session) {
+        if (!session || !session.user?.email) {
             return res.status(401).json({
                 success: false,
                 message: 'Please log in to get access.',

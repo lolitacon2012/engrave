@@ -1,9 +1,11 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from './index.module.css'
 import t from 'cafe-utils/i18n';
 import Navbar from 'cafe-components/navbar';
+import { useRouter } from 'next/router'
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div>
       <Head>
@@ -23,12 +25,16 @@ export default function Home() {
           </p>
 
           <div className={styles.grid}>
-            <a href="https://nextjs.org/docs" className={styles.card}>
+            <a className={styles.card}>
               <h2>Create ✍</h2>
               <p>You can create flashcard decks after login, easy and fast.</p>
             </a>
 
-            <a href="https://nextjs.org/learn" className={styles.card}>
+
+            <a onClick={(e) => {
+              e.preventDefault();
+              router.push('/home')
+            }} className={styles.card}>
               <h2>Learn 🏆</h2>
               <p>Study a deck and keep track of your progress.</p>
             </a>
