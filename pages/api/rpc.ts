@@ -1,4 +1,3 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import withAuth from './../../middleware/auth';
 import RPC_HANDLERS from './../../rpcHandlers';
@@ -23,25 +22,6 @@ const handler = async (
   }else{
     res.json({error: 404, errorMessage: "No such handler is found."})
   }
-
-  // const email = session?.user?.email || '' as string;
-  // const { db } = await connectToDatabase();
-  // let user = null;
-  // if (email) {
-  //   user = await db.collection("users")
-  //     .findOne({ id: email })
-  // }
-  // if(!user){
-  //   user = {
-  //     id: email,
-  //     registerTime: new Date().getTime(),
-  //     owningSetIds: [],
-  //     studyingSetIds: [],
-  //     progress: [],
-  //   }
-  //   await db.collection("users")
-  //     .insertOne(user);
-  // }
 }
 
 export default withAuth(handler);

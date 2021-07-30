@@ -10,6 +10,7 @@ type Deck = {
     words: Word[];
     name: string;
     avatar: string;
+    color?: string;
 }
 
 export type { Deck };

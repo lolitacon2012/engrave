@@ -1,0 +1,66 @@
+.deckCard {
+    background-color: white;
+    min-height: 576px;
+    min-width: 256px;
+    border-radius: 12px;
+
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.deckCard.withNormalShadow {
+    box-shadow: 12px 12px rgba(0, 0, 0, 0.12);
+}
+
+.deckCard.withSmallShadow {
+    box-shadow: 4px 4px rgba(0, 0, 0, 0.12);
+}
+
+.deckCard.clickable {
+    cursor: pointer;
+}
+
+.deckCard.clickable:hover {
+    transform: translateX(-4px) translateY(-4px);
+    box-shadow: 18px 18px 4px 2px rgba(0, 0, 0, 0.12);
+}
+
+.deckCard > .imageContainer {
+    width: 256px;
+    height: 128px;
+    background-color: var(--cafe-colors-pink);
+    position: relative;
+    margin-bottom: 76px;
+}
+
+.deckCard > .imageContainer > .titleImage {
+    width: 128px;
+    height: 128px;
+    background-color: var(--cafe-colors-pink);
+    position: absolute;
+    top: 64px;
+    left: 64px;
+    border-radius: 12px;
+    color: white;
+    border: solid 4px white;
+    display: flex;
+    justify-content: center;
+    line-height: 108px;
+    text-align: center;
+    font-size: 64px;
+    overflow: hidden;
+}
+
+.deckCard > .imageContainer > .titleImage > img{
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-width: 4px;
+}
+
+.deckCard > .contentContainer {
+    padding: 0 12px 12px 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}

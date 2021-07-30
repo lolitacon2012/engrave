@@ -1,15 +1,24 @@
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-  background-color: var(--cafe-colors-background);
-  color: var(--cafe-colors-black);
+  padding           : 0;
+  margin            : 0;
+  background-color  : var(--cafe-colors-background);
+  color             : var(--cafe-colors-black);
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width   : none;
+  /* Firefox */
+  font-family       : var(--font-hei);
 }
 
+html::-webkit-scrollbar,
+html::-webkit-scrollbar {
+  display: none;
+}
+
+
 a {
-  color: inherit;
+  color          : inherit;
   text-decoration: none;
 }
 
@@ -17,11 +26,13 @@ a {
   box-sizing: border-box;
 }
 
-:host,:root {
+:host,
+:root {
   --cafe-colors-purple-500: #805AD5;
-  --cafe-colors-cyan-700: #0987A0;
+  --cafe-colors-cyan-700  : #0987A0;
   --cafe-colors-background: #E6EBE6;
-  --cafe-colors-pink: #F6B5B5;
-  --cafe-colors-black: #3D3F44;
-  --cafe-colors-yellow: #FFDC94;
+  --cafe-colors-pink      : #F6B5B5;
+  --cafe-colors-black     : #3D3F44;
+  --cafe-colors-yellow    : #FFDC94;
+  --font-hei              : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }

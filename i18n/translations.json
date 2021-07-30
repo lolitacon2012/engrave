@@ -4,8 +4,12 @@
         "ZH_CN": "你好！"
     },
     "homepage_title": {
-        "EN_US": "Welcome to Qahva",
-        "ZH_CN": "欢迎使用Qahva"
+        "EN_US": "Qahva",
+        "ZH_CN": "Qahva"
+    },
+    "homepage_subtitle": {
+        "EN_US": "Vocabulary learning tool, designed for linguaphiles, by a linguaphile.",
+        "ZH_CN": "由语言爱好者设计的高效率单词学习工具"
     },
     "global_app_name": {
         "EN_US": "Qahva",
@@ -29,11 +33,15 @@
     },
     "deck_page_settings": {
         "EN_US": "Settings",
-        "ZH_CN": "进度设置"
+        "ZH_CN": "设置"
     },
     "deck_page_edit": {
         "EN_US": "Edit Deck",
         "ZH_CN": "编辑词库"
+    },
+    "deck_page_exit_edit": {
+        "EN_US": "Exit Edit",
+        "ZH_CN": "退出编辑"
     },
     "deck_page_created_by": {
         "EN_US": "Created by ",
@@ -42,5 +50,9 @@
     "general_anonymous": {
         "EN_US": "Anonymous",
         "ZH_CN": "匿名"
+    },
+    "deck_page_search_tip": {
+        "EN_US": "Search word or meaning",
+        "ZH_CN": "搜索单词或释意"
     }
 }

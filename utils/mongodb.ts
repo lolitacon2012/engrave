@@ -1,4 +1,4 @@
-import { MongoClient, MongoClientOptions } from 'mongodb'
+import { Db, MongoClient, MongoClientOptions } from 'mongodb'
 
 const MONGODB_URI = process.env.MONGODB_URI || '';
 
@@ -7,6 +7,10 @@ if (!MONGODB_URI) {
     'Please define the MONGODB_URI environment variable inside .env.local'
   )
 }
+
+declare namespace global {
+  const mongo: { conn: { client: MongoClient; db: Db; }, promise: Promise<{ client: MongoClient; db: Db; }> }
+};
 
 /**
  * Global is used here to maintain a cached connection across hot reloads
@@ -18,7 +22,7 @@ let cached = global.mongo
 
 if (!cached) {
   //@ts-ignore
-  cached = global.mongo = { conn: null, promise: null }
+  cached = global.mongo = { conn: null, promise: null };
 }
 
 export async function connectToDatabase() {
@@ -37,7 +41,7 @@ export async function connectToDatabase() {
         client,
         db: client.db("dev_cafe_engrave"),
       }
-    })
+    }) as Promise<{ client: MongoClient; db: Db; }>;
   }
   cached.conn = await cached.promise
   return cached.conn

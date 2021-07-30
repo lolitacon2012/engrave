@@ -1,5 +1,9 @@
-type GetDeckByIdsRequest = {
+import { Deck, Word } from "cafe-types/set";
+
+type GetDeckByIdsRequestData = {
     ids: string[]
 }
 
-export type { GetDeckByIdsRequest };
+type CreateDeckRequestData = { deck: Partial<Omit<Deck, "words">>, words: Word[] };
+
+export type { GetDeckByIdsRequestData, CreateDeckRequestData };
