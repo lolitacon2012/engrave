@@ -5,7 +5,6 @@ import { connectToDatabase } from 'cafe-utils/mongodb';
 const handler = async (
     data: UpdateWordsByIdsRequestData
 ) => {
-    console.log(data)
     let words = data.words || [];
     const now = new Date().getTime();
     words = words.map(w => {

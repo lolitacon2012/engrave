@@ -5,5 +5,8 @@ type GetDeckByIdsRequestData = {
 }
 
 type CreateDeckRequestData = { deck: Partial<Omit<Deck, "words">>, words: Word[] };
-
-export type { GetDeckByIdsRequestData, CreateDeckRequestData };
+type UpdateDeckRequestData = {
+    id: string,
+    wordIds: string[]
+}
+export type { GetDeckByIdsRequestData, CreateDeckRequestData, UpdateDeckRequestData };

@@ -3,8 +3,9 @@ import { WordContent } from "cafe-types/set"
 import client from "./client";
 
 const WORD_ID_PENDING = 'WORD_ID_PENDING';
+const DECK_WORD_ID_LIST = 'DECK_WORD_ID_LIST';
 
-export const addDeckUpdatePool = (wordId: string, content: WordContent) => {
+export const addDeckWordUpdatePool = (wordId: string, content: WordContent) => {
     const existingPendingWord = JSON.parse(localStorage.getItem(wordId) || '{}');
     existingPendingWord.content = content;
     localStorage.setItem(wordId, JSON.stringify(existingPendingWord));
@@ -13,12 +14,25 @@ export const addDeckUpdatePool = (wordId: string, content: WordContent) => {
         localStorage.setItem(WORD_ID_PENDING, JSON.stringify([...pendingWordIds, wordId]));
     }
 }
-export const commit = (deckId: string) => {
+
+export const addDeckWordInsertPool = (wordIds: string[]) => {
+    localStorage.setItem(DECK_WORD_ID_LIST, JSON.stringify(wordIds));
+}
+
+export const commitDeckChange = (deckId: string) => {
     const pendingWordIds = JSON.parse(localStorage.getItem(WORD_ID_PENDING) || '[]');
     const pendingWords = pendingWordIds.map((id: string) => {
-        return {...JSON.parse(localStorage.getItem(id) || 'null'), id }
+        return { ...JSON.parse(localStorage.getItem(id) || 'null'), id }
     })
-    
+    const newWordIdList = JSON.parse(localStorage.getItem(DECK_WORD_ID_LIST) || 'null');
+    newWordIdList && client.callRPC({
+        rpc: RPC.RPC_UPDATE_DECK_BY_ID,
+        data: {
+            id: deckId,
+            wordIds: newWordIdList,
+        }
+    });
+
     client.callRPC({
         rpc: RPC.RPC_UPDATE_WORDS_BY_IDS,
         data: {
@@ -27,6 +41,7 @@ export const commit = (deckId: string) => {
         }
     });
     
+    localStorage.removeItem(DECK_WORD_ID_LIST);
     localStorage.removeItem(WORD_ID_PENDING);
     pendingWordIds.forEach((id: string) => localStorage.removeItem(id));
     const deckRelatedCacheEntries = Object.entries(localStorage);

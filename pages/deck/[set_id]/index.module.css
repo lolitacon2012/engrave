@@ -42,7 +42,8 @@
     font-size : 1.5rem;
 }
 
-.wordWord>input, .wordMeaning>input {
+.wordWord>input,
+.wordMeaning>input {
     text-align      : left;
     width           : 100%;
     border          : none;
@@ -57,7 +58,8 @@
     background-color: rgba(0, 0, 0, 0.2);
 }
 
-.wordWord>input:focus, .wordMeaning>input:focus {
+.wordWord>input:focus,
+.wordMeaning>input:focus {
     outline: none;
 }
 
@@ -81,6 +83,31 @@
     overflow        : hidden;
 }
 
+
+
+.wordControllers {
+    display         : flex;
+    padding         : 24px;
+    font-size       : 1.5rem;
+    justify-content : center;
+    align-items     : center;
+    background-color: white;
+    height          : 100%;
+    line-height     : 1rem;
+    color           : var(--cafe-colors-grey);
+}
+
+.wordControllers>* {
+    cursor: pointer;
+}
+
+.wordControllers>*:hover{
+    color           : var(--cafe-colors-black);
+}
+
+.wordControllers> :not(:last-child) {
+    margin-right: 12px;
+}
 
 .searchTitle {
     height     : 28px;

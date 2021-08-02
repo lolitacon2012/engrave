@@ -5,4 +5,13 @@ type UpdateWordsByIdsRequestData = {
     words: { id: string, content: WordContent }[]
 }
 
-export type { UpdateWordsByIdsRequestData };
+type CreateWordsRequestData = {
+    set_id: string;
+    contents: WordContent[]
+}
+
+type CreateWordsResponseData = {
+    newIds: string[]
+}
+
+export type { UpdateWordsByIdsRequestData, CreateWordsRequestData, CreateWordsResponseData };

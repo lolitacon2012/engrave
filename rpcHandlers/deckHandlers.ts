@@ -1,12 +1,12 @@
 
-import { CreateDeckRequestData } from 'cafe-types/rpc/deck';
+import { CreateDeckRequestData, UpdateDeckRequestData } from 'cafe-types/rpc/deck';
 import { Word } from 'cafe-types/set';
 import { connectToDatabase } from 'cafe-utils/mongodb';
 import type { NextApiRequest } from 'next';
 import { getSession } from 'next-auth/client'
 import { v4 as uuid } from 'uuid';
 
-const handler = async (
+const createDeck = async (
   data: CreateDeckRequestData,
   req: NextApiRequest
 ) => {
@@ -48,8 +48,25 @@ const handler = async (
       {
         $push: { owningSetIds: newDeck.id },
       }), db.collection("words")
-      .insertMany(newWords)])
+        .insertMany(newWords)])
   return newDeck;
 }
 
-export default handler;
+const updateDeckById = async (
+  data: UpdateDeckRequestData
+) => {
+  const { id, wordIds } = data;
+  const now = new Date().getTime();
+  const { db } = await connectToDatabase();
+
+  await db.collection("decks").updateOne(
+    { "id": id },
+    {
+      $set: {
+        "edited_at": now, "words": wordIds
+      }
+    }
+  )
+}
+
+export { createDeck, updateDeckById };
