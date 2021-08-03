@@ -23,6 +23,7 @@
       "cafe-rpc/*": ["rpcHandlers/*"],
       "cafe-middleware/*": ["middleware/*"],
       "cafe-store/*": ["storeContext/*"],
+      "cafe-constants/*": ["cafe-constants/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],

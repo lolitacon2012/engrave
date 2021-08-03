@@ -2,7 +2,8 @@ import { WordContent } from "cafe-types/set";
 
 type UpdateWordsByIdsRequestData = {
     id: string;
-    words: { id: string, content: WordContent }[]
+    words: { id: string, content: WordContent }[];
+    wordIdsToDelete?: string[];
 }
 
 type CreateWordsRequestData = {

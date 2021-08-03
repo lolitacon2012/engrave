@@ -101,13 +101,64 @@
     cursor: pointer;
 }
 
-.wordControllers>*:hover{
-    color           : var(--cafe-colors-black);
+.wordControllers>*:hover {
+    color: var(--cafe-colors-black);
 }
 
 .wordControllers> :not(:last-child) {
     margin-right: 12px;
 }
+
+@keyframes highlightWordAnimation {
+    0% {
+        transform: translatey(-0px);
+    }
+
+    20% {
+        transform: translatey(-45px);
+    }
+
+    40% {
+        transform: translatey(10px);
+    }
+
+    60% {
+        transform: translatey(-20px);
+    }
+
+    80% {
+        transform: translatey(-5px);
+    }
+
+    100% {
+        transform: translatey(-0px);
+    }
+}
+
+.highlightWord {
+    animation-name           : highlightWordAnimation;
+    animation-duration       : 0.3s;
+    animation-timing-function: ease-out;
+}
+
+.emptyWordList {
+    width         : 100%;
+    display       : flex;
+    flex-direction: column;
+    text-align    : center;
+
+}
+
+.emptyWordList>button {
+    margin: 24px auto;
+}
+
+.emptyWordList>h1 {
+    margin   : 108px 0 32px 0;
+    font-size: 64px;
+    color    : var(--cafe-colors-grey);
+}
+
 
 .searchTitle {
     height     : 28px;

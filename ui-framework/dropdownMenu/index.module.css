@@ -1,0 +1,43 @@
+.dropdownMenuIconContainer {
+    position: relative;
+}
+
+.dropdownMenuIconContainer>.dropdownMenuOuterContainer {
+    display         : none;
+    position        : absolute;
+    right           : 0;
+    top             : 100%;
+    background-color: transparent;
+    color           : var(--cafe-colors-black);
+    padding-top     : 8px;
+    transform       : translateY(-6px);
+}
+
+.dropdownMenuInnerContainer {
+    min-width       : 96px;
+    background-color: white;
+    border-radius   : 12px;
+    min-height      : 64px;
+    color           : var(--cafe-colors-black);
+    font-size       : 1rem;
+    overflow        : hidden;
+    display         : block;
+    padding         : 8px 0;
+    box-shadow      : 4px 4px rgba(0, 0, 0, 0.12);
+}
+
+.dropdownMenuInnerContainer>.dropdownMenuItem {
+    background-color: white;
+    margin          : 4px 0;
+    padding         : 12px;
+}
+
+.dropdownMenuInnerContainer>.dropdownMenuItem:hover {
+    background-color: var(--cafe-colors-pink);
+    color           : white;
+    cursor          : pointer;
+}
+
+.dropdownMenuIconContainer.onHoverMenuIcon:hover>.dropdownMenuOuterContainer {
+    display: block;
+}

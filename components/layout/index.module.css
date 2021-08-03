@@ -1,0 +1,27 @@
+.loadingScreen {
+    position: fixed;
+    z-index: 9000;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: white;
+    font-size: 3rem;
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    transition: all 0.3s ease-out;
+    flex-direction: column;
+    color: var(--cafe-colors-pink);
+}
+
+.loadingScreen > p {
+    font-size: 1rem;
+}
+
+.fadingOut {
+    opacity: 0;
+    transform: scale(2);
+}

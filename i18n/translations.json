@@ -3,6 +3,10 @@
         "EN_US": "Hello!",
         "ZH_CN": "你好！"
     },
+    "general_current_locale": {
+        "EN_US": "En",
+        "ZH_CN": "中"
+    },
     "homepage_title": {
         "EN_US": "Qahva",
         "ZH_CN": "Qahva"
@@ -51,8 +55,28 @@
         "EN_US": "Anonymous",
         "ZH_CN": "匿名"
     },
+    "general_delete": {
+        "EN_US": "Delete",
+        "ZH_CN": "删除"
+    },
+    "general_cancel": {
+        "EN_US": "Cancel",
+        "ZH_CN": "取消"
+    },
     "deck_page_search_tip": {
         "EN_US": "Search word or meaning",
         "ZH_CN": "搜索单词或释意"
+    },
+    "deck_page_delete_modal_text": {
+        "EN_US": "Are you sure to delete this word?",
+        "ZH_CN": "您确定要删除该词条？"
+    },
+    "deck_page_empty_list":{
+        "EN_US": "This deck has no word added yet.",
+        "ZH_CN": "此单词集尚未添加任何词条。"
+    },
+    "deck_page_add_first_word":{
+        "EN_US": "Add first word",
+        "ZH_CN": "添加第一个词条"
     }
 }

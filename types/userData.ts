@@ -1,14 +1,16 @@
-import { Session } from "next-auth";
 import { StudyProgress } from "./study";
-
-export type UserData = {
-    loading: boolean;
-    id: string,
-    registerTime: number,
-    owningSetIds: string[],
-    studyingSetIds: string[],
-    progress: StudyProgress[],
-    email: string,
-    avatar: string,
-    name: string,
-  }
+export type ChangableUserData = {
+  owningSetIds: string[],
+  studyingSetIds: string[],
+  progress: StudyProgress[],
+  alias: string,
+  locale: string,
+}
+export type UserData = ChangableUserData & {
+  loading: boolean;
+  id: string,
+  registerTime: number,
+  email: string,
+  avatar: string,
+  name: string,
+}

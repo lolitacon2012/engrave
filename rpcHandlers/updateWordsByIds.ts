@@ -6,6 +6,7 @@ const handler = async (
     data: UpdateWordsByIdsRequestData
 ) => {
     let words = data.words || [];
+    let wordIdsToDelete = data.wordIdsToDelete || [];
     const now = new Date().getTime();
     words = words.map(w => {
         return {
@@ -23,7 +24,16 @@ const handler = async (
             }
         })
     }
-    await db.collection("words").bulkWrite(bulkArr);
+    for (const id of wordIdsToDelete) {
+        bulkArr.push({
+            deleteOne: {
+                "filter": { "id": id }
+            }
+        })
+    }
+    if (bulkArr.length > 0) {
+        await db.collection("words").bulkWrite(bulkArr);
+    }
 }
 
 export default handler;

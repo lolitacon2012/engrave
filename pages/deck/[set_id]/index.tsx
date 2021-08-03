@@ -6,25 +6,29 @@ import { RPC } from 'cafe-rpc/rpc';
 import { GlobalStoreContext } from 'cafe-store/index';
 import client from 'cafe-utils/client';
 import { Deck, Word } from 'cafe-types/set'
-import t from 'cafe-utils/i18n';
+
 import Button from 'cafe-ui/button';
 import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
-import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave } from "react-icons/io5";
+import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool } from 'cafe-utils/deckUpdatePoolUtils';
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline } from "react-icons/io5";
 import swal from 'sweetalert';
+import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
+import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 
 export default function DeckPage() {
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
+    const t = store.t;
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>('');
     const [loading, setIsLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [editingWord, setEditingWordValue] = useState<Word>();
+    const [scrollToIndex, setScrollToIndex] = useState<number>();
     const setEditingWord = (w?: Word) => {
         setEditingWordValue(w || undefined);
         setTimeout(() => {
@@ -33,8 +37,9 @@ export default function DeckPage() {
     }
     const [pendingNewWordTempIds, setPendingNewWordTempIds] = useState<string[]>([]);
     const [oldNewWordIdmapping, setOldNewWordIdmapping] = useState<{ [key: string]: string }>({});
-    const currentDeckId = router.query?.set_id || '';
+    const currentDeckId = router.query?.set_id as string || '' as string;
     const isOwnDeck = deck?.creator_id === store.user?.id;
+    const isEmptyDeck = !deck?.words?.length;
     const calculateDeckList = () => {
         let originalOrder = deck?.words || [];
         if (!!debouncedSearchKeyword) {
@@ -50,7 +55,7 @@ export default function DeckPage() {
     const onEditWord = (word: string, meaning: string, wordId: string) => {
         const isTempWord = pendingNewWordTempIds.includes(wordId);
 
-        // must be UPDATE, can not handle ADD new word
+        // must be UPDATE, can not handle ADD or DELETE word
         const newWords = deck?.words || [];
         const originalWordIndex = newWords.findIndex((w) => w.id === wordId);
         const originalWord = newWords[originalWordIndex] || {};
@@ -76,21 +81,26 @@ export default function DeckPage() {
         swal({
             text: t('deck_page_delete_modal_text'),
             icon: "warning",
-            buttons: [true, true],
+            buttons: [t("general_cancel"), t("general_delete")],
             dangerMode: true,
         })
             .then((willDelete) => {
                 if (willDelete && deck?.words) {
+                    const newWords = deck?.words.filter(word => word.id !== wordId);
                     setDeck({
                         ...(deck || {}),
-                        words: deck?.words.filter(word => word.id !== wordId)
+                        words: newWords
                     })
-                    // add to delete pool
+                    addDeckWordInsertPool(newWords.map(w => w.id));
+                    addWordDeletePool(wordId);
+                    debouncedBatchUpdateDeck(currentDeckId);
                 }
             });
     }
 
-    const onAddWord = async (afterWordId: string) => {
+    const onAddWord = async (wordId?: string, addToLast?: boolean) => {
+        const afterWordId = wordId || sortedFilteredWordList[sortedFilteredWordList.length - 1]?.id || '';
+        const addToFront = !wordId && !addToLast;
         setSearchKeyword('');
         setDebouncedSearchKeyword('');
         const tempUuid = uuid();
@@ -106,7 +116,7 @@ export default function DeckPage() {
             }
         } as Word;
         const originalWords = deck?.words || [];
-        const index = originalWords.findIndex(word => word.id === afterWordId);
+        const index = addToFront ? 0 : (addToLast ? originalWords.length - 1 : originalWords.findIndex(word => word.id === afterWordId));
         setPendingNewWordTempIds([...pendingNewWordTempIds, tempUuid]);
         const tempNewWordsList = [...(originalWords.slice(0, index + 1)), newEmptyWord, ...(originalWords.slice(index + 1))];
         setDeck({
@@ -136,9 +146,34 @@ export default function DeckPage() {
     const onSearch = useCallback(debounce((keyword: string) => {
         setDebouncedSearchKeyword(keyword);
     }, 500), [])
-    const debouncedBatchUpdateDeck = useCallback(debounce((currentDeckId: string) => {
-        commitDeckChange(currentDeckId);
-    }, 1000), [])
+    const debouncedBatchUpdateDeck = useCallback(debounce((currentDeckId?: string) => {
+        currentDeckId && commitDeckChange(currentDeckId);
+    }, 500), [])
+
+    const onTabWithWordListLastWord = (e: KeyboardEvent) => {
+        if (document.activeElement?.id === 'editing_meaning_input_last') {
+            e.preventDefault();
+            if (!!editingWord) {
+                setEditingWord(undefined);
+            }
+            onAddWord('', true);
+        }
+    }
+
+    const onTabKeyDown = (e: KeyboardEvent) => {
+        const key = e.key || e.keyCode;
+        if (key === 9 || key === "Tab") {
+            onTabWithWordListLastWord(e);
+        }
+    }
+
+    // shortkeys
+    useEffect(() => {
+        document.addEventListener('keydown', onTabKeyDown)
+        return () => { document.removeEventListener('keydown', onTabKeyDown) }
+    }, [sortedFilteredWordList])
+
+    // listening on new word's new id
     useEffect(() => {
         const keys = Object.keys(oldNewWordIdmapping);
         if (keys.length > 0) {
@@ -167,6 +202,7 @@ export default function DeckPage() {
             setOldNewWordIdmapping({});
             setPendingNewWordTempIds(pendingNewWordTempIds.filter(i => !keys.includes(i)));
             addDeckWordInsertPool(newWordIds);
+            debouncedBatchUpdateDeck(deck?.id)
         }
     }, [oldNewWordIdmapping])
 
@@ -186,33 +222,50 @@ export default function DeckPage() {
             })
         }
     }, [store.user, currentDeckId])
+
+    useEffect(() => {
+        deck?.id && commitDeckChange(deck?.id);
+    }, [deck?.id])
+
     const rowRenderer = ({ key, index, style }: { key: string, index: number, style: any }) => {
         const content = sortedFilteredWordList[index].content;
         const wordId = sortedFilteredWordList[index].id;
         const isEditingThisWord = editingWord?.id === wordId;
+        const isLastWord = wordId === sortedFilteredWordList[sortedFilteredWordList.length - 1].id;
+        const highlight = index === scrollToIndex;
+        const isDev = (process.env.NODE_ENV) === 'development';
         return (
-            <div key={key} style={style} className={styles.wordRowOuterContainer}>
+            <div key={key} style={style} data-word-id={isDev ? wordId : undefined} className={cn(styles.wordRowOuterContainer, highlight && styles.highlightWord)}>
                 <div className={styles.wordRow}>
                     {<div className={styles.wordWord}>{(editing || isEditingThisWord) ? <input id={isEditingThisWord ? 'editing_word_input' : undefined} value={content.word} onChange={(e) => {
                         onEditWord(e.target.value, content.meaning, wordId)
-                    }} /> : content.word}</div>}
-                    {<div className={styles.wordMeaning}>{(editing || isEditingThisWord) ? <input value={content.meaning} onChange={(e) => {
+                    }} /> : decodeRubyWithFallback(content.word)}</div>}
+                    {<div className={styles.wordMeaning}>{(editing || isEditingThisWord) ? <input id={isLastWord ? 'editing_meaning_input_last' : undefined} value={content.meaning} onChange={(e) => {
                         onEditWord(content.word, e.target.value, wordId)
                     }} /> : <span>{content.meaning}</span>}</div>}
-                    <div className={styles.wordControllers}>
-                        {isEditingThisWord && <div className={styles.wordController}>{<IoSave onClick={() => {
+                    {isOwnDeck && <div className={styles.wordControllers}>
+                        {isEditingThisWord && !editing && <div className={styles.wordController}>{<IoSave onClick={() => {
                             setEditingWord(undefined);
                         }} />}</div>}
-                        {!isEditingThisWord && <div className={styles.wordController} onClick={() => {
+                        {!isEditingThisWord && !editing && <div className={styles.wordController} onClick={() => {
                             setEditingWord(sortedFilteredWordList[index]);
                         }}>{<IoPencil />}</div>}
                         <div className={styles.wordController}>{<IoTrashBin onClick={() => {
                             onDeleteWord(wordId);
                         }} />}</div>
-                        {!editingWord && <div className={styles.wordController}>{<IoAddCircle onClick={() => {
+                        {(editing || !editingWord) && <div className={styles.wordController}>{<IoAddCircle onClick={() => {
                             onAddWord(wordId);
                         }} />}</div>}
-                    </div>
+                        {!isEditingThisWord && !editing && debouncedSearchKeyword && <div className={styles.wordController}>{<IoLocate onClick={() => {
+                            const indexInOriginalList = deck?.words?.findIndex(w => w.id === wordId) || 0;
+                            setSearchKeyword('');
+                            setDebouncedSearchKeyword('');
+                            setScrollToIndex(indexInOriginalList);
+                            setTimeout(() => {
+                                setScrollToIndex(undefined)
+                            }, 500)
+                        }} />}</div>}
+                    </div>}
                 </div>
             </div>
         );
@@ -235,9 +288,12 @@ export default function DeckPage() {
             }}>{t('deck_page_settings')} ⚙️</Button>}
             {isOwnDeck && !editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(true);
+                setEditingWord(undefined);
             }}>{t('deck_page_edit')} ✏️</Button>}
             {isOwnDeck && editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(false)
+                setEditingWord(undefined);
+
             }}>{t('deck_page_exit_edit')} 💾</Button>}
 
             <div className={styles.flexPlaceholder} />
@@ -249,24 +305,35 @@ export default function DeckPage() {
         <div className={styles.statsAndListRow}>
             <DeckCard shadow={"SMALL"} deck={deck as Deck} />
             <div className={styles.wordListContainer}>
-                {debouncedSearchKeyword && (sortedFilteredWordList.length > 0 ? <h3 className={styles.searchTitle}>Showing {sortedFilteredWordList.length} results for keyword &quot;{debouncedSearchKeyword}&quot;:</h3> : <h3 className={styles.searchTitle}>Keyword &quot;{debouncedSearchKeyword}&quot; has no search result.</h3>)}
-                <AutoSizer>
-                    {({ height, width }) => {
-                        const heightDelta = debouncedSearchKeyword ? 52 : 0;
-                        return (
-                            <List
-                                width={width}
-                                height={height - heightDelta}
-                                rowCount={sortedFilteredWordList.length}
-                                rowHeight={108}
-                                rowRenderer={rowRenderer}
-                            />
-                        )
-                    }}
-                </AutoSizer>
+                {isEmptyDeck ?
+                    <div className={styles.emptyWordList}>
+                        <h1><IoClipboardOutline /></h1>
+                        <h2>{t('deck_page_empty_list')}</h2>
+                        <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+                            onAddWord();
+                        }}>{t('deck_page_add_first_word')} ⛳</Button>
+                    </div> :
+                    <>
+                        {debouncedSearchKeyword && (sortedFilteredWordList.length > 0 ? <h3 className={styles.searchTitle}>Showing {sortedFilteredWordList.length} results for keyword &quot;{debouncedSearchKeyword}&quot;:</h3> : <h3 className={styles.searchTitle}>Keyword &quot;{debouncedSearchKeyword}&quot; has no search result.</h3>)}
+                        <AutoSizer>
+                            {({ height, width }) => {
+                                const heightDelta = debouncedSearchKeyword ? 52 : 0;
+                                return (
+                                    <List
+                                        width={width}
+                                        height={height - heightDelta}
+                                        rowCount={sortedFilteredWordList.length}
+                                        rowHeight={108}
+                                        rowRenderer={rowRenderer}
+                                        scrollToIndex={scrollToIndex}
+                                    />
+                                )
+                            }}
+                        </AutoSizer>
+                    </>
+                }
             </div>
         </div>
 
     </Container>
 }
-
