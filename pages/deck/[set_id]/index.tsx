@@ -17,10 +17,11 @@ import swal from 'sweetalert';
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
-import { serverSideAuthGuard } from "cafe-components/withAuthGuard/withServerSideAuthGuard";
+import useAuthGuard from 'hooks/useAuthGuard';
 
 
 export default function DeckPage() {
+    const authed = useAuthGuard();
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     const t = store.t;
@@ -273,7 +274,7 @@ export default function DeckPage() {
         );
     }
 
-    return loading ? null : <Container>
+    return (loading || !authed) ? null : <Container>
         <div className={styles.titleRow}>
             <h1>{deck?.name}</h1>
             <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>
@@ -339,5 +340,3 @@ export default function DeckPage() {
 
     </Container>
 }
-
-export const getServerSideProps = serverSideAuthGuard;
