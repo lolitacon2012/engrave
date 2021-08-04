@@ -55,10 +55,4 @@ export const commitDeckChange = (deckId: string) => {
     localStorage.removeItem(WORD_ID_PENDING);
     localStorage.removeItem(WORDS_TO_DELETE_ID_LIST);
     pendingWordIds.forEach((id: string) => localStorage.removeItem(id));
-    const deckRelatedCacheEntries = Object.entries(localStorage);
-    deckRelatedCacheEntries.forEach((pair) => {
-        if (pair[0].indexOf(RPC.RPC_GET_DECK_BY_IDS) >= 0) {
-            localStorage.removeItem(pair[0]);
-        }
-    })
 }

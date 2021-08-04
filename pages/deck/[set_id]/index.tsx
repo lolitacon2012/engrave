@@ -21,14 +21,13 @@ import useAuthGuard from 'hooks/useAuthGuard';
 
 
 export default function DeckPage() {
-    const authed = useAuthGuard();
+    useAuthGuard();
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     const t = store.t;
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>('');
-    const [loading, setIsLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [editingWord, setEditingWordValue] = useState<Word>();
     const [scrollToIndex, setScrollToIndex] = useState<number>();
@@ -218,10 +217,8 @@ export default function DeckPage() {
                 }
             }, `RPC_GET_DECK_BY_IDS[${currentDeckId}]`, ((result: Deck[]) => {
                 setDeck(result[0]);
-                setIsLoading(false);
             })).then((result: Deck[]) => {
                 setDeck(result[0]);
-                setIsLoading(false);
             })
         }
     }, [store.user, currentDeckId])
@@ -274,7 +271,7 @@ export default function DeckPage() {
         );
     }
 
-    return (loading || !authed) ? null : <Container>
+    return <Container>
         <div className={styles.titleRow}>
             <h1>{deck?.name}</h1>
             <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>

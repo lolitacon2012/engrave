@@ -27,7 +27,7 @@ const Navbar = () => {
         <span className={styles.logo} onClick={() => {
             router.push('/')
         }}>{store.t('global_app_name')}</span>
-        {(loading === false) && <div className={styles.rightContainer}>
+        {<div className={styles.rightContainer}>
             {/* {name && <span>{name}</span>} */}
             {!id && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
             {

@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const store = React.useContext(GlobalStoreContext);
     const [session, loading] = useSession();
     const [showLoadingScreen, setShowLoadingScreen] = useState(true);
-    const isReadyToDisplay = !session ? !loading : (!loading && (store.user?.locale === store.currentLocale));
+    const isReadyToDisplay = !session ? !loading : (!store.authenticatingInProgress && (store.user?.locale === store.currentLocale));
     useEffect(() => {
         if (!loading && session) {
             client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then((result: Partial<UserData>) => {
@@ -24,12 +24,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             })
         } else {
             store.setUser({
-                loading
+                loading: true
             });
         }
     }, [session, loading])
     useEffect(()=>{
-        setTimeout(()=>{
+        isReadyToDisplay && setTimeout(()=>{
             setShowLoadingScreen(false)
         }, 500)
     }, [isReadyToDisplay])
@@ -37,7 +37,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Navbar />
         {showLoadingScreen && <div className={cn(styles.loadingScreen, isReadyToDisplay && styles.fadingOut)}>
             <IoCafe />
-            <p>请稍候</p>
+            <p>~</p>
         </div>}
         {children}
     </>;
