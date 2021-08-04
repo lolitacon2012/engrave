@@ -1,7 +1,6 @@
-import { signIn, signOut, useSession } from "next-auth/client"
+import { signIn, signOut } from "next-auth/client"
 import React, { useContext } from "react";
 import { GlobalStoreContext } from "cafe-store/index";
-import Button from 'cafe-ui/button';
 import styles from './index.module.css';
 import { useRouter } from "next/router";
 import DropdownMenu from "cafe-ui/dropdownMenu";
@@ -14,8 +13,7 @@ import { IoLanguage, IoLogIn } from "react-icons/io5";
 const Navbar = () => {
     const store = useContext(GlobalStoreContext);
     const t = store.t;
-    const { name, avatar, id } = store.user || {};
-    const [_, loading] = useSession();
+    const { name, avatar, id, loading: userLoading } = store.user || {};
     const router = useRouter();
     const debouncedSetUserLocale = useCallback(debounce((locale: string) => {
         client.callRPC({
@@ -23,14 +21,15 @@ const Navbar = () => {
             data: { locale }
         })
     }, 1000), []);
+    const canLogin = !id && !userLoading && !store.authenticatingInProgress;
     const userMenuItems = [{ key: 'PROFILE', title: <div className={styles.avatarDropdownMenuItem}>{t('navbar_profile')}</div> }, null, { key: 'SIGNOUT', title: <div className={styles.avatarDropdownMenuItem}>{t('navbar_signout')}</div> }]
     return <div className={styles.container}>
         <span className={styles.logo} onClick={() => {
             router.push('/')
         }}>{store.t('global_app_name')}</span>
-        {(loading === false) && <div className={styles.rightContainer}>
+        {<div className={styles.rightContainer}>
             {/* {name && <span>{name}</span>} */}
-            {!id && (store.authenticatingInProgress === false) && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
+            {canLogin && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
             {
                 avatar && (
                     <DropdownMenu onItemClicked={(key: string) => {

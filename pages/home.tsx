@@ -78,7 +78,6 @@ export default function Home() {
             }} />
         )
     }
-    console.log(store.authenticatingInProgress)
     return hasAuthenticated && (
         <>
             <Container>

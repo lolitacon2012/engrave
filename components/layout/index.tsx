@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             })
         } else {
             store.setUser({
-                loading: true
+                loading
             });
         }
     }, [session, loading])
