@@ -30,7 +30,7 @@ const Navbar = () => {
         {(loading === false) && <div className={styles.rightContainer}>
             {/* {name && <span>{name}</span>} */}
             {!id && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
-            {// eslint-disable-next-line @next/next/no-img-element
+            {
                 avatar && (
                     <DropdownMenu onItemClicked={(key: string) => {
                         switch (key) {
@@ -44,7 +44,8 @@ const Navbar = () => {
                             }
                         }
                     }} items={userMenuItems}>
-                        <div className={styles.navBarRoundButton}><img className={styles.avatar} alt={name} src={avatar || "/assets/default_avatar.jpg"} /></div>
+                        {// eslint-disable-next-line @next/next/no-img-element
+                            <div className={styles.navBarRoundButton}><img className={styles.avatar} alt={name} src={avatar || "/assets/default_avatar.jpg"} /></div>}
                     </DropdownMenu>)}
             {(
                 <DropdownMenu onItemClicked={(locale: string) => {
