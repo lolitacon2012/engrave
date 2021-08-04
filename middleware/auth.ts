@@ -2,7 +2,7 @@ import { getSession } from 'next-auth/client'
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 
 const withAuth = (handler: NextApiHandler) => {
-    const allowedUsers = ['lolitacon2012@gmail.com'];
+    const allowedUsers = ['lolitacon2012@gmail.com', 'dake.liu@sprinklr.com'];
     return async (req: NextApiRequest,
         res: NextApiResponse) => {
         const session = await getSession({ req });

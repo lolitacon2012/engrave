@@ -7,6 +7,7 @@ import { RPC } from 'cafe-rpc/rpc';
 import { GlobalStoreContext } from "cafe-store/index";
 import { Deck } from "cafe-types/set";
 import DeckCard from "cafe-components/deckCard";
+import { serverSideAuthGuard } from "cafe-components/withAuthGuard/withServerSideAuthGuard";
 
 export default function Home() {
     const router = useRouter();
@@ -92,3 +93,5 @@ export default function Home() {
         </>
     )
 };
+
+export const getServerSideProps = serverSideAuthGuard;

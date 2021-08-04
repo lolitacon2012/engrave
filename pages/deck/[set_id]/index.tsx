@@ -17,6 +17,8 @@ import swal from 'sweetalert';
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
+import { serverSideAuthGuard } from "cafe-components/withAuthGuard/withServerSideAuthGuard";
+
 
 export default function DeckPage() {
     const router = useRouter();
@@ -337,3 +339,5 @@ export default function DeckPage() {
 
     </Container>
 }
+
+export const getServerSideProps = serverSideAuthGuard;

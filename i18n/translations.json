@@ -8,20 +8,24 @@
         "ZH_CN": "中"
     },
     "homepage_title": {
-        "EN_US": "Qahva",
-        "ZH_CN": "Qahva"
+        "EN_US": "Qahva ☕",
+        "ZH_CN": "Qahva ☕"
     },
     "homepage_subtitle": {
         "EN_US": "Vocabulary learning tool, designed for linguaphiles, by a linguaphile.",
         "ZH_CN": "由语言爱好者设计的高效率单词学习工具"
     },
     "global_app_name": {
-        "EN_US": "Qahva",
-        "ZH_CN": "Qahva"
+        "EN_US": "Qahva ☕",
+        "ZH_CN": "Qahva ☕"
     },
     "navbar_signin": {
         "EN_US": "Sign In",
         "ZH_CN": "登录"
+    },
+    "navbar_profile": {
+        "EN_US": "My Profile",
+        "ZH_CN": "我的账户"
     },
     "navbar_signout": {
         "EN_US": "Sign Out",
