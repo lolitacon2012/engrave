@@ -35,7 +35,7 @@
     right           : 0;
     top             : 0;
     bottom          : 0;
-    background-color: white;
+    background-color: var(--cafe-colors-background);
     font-size       : 4rem;
     margin          : auto;
     display         : flex;
