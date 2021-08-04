@@ -13,6 +13,7 @@ export default function Home() {
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     useAuthGuard();
+    const hasAuthenticated = (store.authenticatingInProgress === false);
     const [decks, setDecks] = useState<Deck[]>([]);
     const createDeck = (fullDeck?: string) => {
         const words = (fullDeck || '').split('========').map((w: string) => {
@@ -77,8 +78,8 @@ export default function Home() {
             }} />
         )
     }
-
-    return (
+    console.log(store.authenticatingInProgress)
+    return hasAuthenticated && (
         <>
             <Container>
                 <h2>Currently Learning</h2><button onClick={() => {

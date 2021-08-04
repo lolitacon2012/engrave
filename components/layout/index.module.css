@@ -1,27 +1,60 @@
-.loadingScreen {
-    position: fixed;
-    z-index: 9000;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    background-color: white;
-    font-size: 3rem;
-    margin: auto;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    transition: all 0.3s ease-out;
-    flex-direction: column;
-    color: var(--cafe-colors-pink);
+@keyframes bounce {
+    0% {
+        transform: scale(1, 1) translateY(0);
+    }
+
+    10% {
+        transform: scale(1.1, .9) translateY(0);
+    }
+
+    30% {
+        transform: scale(.9, 1.1) translateY(-32px);
+    }
+
+    50% {
+        transform: scale(1.05, .95) translateY(0);
+    }
+
+    57% {
+        transform: scale(1, 1) translateY(0px);
+    }
+
+    64% {
+        transform: scale(1, 1) translateY(0);
+    }
+
+    100% {
+        transform: scale(1, 1) translateY(0);
+    }
 }
 
-.loadingScreen > p {
-    font-size: 1rem;
+.loadingScreen {
+    position        : fixed;
+    z-index         : 9000;
+    left            : 0;
+    right           : 0;
+    top             : 0;
+    bottom          : 0;
+    background-color: white;
+    font-size       : 4rem;
+    margin          : auto;
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    text-align      : center;
+    transition      : all 0.3s ease-out;
+    flex-direction  : column;
+    color           : var(--cafe-colors-pink);
+}
+
+.loadingScreen>.coffee {
+    animation-name           : bounce;
+    animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
+    animation-duration: 1.2s;
+    animation-iteration-count: infinite;
 }
 
 .fadingOut {
-    opacity: 0;
+    opacity  : 0;
     transform: scale(2);
 }

@@ -22,9 +22,11 @@ import useAuthGuard from 'hooks/useAuthGuard';
 
 export default function DeckPage() {
     useAuthGuard();
+    
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     const t = store.t;
+    const hasAuthenticated = (store.authenticatingInProgress === false);
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>('');
@@ -271,7 +273,7 @@ export default function DeckPage() {
         );
     }
 
-    return <Container>
+    return hasAuthenticated && <Container>
         <div className={styles.titleRow}>
             <h1>{deck?.name}</h1>
             <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>

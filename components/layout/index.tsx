@@ -31,13 +31,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     useEffect(()=>{
         isReadyToDisplay && setTimeout(()=>{
             setShowLoadingScreen(false)
-        }, 500)
+        }, 350)
     }, [isReadyToDisplay])
     return <>
         <Navbar />
         {showLoadingScreen && <div className={cn(styles.loadingScreen, isReadyToDisplay && styles.fadingOut)}>
-            <IoCafe />
-            <p>~</p>
+            <IoCafe className={styles.coffee} />
         </div>}
         {children}
     </>;
