@@ -30,7 +30,7 @@ const Navbar = () => {
         }}>{store.t('global_app_name')}</span>
         {(loading === false) && <div className={styles.rightContainer}>
             {/* {name && <span>{name}</span>} */}
-            {!id && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
+            {!id && (store.authenticatingInProgress === false) && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
             {
                 avatar && (
                     <DropdownMenu onItemClicked={(key: string) => {

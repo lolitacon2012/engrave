@@ -18,7 +18,7 @@ export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   t: getTranslation,
   setLocale: ()=>undefined,
   setAuthenticatingInProgress: ()=>undefined,
-  currentLocale: 'EN_US',
+  currentLocale: DEFAULT_LOCALE,
   authenticatingInProgress: undefined,
 });
 
