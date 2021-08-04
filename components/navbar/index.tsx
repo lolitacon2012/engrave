@@ -1,4 +1,4 @@
-import { signIn, signOut } from "next-auth/client"
+import { signIn, signOut, useSession } from "next-auth/client"
 import React, { useContext } from "react";
 import { GlobalStoreContext } from "cafe-store/index";
 import Button from 'cafe-ui/button';
@@ -10,11 +10,12 @@ import { RPC } from "cafe-rpc/rpc";
 import { useCallback } from "react";
 import debounce from "lodash/debounce";
 import { IoLanguage, IoLogIn } from "react-icons/io5";
-import swal from "sweetalert";
+
 const Navbar = () => {
     const store = useContext(GlobalStoreContext);
     const t = store.t;
-    const { loading, name, avatar, id } = store.user || {};
+    const { name, avatar, id } = store.user || {};
+    const [_, loading] = useSession();
     const router = useRouter();
     const debouncedSetUserLocale = useCallback(debounce((locale: string) => {
         client.callRPC({
@@ -27,7 +28,7 @@ const Navbar = () => {
         <span className={styles.logo} onClick={() => {
             router.push('/')
         }}>{store.t('global_app_name')}</span>
-        {<div className={styles.rightContainer}>
+        {(loading === false) && <div className={styles.rightContainer}>
             {/* {name && <span>{name}</span>} */}
             {!id && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
             {
