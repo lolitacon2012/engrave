@@ -15,7 +15,7 @@ import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
-import { generateQuestionSet } from './generateQuestionSet';
+import { generateQuestionSet } from '../../../utils/generateQuestionSet';
 import { StudySet } from 'cafe-types/study';
 import QuestionSet from 'cafe-components/questionSet';
 

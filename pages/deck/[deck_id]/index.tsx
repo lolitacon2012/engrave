@@ -210,7 +210,6 @@ export default function DeckPage() {
     }, [oldNewWordIdmapping])
 
     useEffect(() => {
-        console.log(currentDeckId)
         // Fetch current deck
         if (currentDeckId) {
             client.callRPC({
