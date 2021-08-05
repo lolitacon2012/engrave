@@ -1,4 +1,4 @@
-import { Deck, Word } from "cafe-types/set";
+import { Deck, Word } from "cafe-types/deck";
 
 type GetDeckByIdsRequestData = {
     ids: string[]

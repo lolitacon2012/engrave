@@ -7,7 +7,7 @@ import { v4 as uuid } from 'uuid';
 const handler = async (
   data: CreateWordsRequestData,
 ): Promise<CreateWordsResponseData> => {
-  const {set_id, contents} = data;
+  const {deck_id, contents} = data;
   const newUuids = [] as string[];
   const now = new Date().getTime();
   const newWords = contents.map(c => {
@@ -15,7 +15,7 @@ const handler = async (
     newUuids.push(newId);
     return {
       id: newId,
-      set_id,
+      deck_id,
       created_at: now,
       edited_at: now,
       content: c

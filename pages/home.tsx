@@ -5,7 +5,7 @@ import client from 'cafe-utils/client';
 import React, { useContext, useEffect, useState } from 'react';
 import { RPC } from 'cafe-rpc/rpc';
 import { GlobalStoreContext } from "cafe-store/index";
-import { Deck } from "cafe-types/set";
+import { Deck } from "cafe-types/deck";
 import DeckCard from "cafe-components/deckCard";
 import useAuthGuard from "hooks/useAuthGuard";
 
@@ -58,7 +58,7 @@ export default function Home() {
     }
     useEffect(() => {
         // Fetch all decks and progress
-        const allDecks = [...store.user?.studyingSetIds || [], ...store.user?.owningSetIds || []];
+        const allDecks = [...store.user?.studyingDeckIds || [], ...store.user?.owningDeckIds || []];
         if (allDecks.length > 0) {
             client.callRPC({
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {

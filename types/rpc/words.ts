@@ -1,4 +1,4 @@
-import { WordContent } from "cafe-types/set";
+import { WordContent } from "cafe-types/deck";
 
 type UpdateWordsByIdsRequestData = {
     id: string;
@@ -7,7 +7,7 @@ type UpdateWordsByIdsRequestData = {
 }
 
 type CreateWordsRequestData = {
-    set_id: string;
+    deck_id: string;
     contents: WordContent[]
 }
 

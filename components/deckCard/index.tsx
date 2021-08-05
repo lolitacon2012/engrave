@@ -1,4 +1,4 @@
-import { Deck } from 'cafe-types/set';
+import { Deck } from 'cafe-types/deck';
 import styles from './index.module.css';
 import cn from 'classnames';
 

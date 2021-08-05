@@ -1,6 +1,6 @@
 
 import { CreateDeckRequestData, UpdateDeckRequestData } from 'cafe-types/rpc/deck';
-import { Word } from 'cafe-types/set';
+import { Word } from 'cafe-types/deck';
 import { connectToDatabase } from 'cafe-utils/mongodb';
 import type { NextApiRequest } from 'next';
 import { getSession } from 'next-auth/client'
@@ -31,7 +31,7 @@ const createDeck = async (
     word.created_at = now;
     const newWordId = uuid();
     word.id = newWordId
-    word.set_id = newDeckId;
+    word.deck_id = newDeckId;
     word.content = {
       word: word.content?.word || '',
       meaning: word.content?.meaning || '',
@@ -46,7 +46,7 @@ const createDeck = async (
   await Promise.all([db.collection("decks")
     .insertOne(newDeck), db.collection("users").updateOne({ id: email },
       {
-        $push: { owningSetIds: newDeck.id },
+        $push: { owningDeckIds: newDeck.id },
       }), db.collection("words")
         .insertMany(newWords)])
   return newDeck;

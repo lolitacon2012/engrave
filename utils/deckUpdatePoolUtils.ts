@@ -1,5 +1,5 @@
 import { RPC } from "cafe-rpc/rpc";
-import { WordContent } from "cafe-types/set"
+import { WordContent } from "cafe-types/deck"
 import client from "./client";
 
 const WORD_ID_PENDING = 'WORD_ID_PENDING';

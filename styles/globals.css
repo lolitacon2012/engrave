@@ -28,12 +28,16 @@ a {
 
 :host,
 :root {
-  --cafe-colors-purple-500: #805AD5;
-  --cafe-colors-cyan-700  : #0987A0;
-  --cafe-colors-background: #E6EBE6;
-  --cafe-colors-pink      : #F6B5B5;
-  --cafe-colors-black     : #3D3F44;
-  --cafe-colors-yellow    : #FFDC94;
-  --cafe-colors-grey      : #aaaaaa;
-  --font-hei              : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+  --cafe-colors-purple-500 : #805AD5;
+  --cafe-colors-cyan-700   : #0987A0;
+  --cafe-colors-background : #E6EBE6;
+  --cafe-colors-pink       : #F6B5B5;
+  --cafe-colors-black      : #3D3F44;
+  --cafe-colors-yellow     : #FFDC94;
+  --cafe-colors-grey       : #aaaaaa;
+  --cafe-colors-light-grey : #dddddd;
+  --cafe-colors-light-green: #C9E3AA;
+  --cafe-colors-light-red  : #ffcfcb;
+  --cafe-colors-red        : rgb(255, 119, 119);
+  --font-hei               : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }

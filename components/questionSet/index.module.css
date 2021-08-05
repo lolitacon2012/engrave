@@ -1,0 +1,75 @@
+.card {
+    width           : 100%;
+    max-width       : 1024px;
+    background-color: white;
+    box-shadow      : 12px 12px rgba(0, 0, 0, 0.12);
+    height          : 640px;
+    border-radius   : 12px;
+    margin          : 64px auto;
+    display         : flex;
+    flex-direction  : column;
+    padding         : 24px;
+    transition      : all 0.3s;
+}
+
+.answerInput {
+    border          : none;
+    border-radius   : 12px;
+    font-size       : 1.2rem;
+    padding         : 0 12px;
+    width           : 100%;
+    background-color: var(--cafe-colors-light-grey);
+    height          : 40px;
+    border          : 2px solid var(--cafe-colors-grey);
+    transition      : all 0.3s;
+}
+
+.correct .answerInput {
+    border: 2px solid green;
+    color : green;
+}
+
+.incorrect .answerInput {
+    border: 2px solid var(--cafe-colors-red);
+    color :  var(--cafe-colors-red);
+}
+
+.answerInput::placeholder {
+    color: rgba(0, 0, 0, 0.24);
+}
+
+.answerInput:focus {
+    outline: none;
+}
+
+.buttonContainer {
+    display   : flex;
+    margin-top: 24px;
+}
+
+.buttonContainer> :not(:last-child) {
+    margin-right: 12px;
+}
+
+.questionBody {
+    margin-top: 96px;
+    margin-bottom: 96px;
+}
+
+.correct .questionResult {
+    color: green;
+}
+
+.incorrect .questionResult {
+    color:  var(--cafe-colors-red);
+}
+
+.flexOne {
+    flex: 1;
+}
+
+.footerContainer {
+    display       : flex;
+    flex-direction: row-reverse;
+    margin-top    : 24px;
+}

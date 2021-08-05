@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { RPC } from 'cafe-rpc/rpc';
 import { GlobalStoreContext } from 'cafe-store/index';
 import client from 'cafe-utils/client';
-import { Deck, Word } from 'cafe-types/set'
+import { Deck, Word } from 'cafe-types/deck'
 
 import Button from 'cafe-ui/button';
 import { AutoSizer, List } from 'react-virtualized';
@@ -22,7 +22,6 @@ import useAuthGuard from 'hooks/useAuthGuard';
 
 export default function DeckPage() {
     useAuthGuard();
-    
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     const t = store.t;
@@ -41,7 +40,7 @@ export default function DeckPage() {
     }
     const [pendingNewWordTempIds, setPendingNewWordTempIds] = useState<string[]>([]);
     const [oldNewWordIdmapping, setOldNewWordIdmapping] = useState<{ [key: string]: string }>({});
-    const currentDeckId = router.query?.set_id as string || '' as string;
+    const currentDeckId = router.query?.deck_id as string || '' as string;
     const isOwnDeck = deck?.creator_id === store.user?.id;
     const isEmptyDeck = !deck?.words?.length;
     const calculateDeckList = () => {
@@ -110,7 +109,7 @@ export default function DeckPage() {
         const tempUuid = uuid();
         const newEmptyWord = {
             id: tempUuid,
-            set_id: currentDeckId,
+            deck_id: currentDeckId,
             created_at: new Date().getTime(),
             edited_at: new Date().getTime(),
             content: {
@@ -131,7 +130,7 @@ export default function DeckPage() {
         const res = await client.callRPC({
             rpc: RPC.RPC_CREATE_WORDS,
             data: {
-                set_id: currentDeckId,
+                deck_id: currentDeckId,
                 contents: [{
                     word: "",
                     meaning: "",
@@ -211,6 +210,7 @@ export default function DeckPage() {
     }, [oldNewWordIdmapping])
 
     useEffect(() => {
+        console.log(currentDeckId)
         // Fetch current deck
         if (currentDeckId) {
             client.callRPC({
@@ -280,6 +280,8 @@ export default function DeckPage() {
         </div>
         <div className={styles.controllerRow}>
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+                store.setCurrentDeckProgress(undefined);
+                store.setCurrentStudyingDeck(deck as Deck);
                 router.push(`/deck/${currentDeckId}/study`)
             }}>{t('deck_page_continue_study')} ✍️</Button>}
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {

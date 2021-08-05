@@ -5,4 +5,16 @@ const decodeRubyWithFallback = (word: string) => {
     return <span>{ruby ? <ruby>{main}<rt>{ruby}</rt></ruby> : main}</span>
 }
 
-export { decodeRubyWithFallback };
+const getRubyMain = (word: string) => {
+    const wordWithNormalizedRubyConstant = word.replace('：：', '::');
+    const main = (wordWithNormalizedRubyConstant || '').split('::')[0] || '';
+    return main;
+}
+
+const getRuby = (word: string) => {
+    const wordWithNormalizedRubyConstant = word.replace('：：', '::');
+    const ruby = (wordWithNormalizedRubyConstant || '').split('::')[1] || '';
+    return ruby;
+}
+
+export { decodeRubyWithFallback, getRubyMain, getRuby };

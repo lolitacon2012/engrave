@@ -24,8 +24,8 @@ const getUserInfo = async (
       id: email,
       registerTime: now,
       locale,
-      owningSetIds: [],
-      studyingSetIds: [],
+      owningDeckIds: [],
+      studyingDeckIds: [],
       progress: [],
     }
     await db.collection("users")

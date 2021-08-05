@@ -2,7 +2,7 @@ import { CustomizedField } from "./customizedField";
 
 type Word = {
     id: string;
-    set_id: string;
+    deck_id: string;
     created_at: number;
     edited_at: number;
     content: WordContent;
