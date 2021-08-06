@@ -155,7 +155,7 @@ export default function QuestionSet(props: Props) {
                 {stage === QuestionStage.Question && <Button onClick={() => {
                     moveToNextQuestion();
                 }}>{t('study_skip')}</Button>}
-                {stage === QuestionStage.Question && <Button onClick={() => {
+                {stage === QuestionStage.Question && !isRepeating && <Button onClick={() => {
                     evaluateAnswer();
                 }}>{t(isLearningNewWord ? 'study_i_remembered' : 'study_confirm')}</Button>}
                 {!isRepeating && stage === QuestionStage.Success && <Button onClick={() => {

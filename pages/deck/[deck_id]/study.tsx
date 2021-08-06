@@ -120,15 +120,14 @@ export default function DeckPage() {
                     [currentDeckId]: newProgress
                 }
             }
-        }).then(() => {
-            store.setUser({
-                ...store.user, progress: {
-                    ...store.user?.progress,
-                    [currentDeckId]: newProgress
-                }
-            });
-            setCurrentDeckProgress(newProgress);
         })
+        store.setUser({
+            ...store.user, progress: {
+                ...store.user?.progress,
+                [currentDeckId]: newProgress
+            }
+        });
+        setCurrentDeckProgress(newProgress);
     }
 
     return currentQuestionSet ? <Container>
