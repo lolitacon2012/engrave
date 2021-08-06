@@ -5,47 +5,48 @@ import { Locale } from "cafe-types/i18n";
 import { DEFAULT_LOCALE } from "cafe-constants/index";
 import { Deck } from "cafe-types/deck";
 import { StudyProgress } from "cafe-types/study";
-const NOOP = ()=>undefined;
+const NOOP = () => undefined;
 interface GlobalStoreInterface {
   user?: Partial<UserData> | undefined,
   setUser: React.Dispatch<React.SetStateAction<Partial<UserData> | undefined>>,
   setLocale: (l?: string) => void,
   setAuthenticatingInProgress: React.Dispatch<React.SetStateAction<boolean | undefined>>,
-  setCurrentStudyingDeck: React.Dispatch<React.SetStateAction<Deck | undefined>>,
-  currentStudyingDeck?: Deck,
-  t: (key: string) => string,
+  t: (key: string, placeholder?: { [key: string]: string }) => string,
   currentLocale: string,
   authenticatingInProgress?: boolean,
-  currentDeckProgress?: Partial<StudyProgress>,
-  setCurrentDeckProgress: React.Dispatch<React.SetStateAction<Partial<StudyProgress> | undefined>>,
+  loading?: boolean,
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>,
+  isUserLoading: boolean,
+  isLocaleLoading: boolean,
 }
 export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   setUser: NOOP,
-  t: getTranslation,
+  t: () => '',
   setLocale: NOOP,
-  setCurrentStudyingDeck: NOOP,
-  currentStudyingDeck: undefined,
   setAuthenticatingInProgress: NOOP,
   currentLocale: DEFAULT_LOCALE,
   authenticatingInProgress: undefined,
-  currentDeckProgress: undefined,
-  setCurrentDeckProgress: NOOP,
+  loading: true,
+  setLoading: NOOP,
+  isUserLoading: true,
+  isLocaleLoading: true,
 });
 
-export default function GlobalStoreProvider ({ children }: { children: React.ReactNode }) {
+export default function GlobalStoreProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<Partial<UserData> | undefined>(undefined);
+  const [loading, setLoading] = useState<boolean>(true);
   const [authenticatingInProgress, setAuthenticatingInProgress] = useState<boolean | undefined>(undefined);
   const [locale, localSetLocale] = useState<string>('');
-  const [currentStudyingDeck, setCurrentStudyingDeck] = useState<Deck|undefined>(undefined);
-  const [currentDeckProgress, setCurrentDeckProgress] = useState<Partial<StudyProgress>|undefined>(undefined);
+  const isUserLoading = !!user?.loading || !!authenticatingInProgress;
+  const isLocaleLoading = (user?.locale !== locale)
   const setLocale = (locale?: string) => {
     localSetLocale(locale || DEFAULT_LOCALE)
   }
-  const t = (key: string, forceLocale?: string) => {
-    return getTranslation(key, (forceLocale || locale || DEFAULT_LOCALE) as Locale);
+  const t = (key: string, placeholder?: { [key: string]: string }) => {
+    return getTranslation(key, (locale || DEFAULT_LOCALE) as Locale, placeholder || {});
   }
   const store = {
-    currentDeckProgress, setCurrentDeckProgress, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress, setCurrentStudyingDeck, currentStudyingDeck
+    isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
   }
   return <GlobalStoreContext.Provider value={store}>
     {children}

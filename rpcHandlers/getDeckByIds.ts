@@ -1,6 +1,5 @@
 import { connectToDatabase } from 'cafe-utils/mongodb';
 import { GetDeckByIdsRequestData } from 'cafe-types/rpc/deck';
-import { Word } from 'cafe-types/deck';
 
 const getDeckByIds = async (
     data: GetDeckByIdsRequestData

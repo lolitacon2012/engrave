@@ -82,5 +82,61 @@
     "deck_page_add_first_word":{
         "EN_US": "Add first word",
         "ZH_CN": "添加第一个词条"
+    },
+    "study_your_answer": {
+        "EN_US": "Your answer:",
+        "ZH_CN": "您的回答："
+    },
+    "study_incorrect": {
+        "EN_US": "Incorrect. Correct answer is: {answer}",
+        "ZH_CN": "回答错误。正解：{answer}"
+    },
+    "study_correct": {
+        "EN_US": "Correct.",
+        "ZH_CN": "回答正确。"
+    },
+    "study_confirm": {
+        "EN_US": "Submit",
+        "ZH_CN": "提交答案"
+    },
+    "study_next": {
+        "EN_US": "Next",
+        "ZH_CN": "继续"
+    },
+    "study_restudy": {
+        "EN_US": "Forgot",
+        "ZH_CN": "完全忘了"
+    },
+    "study_exit": {
+        "EN_US": "Exit",
+        "ZH_CN": "退出学习"
+    },
+    "study_guessed": {
+        "EN_US": "I was lucky",
+        "ZH_CN": "我是瞎蒙的"
+    },
+    "study_skip": {
+        "EN_US": "Skip",
+        "ZH_CN": "跳过"
+    },
+    "study_i_remembered": {
+        "EN_US": "Remembered",
+        "ZH_CN": "记住了"
+    },
+    "study_continue": {
+        "EN_US": "Continue",
+        "ZH_CN": "继续学习"
+    },
+    "study_finished_title": {
+        "EN_US": "You have finished studying {words_count} words",
+        "ZH_CN": "您已完成 {words_count} 个词条的学习"
+    },
+    "study_please_repeat": {
+        "EN_US": "Please repeat: {answer}",
+        "ZH_CN": "请拼写：{answer}"
+    },
+    "study_meaning": {
+        "EN_US": "Meaning: ",
+        "ZH_CN": "释意："
     }
 }

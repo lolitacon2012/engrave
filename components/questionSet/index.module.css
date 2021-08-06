@@ -4,7 +4,6 @@
     background-color: white;
     box-shadow      : 12px 12px rgba(0, 0, 0, 0.12);
     height          : 640px;
-    border-radius   : 12px;
     margin          : 64px auto;
     display         : flex;
     flex-direction  : column;
@@ -14,7 +13,6 @@
 
 .answerInput {
     border          : none;
-    border-radius   : 12px;
     font-size       : 1.2rem;
     padding         : 0 12px;
     width           : 100%;
@@ -24,6 +22,13 @@
     transition      : all 0.3s;
 }
 
+.newWord {
+    border          : none;
+    font-size       : 1.2rem;
+    width           : 100%;
+    height          : 40px;
+}
+
 .correct .answerInput {
     border: 2px solid green;
     color : green;
@@ -31,7 +36,7 @@
 
 .incorrect .answerInput {
     border: 2px solid var(--cafe-colors-red);
-    color :  var(--cafe-colors-red);
+    color : var(--cafe-colors-red);
 }
 
 .answerInput::placeholder {
@@ -52,24 +57,69 @@
 }
 
 .questionBody {
-    margin-top: 96px;
+    margin-top   : 96px;
     margin-bottom: 96px;
 }
 
-.correct .questionResult {
+.correct .questionTips {
     color: green;
 }
 
-.incorrect .questionResult {
-    color:  var(--cafe-colors-red);
+.incorrect .questionTips {
+    color: var(--cafe-colors-red);
 }
 
-.flexOne {
-    flex: 1;
+.result {
+    flex           : 1;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    flex-direction : column;
 }
 
 .footerContainer {
     display       : flex;
     flex-direction: row-reverse;
     margin-top    : 24px;
+}
+
+.footerContainer> :not(:first-child) {
+    margin-right: 12px;
+}
+
+.reviewWordRow {
+    display         : flex;
+    background-color: white;
+    width           : 100%;
+    font-size       : 1.2rem;
+    border-bottom   : 1px solid white;
+    align-items     : center;
+}
+
+.reviewResult {
+    margin-right: 12px;
+}
+
+.reviewWord {
+    background-color: var(--cafe-colors-light-green);
+    height          : 100%;
+    display         : flex;
+    align-items     : center;
+    min-width       : 33%;
+    padding-left    : 12px;
+}
+
+.reviewWord.reviewWrong {
+    background-color: var(--cafe-colors-light-red);
+}
+
+.reviewWord.skipped {
+    background-color: var(--cafe-colors-light-grey);
+}
+
+.reviewMeaning {
+    display     : flex;
+    align-items : center;
+    flex        : 1;
+    padding-left: 12px;
 }

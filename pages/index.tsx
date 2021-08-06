@@ -8,6 +8,7 @@ export default function Home() {
   const router = useRouter();
   const store = useContext(GlobalStoreContext);
   const t = store.t;
+  store.setLoading(false);
   return (
     <div>
       <Head>

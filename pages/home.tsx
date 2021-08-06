@@ -13,8 +13,9 @@ export default function Home() {
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     useAuthGuard();
+
     const hasAuthenticated = (store.authenticatingInProgress === false);
-    const [decks, setDecks] = useState<Deck[]>([]);
+    const [decks, setDecks] = useState<Deck[]>();
     const createDeck = (fullDeck?: string) => {
         const words = (fullDeck || '').split('========').map((w: string) => {
             const ww = w.split('--------')[0];
@@ -71,9 +72,13 @@ export default function Home() {
             })
         }
     }, [store.user])
+    useEffect(() => {
+        store.setLoading(store.isLocaleLoading || store.isUserLoading || !decks);
+    }, [decks, store.isLocaleLoading || store.isUserLoading])
+
     const renderDeckCard = () => {
-        return decks.map((deck) =>
-            <DeckCard shadow={"NORMAL"} key={`deck_card_${deck?.id}`} deck={deck} onClick={() => {
+        return decks?.map((deck) =>
+            <DeckCard shadow={"NORMAL"} key={`deck_card_${deck?.id}`} deck={deck} progress={store.user?.progress?.[deck?.id]} onClick={() => {
                 deck && router.push(`/deck/${deck.id}`)
             }} />
         )

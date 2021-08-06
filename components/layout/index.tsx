@@ -13,7 +13,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const store = React.useContext(GlobalStoreContext);
     const [session, loading] = useSession();
     const [showLoadingScreen, setShowLoadingScreen] = useState(true);
-    const isReadyToDisplay = !session ? !loading : (!store.authenticatingInProgress && (store.user?.locale === store.currentLocale));
+    const isReadyToDisplay = !store.loading;
     useEffect(() => {
         if (!loading && session) {
             client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then((result: Partial<UserData>) => {
@@ -28,8 +28,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             });
         }
     }, [session, loading])
-    useEffect(()=>{
-        isReadyToDisplay && setTimeout(()=>{
+    useEffect(() => {
+        isReadyToDisplay && setTimeout(() => {
             setShowLoadingScreen(false)
         }, 350)
     }, [isReadyToDisplay])

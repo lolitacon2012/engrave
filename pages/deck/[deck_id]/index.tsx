@@ -228,6 +228,10 @@ export default function DeckPage() {
         deck?.id && commitDeckChange(deck?.id);
     }, [deck?.id])
 
+    useEffect(() => {
+        store.setLoading(store.isLocaleLoading || store.isUserLoading || !deck);
+    }, [deck, store.isLocaleLoading || store.isUserLoading])
+
     const rowRenderer = ({ key, index, style }: { key: string, index: number, style: any }) => {
         const content = sortedFilteredWordList[index].content;
         const wordId = sortedFilteredWordList[index].id;
@@ -279,8 +283,6 @@ export default function DeckPage() {
         </div>
         <div className={styles.controllerRow}>
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
-                store.setCurrentDeckProgress(undefined);
-                store.setCurrentStudyingDeck(deck as Deck);
                 router.push(`/deck/${currentDeckId}/study`)
             }}>{t('deck_page_continue_study')} ✍️</Button>}
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
@@ -306,7 +308,7 @@ export default function DeckPage() {
             }} />}
         </div>
         <div className={styles.statsAndListRow}>
-            <DeckCard shadow={"SMALL"} deck={deck as Deck} />
+            <DeckCard shadow={"SMALL"} deck={deck as Deck} progress={store.user?.progress?.[currentDeckId]} />
             <div className={styles.wordListContainer}>
                 {isEmptyDeck ?
                     <div className={styles.emptyWordList}>

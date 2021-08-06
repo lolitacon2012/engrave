@@ -3,14 +3,19 @@ import { DEFAULT_LOCALE } from "cafe-constants/index";
 import translations from "i18n/translations.json";
 
 const supportedLocalesMap: { [key: string]: string } = { 'EN': 'EN_US', 'ZH': 'ZH_CN' };
-const getTranslation = (key: string, locale?: Locale) => {
+const getTranslation = (key: string, locale: Locale, placeholder: {[key: string] : string}) => {
     const allTranslations = translations as {
         [key: string]: {
             [key: string]: string
         }
     };
     const keyTranslation = allTranslations[key] || {};
-    return keyTranslation[locale as string] || keyTranslation[Locale.ZH_CN] || key;
+    const translated = keyTranslation[locale as string] || keyTranslation[Locale.ZH_CN] || key;
+    let hydrated = translated;
+    Object.keys(placeholder || {}).forEach(key => {
+        hydrated = translated.replaceAll(`{${key}}`, placeholder[key] || '')
+    });
+    return hydrated;
 }
 
 const getLocaleFromAcceptLanguagesHeader = (header: string) => {

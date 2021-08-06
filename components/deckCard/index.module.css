@@ -2,7 +2,6 @@
     background-color: white;
     min-height: 576px;
     min-width: 256px;
-    border-radius: 12px;
 
     overflow: hidden;
     transition: all 0.3s;
@@ -40,7 +39,6 @@
     position: absolute;
     top: 64px;
     left: 64px;
-    border-radius: 12px;
     color: white;
     border: solid 4px white;
     display: flex;
