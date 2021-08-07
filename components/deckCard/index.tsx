@@ -51,7 +51,8 @@ export default function DeckCard({ deck, onClickEnter, progress, shadow }: { dec
 
             <div className={styles.cardfooter}>
                 <h5 className={styles.wordCount}>{totalWord}{t('deck_component_words')}</h5>
-                <img className={styles.authorAvatar} src={authorAvatar} alt={authorName} />
+                {// eslint-disable-next-line @next/next/no-img-element
+                    <img className={styles.authorAvatar} src={authorAvatar} alt={authorName} />}
                 <h5 className={styles.authorName}>{authorName}</h5>
             </div>
         </div>}
