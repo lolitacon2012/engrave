@@ -8,16 +8,48 @@
         "ZH_CN": "中"
     },
     "homepage_title": {
-        "EN_US": "Qahva ☕",
-        "ZH_CN": "Qahva ☕"
+        "EN_US": "Qahva",
+        "ZH_CN": "Qahva"
     },
     "homepage_subtitle": {
-        "EN_US": "Vocabulary learning tool, designed for linguaphiles, by a linguaphile.",
-        "ZH_CN": "由语言爱好者设计的高效率单词学习工具"
+        "EN_US": "A pure vocabulary learning tool",
+        "ZH_CN": "纯粹的单词背诵工具"
+    },
+    "homepage_subtitle_create": {
+        "EN_US": "Create",
+        "ZH_CN": "创建单词集"
+    },
+    "homepage_subtitle_create_intro": {
+        "EN_US": "Create your own word list, importing from Quizlet supported.",
+        "ZH_CN": "创建您自定义的单词集，亦支持从Quizlet导入。"
+    },
+    "homepage_subtitle_learn": {
+        "EN_US": "Learn",
+        "ZH_CN": "超硬核记忆"
+    },
+    "homepage_subtitle_learn_intro": {
+        "EN_US": "Repeat, again, and again, then you won't forget anymore.",
+        "ZH_CN": "提供痛不欲生的死记硬背+机械式重复，让单词永生难忘。"
+    },
+    "homepage_subtitle_share": {
+        "EN_US": "Share",
+        "ZH_CN": "共享单词集"
+    },
+    "homepage_subtitle_share_intro": {
+        "EN_US": "Share your word list with others as well as using existing lists.",
+        "ZH_CN": "创建私有或者公开的单词集，将背单词的痛苦传播给他人。"
+    },
+    "homepage_subtitle_support": {
+        "EN_US": "Support",
+        "ZH_CN": "咖啡因成瘾"
+    },
+    "homepage_subtitle_support_intro": {
+        "EN_US": "Support me and buy me a coffee if you like the tool!",
+        "ZH_CN": "多年咖啡因成瘾患者，需要您的支持来购买更多咖啡。"
     },
     "global_app_name": {
-        "EN_US": "Qahva ☕",
-        "ZH_CN": "Qahva ☕"
+        "EN_US": "Qahva",
+        "ZH_CN": "Qahva"
     },
     "navbar_signin": {
         "EN_US": "Sign In",
@@ -82,6 +114,10 @@
     "deck_page_add_first_word":{
         "EN_US": "Add first word",
         "ZH_CN": "添加第一个词条"
+    },
+    "deck_component_words": {
+        "EN_US": " words",
+        "ZH_CN": "个单词"
     },
     "study_your_answer": {
         "EN_US": "Your answer:",

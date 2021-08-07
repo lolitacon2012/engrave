@@ -8,6 +8,7 @@ import Navbar from "cafe-components/navbar";
 import styles from './index.module.css';
 import { IoCafe } from "react-icons/io5";
 import cn from "classnames";
+import Head from "next/head";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const store = React.useContext(GlobalStoreContext);
@@ -34,6 +35,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         }, 350)
     }, [isReadyToDisplay])
     return <>
+        <Head>
+            <title>Qahva</title>
+            <meta name="description" content={"Qahva - " + store.t('homepage_subtitle')} />
+            <link rel="icon" href="/favicon.ico" />
+        </Head>
         <Navbar />
         {showLoadingScreen && <div className={cn(styles.loadingScreen, isReadyToDisplay && styles.fadingOut)}>
             <IoCafe className={styles.coffee} />

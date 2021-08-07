@@ -2,8 +2,8 @@ html,
 body {
   padding           : 0;
   margin            : 0;
-  background-color  : var(--cafe-colors-background);
-  color             : var(--cafe-colors-black);
+  background-color  : var(--cafe-background);
+  color             : var(--cafe-black);
   -ms-overflow-style: none;
   /* IE and Edge */
   scrollbar-width   : none;
@@ -28,16 +28,21 @@ a {
 
 :host,
 :root {
-  --cafe-colors-purple-500 : #805AD5;
-  --cafe-colors-cyan-700   : #0987A0;
-  --cafe-colors-background : #E6EBE6;
-  --cafe-colors-pink       : #F6B5B5;
-  --cafe-colors-black      : #3D3F44;
-  --cafe-colors-yellow     : #FFDC94;
-  --cafe-colors-grey       : #aaaaaa;
-  --cafe-colors-light-grey : #dddddd;
-  --cafe-colors-light-green: #C9E3AA;
-  --cafe-colors-light-red  : #ffcfcb;
-  --cafe-colors-red        : rgb(255, 119, 119);
-  --font-hei               : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+  --cafe-1: #ffb6b9;
+  --cafe-2: #fae3d9;
+  --cafe-3: #bbded6;
+  --cafe-4: #8ac6d1;
+  --cafe-5: #d9d9f3;
+  --cafe-6: #ceefe4;
+  --cafe-7: #9dd3a8;
+
+
+  --cafe-background : #E6EBE6;
+  --cafe-black      : #3D3F44;
+  --cafe-grey       : #aaaaaa;
+  --cafe-light-grey : #dddddd;
+  --cafe-light-green: #C9E3AA;
+  --cafe-light-red  : #ffcfcb;
+  --cafe-red        : rgb(255, 119, 119);
+  --font-hei        : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }

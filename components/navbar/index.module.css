@@ -6,7 +6,7 @@
     justify-content : space-between;
     align-items     : center;
     padding         : 0 24px;
-    background-image: linear-gradient(to right, var(--cafe-colors-cyan-700), var(--cafe-colors-purple-500));
+    background-image: linear-gradient(to right, var(--cafe-1), var(--cafe-3));
     position        : fixed;
     left            : 0;
     right           : 0;
@@ -45,7 +45,7 @@
     width           : 36px;
     height          : 36px;
     border-radius   : 20px;
-    background-color: rgba(0, 0, 0, 0.12);
+    background-color: rgba(0, 0, 0, 0.24);
     text-align      : center;
     font-size       : 20px;
     cursor          : pointer;

@@ -8,7 +8,7 @@
     right           : 0;
     top             : 100%;
     background-color: transparent;
-    color           : var(--cafe-colors-black);
+    color           : var(--cafe-black);
     padding-top     : 8px;
     transform       : translateY(-6px);
 }
@@ -17,7 +17,7 @@
     min-width       : 96px;
     background-color: white;
     min-height      : 64px;
-    color           : var(--cafe-colors-black);
+    color           : var(--cafe-black);
     font-size       : 1rem;
     overflow        : hidden;
     display         : block;
@@ -40,7 +40,7 @@
 }
 
 .dropdownMenuInnerContainer>.dropdownMenuItem:hover {
-    background-color: var(--cafe-colors-pink);
+    background-color: var(--cafe-4);
     color           : white;
     cursor          : pointer;
 }

@@ -1,10 +1,13 @@
 .deckCard {
     background-color: white;
-    min-height: 576px;
-    min-width: 256px;
-
-    overflow: hidden;
-    transition: all 0.3s;
+    min-height      : 576px;
+    min-width       : 256px;
+    max-width       : 256px;
+    overflow        : hidden;
+    transition      : all 0.3s;
+    display         : flex;
+    flex-direction  : column;
+    transition      : all 0.3s;
 }
 
 .deckCard.withNormalShadow {
@@ -20,45 +23,155 @@
 }
 
 .deckCard.clickable:hover {
-    transform: translateX(-4px) translateY(-4px);
+    transform : translateX(-4px) translateY(-4px);
     box-shadow: 18px 18px 4px 2px rgba(0, 0, 0, 0.12);
 }
 
-.deckCard > .imageContainer {
-    width: 256px;
-    height: 128px;
-    background-color: var(--cafe-colors-pink);
-    position: relative;
+.deckCard>.imageContainer {
+    width        : 256px;
+    height       : 128px;
+    position     : relative;
     margin-bottom: 76px;
 }
 
-.deckCard > .imageContainer > .titleImage {
-    width: 128px;
-    height: 128px;
-    background-color: var(--cafe-colors-pink);
-    position: absolute;
-    top: 64px;
-    left: 64px;
-    color: white;
-    border: solid 4px white;
-    display: flex;
-    justify-content: center;
-    line-height: 108px;
-    text-align: center;
-    font-size: 64px;
-    overflow: hidden;
+.deckCard>.imageContainer>.titleImage {
+    width           : 128px;
+    height          : 128px;
+    background-color: var(--cafe-1);
+    position        : absolute;
+    top             : 64px;
+    left            : 64px;
+    color           : white;
+    border          : solid 4px white;
+    display         : flex;
+    justify-content : center;
+    line-height     : 108px;
+    text-align      : center;
+    font-size       : 64px;
+    overflow        : hidden;
 }
 
-.deckCard > .imageContainer > .titleImage > img{
-    width: 120px;
-    height: 120px;
-    object-fit: cover;
+.deckCard>.imageContainer>.titleImage>img {
+    width       : 120px;
+    height      : 120px;
+    object-fit  : cover;
     border-width: 4px;
 }
 
-.deckCard > .contentContainer {
-    padding: 0 12px 12px 12px;
-    display: flex;
+.deckCard>.contentContainer {
+    padding       : 0 12px 12px 12px;
+    display       : flex;
     flex-direction: column;
+    align-items   : center;
+    flex          : 1;
+}
+
+.titleText {
+    max-width     : 100%;
+    white-space   : normal;
+    overflow-wrap : break-word;
+    text-align    : center;
+    margin        : 0;
+    padding-bottom: 24px;
+    border-bottom : 1px solid var(--cafe-light-grey);
+}
+
+.cardProgress {
+    flex          : 1;
+    width         : 100%;
+    padding       : 12px 0;
+    display       : flex;
+    flex-direction: column;
+}
+
+.cardProgress>.progressBarContainer {
+    width  : 100%;
+    display: flex;
+    height : 32px;
+    border : 2px solid var(--cafe-light-grey);
+    padding: 2px;
+    margin : 16px 0 24px 0;
+}
+
+.cardProgress>.progressBarContainer>div {
+    display: flex;
+}
+
+.cardProgress>.progressBarContainer>.new,
+.progressColorIconNew {
+    background-color: white;
+}
+
+.cardfooter {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    width          : 100%;
+}
+
+.cardfooter>h5 {
+    margin: 0;
+}
+
+.wordCount {
+    color: var(--cafe-grey);
+    flex : 1;
+}
+
+.authorAvatar {
+    width        : 24px;
+    height       : 24px;
+    border-radius: 12px;
+    margin-right : 4px;
+}
+
+.progressTextContainer {
+    display    : flex;
     align-items: center;
+    font-size  : 1rem;
+    margin     : 8px 0;
+}
+
+.progressTextContainer>.progressColorIcon {
+    height      : 1rem;
+    width       : 1rem;
+    margin-right: 8px;
+}
+
+.progressTextContainer>h4 {
+    margin: 0;
+}
+
+.progressTextContainer>.title {
+    flex: 1;
+}
+
+.progressColorIconNew {
+    border: 2px solid var(--cafe-light-grey)
+}
+
+.controlButtonContainer {
+    display        : flex;
+    justify-content: space-evenly;
+    align-items    : center;
+    flex           : 1;
+}
+
+.deckControlButton {
+    font-size       : 24px;
+    color           : white;
+    background-color: rgba(0, 0, 0, 0.24);
+    width           : 40px;
+    height          : 40px;
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+    border-radius   : 20px;
+    cursor          : pointer;
+    opacity         : 0.6666;
+    transition      : all 0.3s;
+}
+
+.deckControlButton:hover {
+    opacity: 1;
 }

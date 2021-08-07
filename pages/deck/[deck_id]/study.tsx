@@ -117,6 +117,7 @@ export default function DeckPage() {
             rpc: RPC.RPC_UPDATE_USER_INFO,
             data: {
                 progress: {
+                    ...store.user?.progress,
                     [currentDeckId]: newProgress
                 }
             }

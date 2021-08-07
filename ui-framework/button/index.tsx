@@ -10,7 +10,7 @@ interface ButtonProps {
 const Button = (props: ButtonProps) => {
     const height = (props.type === 'SMALL' && 24) || (props.type === 'NORMAL' && 32) || (props.type === 'LARGE' && 40) || 32;
     const fontSize = (props.type === 'SMALL' && '0.8rem') || (props.type === 'NORMAL' && '1rem') || (props.type === 'LARGE' && '1.2rem') || '1rem';
-    const backgroundColor = (props.color === 'BLACK-ALPHA' && 'rgba(0,0,0,0.16)') || (props.color === 'PRIMARY' && '#F687B3') || '#F687B3';
+    const backgroundColor = (props.color === 'BLACK-ALPHA' && 'rgba(0,0,0,0.16)') || (props.color === 'PRIMARY' && '#8ac6d1') || '#8ac6d1';
     const color = (props.color === 'BLACK-ALPHA' && 'white') || (props.color === 'PRIMARY' && 'white') || 'white';
     return <button className={style.button} style={
         {

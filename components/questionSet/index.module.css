@@ -16,9 +16,9 @@
     font-size       : 1.2rem;
     padding         : 0 12px;
     width           : 100%;
-    background-color: var(--cafe-colors-light-grey);
+    background-color: var(--cafe-light-grey);
     height          : 40px;
-    border          : 2px solid var(--cafe-colors-grey);
+    border          : 2px solid var(--cafe-grey);
     transition      : all 0.3s;
 }
 
@@ -35,8 +35,8 @@
 }
 
 .incorrect .answerInput {
-    border: 2px solid var(--cafe-colors-red);
-    color : var(--cafe-colors-red);
+    border: 2px solid var(--cafe-red);
+    color : var(--cafe-red);
 }
 
 .answerInput::placeholder {
@@ -66,7 +66,7 @@
 }
 
 .incorrect .questionTips {
-    color: var(--cafe-colors-red);
+    color: var(--cafe-red);
 }
 
 .result {
@@ -101,7 +101,7 @@
 }
 
 .reviewWord {
-    background-color: var(--cafe-colors-light-green);
+    background-color: var(--cafe-light-green);
     height          : 100%;
     display         : flex;
     align-items     : center;
@@ -110,11 +110,11 @@
 }
 
 .reviewWord.reviewWrong {
-    background-color: var(--cafe-colors-light-red);
+    background-color: var(--cafe-light-red);
 }
 
 .reviewWord.skipped {
-    background-color: var(--cafe-colors-light-grey);
+    background-color: var(--cafe-light-grey);
 }
 
 .reviewMeaning {

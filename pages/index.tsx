@@ -11,11 +11,6 @@ export default function Home() {
   store.setLoading(false);
   return (
     <div>
-      <Head>
-        <title>Qahva</title>
-        <meta name="description" content="Qahva - Free vocabulary study tool" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
       <div className={styles.container}>
         <main className={styles.main}>
           <h1 className={styles.title}>
@@ -28,8 +23,8 @@ export default function Home() {
 
           <div className={styles.grid}>
             <a className={styles.card}>
-              <h2>Create ✍</h2>
-              <p>You can create flashcard decks after login, easy and fast.</p>
+              <h2>{t('homepage_subtitle_create')} ✍</h2>
+              <p>{t('homepage_subtitle_create_intro')}</p>
             </a>
 
 
@@ -37,8 +32,8 @@ export default function Home() {
               e.preventDefault();
               router.push('/home')
             }} className={styles.card}>
-              <h2>Learn 🏆</h2>
-              <p>Study a deck and keep track of your progress.</p>
+              <h2>{t('homepage_subtitle_learn')} 🏆</h2>
+              <p>{t('homepage_subtitle_learn_intro')}</p>
             </a>
 
             <a
@@ -48,21 +43,19 @@ export default function Home() {
               }}
               className={styles.card}
             >
-              <h2>Share 🐾</h2>
-              <p>All decks created can be shared with other users, via link or search.</p>
+              <h2>{t('homepage_subtitle_share')} 🐾</h2>
+              <p>{t('homepage_subtitle_share_intro')}</p>
             </a>
 
             <a
               onClick={(e) => {
                 e.preventDefault();
-                router.push('/home')
+                window.location.href = 'https://www.buymeacoffee.com/liudake'
               }}
               className={styles.card}
             >
-              <h2>Donate ☕</h2>
-              <p>
-                Free forever, but do buy me a Qahva if you like it!
-              </p>
+              <h2>{t('homepage_subtitle_support')} ☕</h2>
+              <p>{t('homepage_subtitle_support_intro')}</p>
             </a>
           </div>
         </main>
