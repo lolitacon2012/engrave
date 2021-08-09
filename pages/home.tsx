@@ -76,7 +76,11 @@ const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, 
                     color: validateDeckThemeColor() ? normalizedColor : '#ff0000'
                 })
                 ReactSwal.close();
-            }} loading={isLoading}>{t('home_create_deck_submit')}</Button></div>
+            }} loading={isLoading}>{t('home_create_deck_submit')}</Button>
+            <Button disabled={isLoading} onClick={() => {
+                ReactSwal.close();
+            }} loading={isLoading}>{t('general_cancel')}</Button>
+        </div>
     </>
 };
 
@@ -138,16 +142,24 @@ export default function Home() {
             })).then((result: Deck[]) => {
                 setDecks(result.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
             })
+        } else {
+            setDecks([])
         }
     }, [store.user])
     useEffect(() => {
         store.setLoading(store.isLocaleLoading || store.isUserLoading || !decks);
     }, [decks, store.isLocaleLoading || store.isUserLoading])
 
+    const studyingCards = decks?.filter(deck => {
+        return !!store.user?.progress?.[deck.id];
+    })
+
+    const nonStudyingCards = decks?.filter(deck => {
+        return !!!store.user?.progress?.[deck.id];
+    })
+
     const renderDeckCard = (isStudying?: boolean) => {
-        return decks?.filter(deck => {
-            return isStudying ? !!store.user?.progress?.[deck.id] : !!!store.user?.progress?.[deck.id];
-        }).map((deck) =>
+        return ((isStudying ? studyingCards : nonStudyingCards) || []).map((deck) =>
             <DeckCard isMiniCard={!isStudying} shadow={"NORMAL"} key={`deck_card_${deck?.id}`} deck={deck} progress={store.user?.progress?.[deck?.id]} onClickEnter={() => {
                 deck && router.push(`/deck/${deck.id}`)
             }} />
@@ -157,10 +169,10 @@ export default function Home() {
     return hasAuthenticated && (
         <>
             <Container>
-                <h1>{t('home_title')}</h1>
-                <div className={styles.deckCardsRow}>
-                    {renderDeckCard(true)}
-                </div>
+                {studyingCards?.length ? <><h1>{t('home_title')}</h1>
+                    <div className={styles.deckCardsRow}>
+                        {renderDeckCard(true)}
+                    </div></> : null}
                 <h1>{t('home_all_decks')}</h1>
                 <div className={styles.deckCardsRow}>
                     <DeckCard isPlaceholder shadow={"NORMAL"} onClickEnter={() => {

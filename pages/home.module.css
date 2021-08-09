@@ -61,3 +61,7 @@
     flex-direction: row-reverse;
     margin-top    : 24px;
 }
+
+.deckCreationSubmitButton :not(:first-child) {
+    margin-right: 12px;
+}

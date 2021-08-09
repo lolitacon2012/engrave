@@ -49,6 +49,7 @@ const Navbar = () => {
                     </DropdownMenu>)}
             {(
                 <DropdownMenu onItemClicked={(locale: string) => {
+                    localStorage.setItem('locale', locale)
                     store.setLocale(locale);
                     id && debouncedSetUserLocale(locale);
                 }} items={[{ key: 'EN_US', title: 'English' }, { key: 'ZH_CN', title: '简体中文' }]}>

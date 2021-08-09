@@ -210,7 +210,7 @@ export default function QuestionSet(props: Props) {
         </div>
         <div className={styles.footerContainer}>
             <Button onClick={() => {
-                Swal.fire({
+                stage !== QuestionStage.Finished && Swal.fire({
                     title: t('study_exit'),
                     text: t('study_exit_warning'),
                     showCancelButton: true,

@@ -16,12 +16,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const [showLoadingScreen, setShowLoadingScreen] = useState(true);
     const isReadyToDisplay = !store.loading;
     useEffect(() => {
+        store.setLocale(localStorage.getItem('locale') || '');
+    })
+    useEffect(() => {
         if (!loading && session) {
             client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then((result: Partial<UserData>) => {
                 store.setUser({
                     ...store.user, ...result, loading: false, email: session.user?.email || '', avatar: session.user?.image || '', name: session.user?.name || ''
                 });
-                store.setLocale(result?.locale);
+                store.setLocale(localStorage.getItem('locale') || result?.locale);
             })
         } else {
             store.setUser({
@@ -44,7 +47,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {showLoadingScreen && <div className={cn(styles.loadingScreen, isReadyToDisplay && styles.fadingOut)}>
             <IoCafe className={styles.coffee} />
         </div>}
-        {children}
+        <div className={(styles.childContainer)}>{children}</div>
         <footer className={styles.footer}>
             <p className={styles.version}>pre-alpha 0.0.2</p>
             <span className={styles.disclaimer}>DISCLAIMER: This website is still at pre-alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Please use it at your own risk.</span>

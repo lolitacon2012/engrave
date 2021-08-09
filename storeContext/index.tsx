@@ -45,6 +45,7 @@ export default function GlobalStoreProvider({ children }: { children: React.Reac
   const isLocaleLoading = (user?.locale !== locale)
   const setLocale = (locale?: string) => {
     localSetLocale(locale || DEFAULT_LOCALE)
+    localStorage?.setItem('locale', locale || DEFAULT_LOCALE)
   }
   const updateUser = () => {
     client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then((result: Partial<UserData>) => {

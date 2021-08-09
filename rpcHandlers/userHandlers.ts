@@ -13,6 +13,7 @@ const getUserInfo = async (
   const { db } = await connectToDatabase();
   const now = new Date().getTime();
   let user = null;
+
   if (email) {
     user = await db.collection("users")
       .findOne({ id: email })

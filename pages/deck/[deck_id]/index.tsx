@@ -229,7 +229,7 @@ export default function DeckPage() {
     }, [store.user?.id, currentDeckId])
 
     useEffect(() => {
-        deck?.id && commitDeckChange(deck?.id, () => store.updateUser());
+        deck?.id && commitDeckChange(deck?.id, () => { });
     }, [deck?.id])
 
     useEffect(() => {
@@ -299,23 +299,23 @@ export default function DeckPage() {
                     router.push(`/deck/${currentDeckId}/study`)
                 }
 
-            }}>{t(!deck?.words?.length ? 'deck_page_begin_study' : 'deck_page_continue_study')} ✍️</Button>}
+            }}>{t(store.user?.progress?.[currentDeckId] ? 'deck_page_continue_study' : 'deck_page_begin_study')}</Button>}
             {/* {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 router.push(`/deck/${currentDeckId}/study`)
             }}>{t('deck_page_flashcard')} ✔️</Button>} */}
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 // TODO: set deck and progress style
                 alert('Not implemented yet 😅')
-            }}>{t('deck_page_settings')} ⚙️</Button>}
+            }}>{t('deck_page_settings')}</Button>}
             {isOwnDeck && !editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(true);
                 setEditingWord(undefined);
-            }}>{t('deck_page_edit')} ✏️</Button>}
+            }}>{t('deck_page_edit')}</Button>}
             {isOwnDeck && editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(false)
                 setEditingWord(undefined);
 
-            }}>{t('deck_page_exit_edit')} 💾</Button>}
+            }}>{t('deck_page_exit_edit')}</Button>}
 
             <div className={styles.flexPlaceholder} />
             {!editing && <input className={styles.searchBar} placeholder={t('deck_page_search_tip')} value={searchKeyword} onChange={(keyword) => {
