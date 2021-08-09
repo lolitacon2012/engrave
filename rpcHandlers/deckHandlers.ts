@@ -1,10 +1,14 @@
 
 import { CreateDeckRequestData, UpdateDeckRequestData } from 'cafe-types/rpc/deck';
-import { Word } from 'cafe-types/deck';
+import { Deck, Word } from 'cafe-types/deck';
 import { connectToDatabase } from 'cafe-utils/mongodb';
 import type { NextApiRequest } from 'next';
 import { getSession } from 'next-auth/client'
 import { v4 as uuid } from 'uuid';
+
+const deckChecker = (deck: Partial<Deck>) => {
+  // TODO: check deck before commit
+}
 
 const createDeck = async (
   data: CreateDeckRequestData,

@@ -45,5 +45,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <IoCafe className={styles.coffee} />
         </div>}
         {children}
+        <footer className={styles.footer}>
+            <p className={styles.version}>pre-alpha 0.0.2</p>
+            <span className={styles.disclaimer}>DISCLAIMER: This website is still at pre-alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Please use it at your own risk.</span>
+        </footer>
     </>;
 }

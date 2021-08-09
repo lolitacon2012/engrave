@@ -15,9 +15,10 @@ const handler = async (
         }
     })
     const { db } = await connectToDatabase();
-    const bulkArr = [];
+    const wordsBulkArr = [];
+    const userProgressBulkArr = [];
     for (const i of words) {
-        bulkArr.push({
+        wordsBulkArr.push({
             updateOne: {
                 "filter": { "id": i.id },
                 "update": { $set: i }
@@ -25,14 +26,26 @@ const handler = async (
         })
     }
     for (const id of wordIdsToDelete) {
-        bulkArr.push({
+        wordsBulkArr.push({
             deleteOne: {
                 "filter": { "id": id }
             }
         })
     }
-    if (bulkArr.length > 0) {
-        await db.collection("words").bulkWrite(bulkArr);
+    if (wordsBulkArr.length > 0) {
+        await db.collection("words").bulkWrite(wordsBulkArr);
+    }
+    if (wordIdsToDelete.length > 0) {
+        let pullOperation: any = {};
+        for (let lv = 0; lv <= 10; lv++) {
+            pullOperation["progress.$[].progress.level_" + lv] = {
+                $in: [...wordIdsToDelete]
+            };
+        }
+        await db.collection("users").updateMany({},
+            {//@ts-ignore
+                $pull: { ...pullOperation }
+            })
     }
 }
 

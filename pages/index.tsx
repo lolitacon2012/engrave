@@ -59,10 +59,6 @@ export default function Home() {
             </a>
           </div>
         </main>
-
-        <footer className={styles.footer}>
-          <p className={styles.version}>pre-alpha 0.0.1</p>
-        </footer>
       </div>
     </div>
   )

@@ -13,7 +13,7 @@ import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool } from 'cafe-utils/deckUpdatePoolUtils';
 import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline } from "react-icons/io5";
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
@@ -26,6 +26,7 @@ export default function DeckPage() {
     const store = useContext(GlobalStoreContext);
     const t = store.t;
     const hasAuthenticated = (store.authenticatingInProgress === false);
+
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>('');
@@ -81,14 +82,16 @@ export default function DeckPage() {
     }
 
     const onDeleteWord = (wordId: string) => {
-        swal({
+        Swal.fire({
             text: t('deck_page_delete_modal_text'),
-            icon: "warning",
-            buttons: [t("general_cancel"), t("general_delete")],
-            dangerMode: true,
-        })
-            .then((willDelete) => {
-                if (willDelete && deck?.words) {
+            showCancelButton: true,
+            cancelButtonText: t("general_cancel"),
+            confirmButtonText: t("general_delete"),
+            confirmButtonColor: '#ff0000',
+            icon: 'warning',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                if (deck?.words) {
                     const newWords = deck?.words.filter(word => word.id !== wordId);
                     setDeck({
                         ...(deck || {}),
@@ -98,7 +101,8 @@ export default function DeckPage() {
                     addWordDeletePool(wordId);
                     debouncedBatchUpdateDeck(currentDeckId);
                 }
-            });
+            }
+        })
     }
 
     const onAddWord = async (wordId?: string, addToLast?: boolean) => {
@@ -150,7 +154,7 @@ export default function DeckPage() {
         setDebouncedSearchKeyword(keyword);
     }, 500), [])
     const debouncedBatchUpdateDeck = useCallback(debounce((currentDeckId?: string) => {
-        currentDeckId && commitDeckChange(currentDeckId);
+        currentDeckId && commitDeckChange(currentDeckId, () => store.updateUser());
     }, 500), [])
 
     const onTabWithWordListLastWord = (e: KeyboardEvent) => {
@@ -222,14 +226,14 @@ export default function DeckPage() {
                 setDeck(result[0]);
             })
         }
-    }, [store.user, currentDeckId])
+    }, [store.user?.id, currentDeckId])
 
     useEffect(() => {
-        deck?.id && commitDeckChange(deck?.id);
+        deck?.id && commitDeckChange(deck?.id, () => store.updateUser());
     }, [deck?.id])
 
     useEffect(() => {
-        store.setLoading(store.isLocaleLoading || store.isUserLoading || !deck);
+        store.setLoading(store.isLocaleLoading || store.isUserLoading || !deck || deck.id !== currentDeckId);
     }, [deck, store.isLocaleLoading || store.isUserLoading])
 
     const rowRenderer = ({ key, index, style }: { key: string, index: number, style: any }) => {
@@ -275,21 +279,33 @@ export default function DeckPage() {
             </div>
         );
     }
-
-    return hasAuthenticated && <Container>
+    return hasAuthenticated && <Container fullHeight>
         <div className={styles.titleRow}>
             <h1>{deck?.name}</h1>
             <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>
         </div>
         <div className={styles.controllerRow}>
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
-                router.push(`/deck/${currentDeckId}/study`)
-            }}>{t('deck_page_continue_study')} ✍️</Button>}
+                router.push(`/home`)
+            }}>{t('deck_page_back_to_list')}</Button>}
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+                if (!deck?.words?.length) {
+                    Swal.fire({
+                        text: t('deck_page_empty_list'),
+                        confirmButtonText: t("general_ok"),
+                        icon: 'warning',
+                    })
+                } else {
+                    router.push(`/deck/${currentDeckId}/study`)
+                }
+
+            }}>{t(!deck?.words?.length ? 'deck_page_begin_study' : 'deck_page_continue_study')} ✍️</Button>}
+            {/* {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 router.push(`/deck/${currentDeckId}/study`)
-            }}>{t('deck_page_flashcard')} ✔️</Button>}
+            }}>{t('deck_page_flashcard')} ✔️</Button>} */}
             {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
-                router.push(`/deck/${currentDeckId}/study`)
+                // TODO: set deck and progress style
+                alert('Not implemented yet 😅')
             }}>{t('deck_page_settings')} ⚙️</Button>}
             {isOwnDeck && !editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(true);

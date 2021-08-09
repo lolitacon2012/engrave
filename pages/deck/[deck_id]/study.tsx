@@ -10,7 +10,7 @@ import { Deck, Word } from 'cafe-types/deck'
 import Button from 'cafe-ui/button';
 import DeckCard from 'cafe-components/deckCard';
 import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline } from "react-icons/io5";
-import swal from 'sweetalert';
+
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
@@ -67,8 +67,9 @@ export default function DeckPage() {
     useEffect(() => {
         const userStudyProgresses = store.user?.progress || {};
         let currentProgress = userStudyProgresses[currentDeckId];
+        const hasNoWords = currentProgress && ([...currentProgress.level_0, ...currentProgress.level_1, ...currentProgress.level_2, ...currentProgress.level_3, ...currentProgress.level_4, ...currentProgress.level_5, ...currentProgress.level_6, ...currentProgress.level_7, ...currentProgress.level_8, ...currentProgress.level_9, ...currentProgress.level_10].length === 0);
         if (!!currentStudyingDeck && !!store.user?.id) {
-            if (!currentProgress) {
+            if (!currentProgress || hasNoWords) {
                 currentProgress = {
                     ...NEW_PROGRESS,
                     deck_id: currentDeckId,
@@ -97,7 +98,7 @@ export default function DeckPage() {
             const currentLevel = [...newProgress['level_' + (lv)]] as string[];
             const toRemoveFromCurrentLevel: string[] = [];
             questions.forEach(q => {
-                if (currentLevel.includes(q.word.id) && !processedIds.includes(q.word.id)) {
+                if (q.word && currentLevel.includes(q.word.id) && !processedIds.includes(q.word.id)) {
                     processedIds.push(q.word.id);
                     const toLevel = Math.min(Math.max(lv + q.rank_delta, 0), 10);
                     if (toLevel === lv) {

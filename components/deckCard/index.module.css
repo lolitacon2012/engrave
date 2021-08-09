@@ -1,6 +1,5 @@
 .deckCard {
     background-color: white;
-    min-height      : 576px;
     min-width       : 256px;
     max-width       : 256px;
     overflow        : hidden;
@@ -25,6 +24,13 @@
 .deckCard.clickable:hover {
     transform : translateX(-4px) translateY(-4px);
     box-shadow: 18px 18px 4px 2px rgba(0, 0, 0, 0.12);
+}
+
+.deckCard.placeHolder {
+    border       : 4px dashed var(--cafe-grey);
+    border-radius: 4px;
+    min-width    : 248px;
+    max-width    : 248px;
 }
 
 .deckCard>.imageContainer {
@@ -66,6 +72,28 @@
     flex          : 1;
 }
 
+.placeHolderContainer {
+    display        : flex;
+    flex-direction : column;
+    justify-content: center;
+    align-items    : center;
+    color          : var(--cafe-grey);
+}
+
+.placeHolderContainer h2 {
+    width        : 128px;
+    height       : 128px;
+    line-height  : 108px;
+    text-align   : center;
+    font-size    : 96px;
+    margin       : 64px;
+    margin-bottom: 8px;
+}
+
+.placeHolderContainer h3 {
+    margin: 0 0 32px 0;
+}
+
 .titleText {
     max-width     : 100%;
     white-space   : normal;
@@ -77,11 +105,23 @@
 }
 
 .cardProgress {
-    flex          : 1;
-    width         : 100%;
-    padding       : 12px 0;
-    display       : flex;
-    flex-direction: column;
+    flex           : 1;
+    width          : 100%;
+    padding        : 12px 0 0 0;
+    display        : flex;
+    flex-direction : column;
+    min-height     : 256px;
+    justify-content: center;
+}
+
+.cardProgress.noProgress {
+    color     : var(--cafe-grey);
+    text-align: center;
+}
+
+.cardProgress.noProgress>span {
+    font-size: 64px;
+
 }
 
 .cardProgress>.progressBarContainer {
@@ -107,6 +147,7 @@
     justify-content: center;
     align-items    : center;
     width          : 100%;
+    padding        : 12px 0 0 0;
 }
 
 .cardfooter>h5 {

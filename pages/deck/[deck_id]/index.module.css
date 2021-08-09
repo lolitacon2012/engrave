@@ -168,10 +168,10 @@
 }
 
 .searchBar {
-    border       : none;
-    font-size    : 1.2rem;
-    padding      : 0 12px;
-    width        : 360px;
+    border   : none;
+    font-size: 1.2rem;
+    padding  : 0 12px;
+    width    : 360px;
 }
 
 .searchBar::placeholder {
@@ -183,8 +183,10 @@
 }
 
 .statsAndListRow {
-    display: flex;
-    width  : 100%;
+    display       : flex;
+    width         : 100%;
+    height        : 100%;
+    padding-bottom: 24px;
 }
 
 .statsAndListRow> :first-child {

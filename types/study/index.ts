@@ -19,14 +19,17 @@ type StudyProgress = {
 }
 
 type StudySet = {
-    questions: {
-        word: Word,
-        rank_delta: number, // 0 = no change, 1 -1 etc.
-        question_type: string
-    }[];
+    questions: Question[];
     temp_id: string,
 }
 
-export type { StudyProgress, StudySet };
+type Question = {
+    word?: Word, // could be undefined
+    rank_delta: number, // 0 = no change, 1 -1 etc.
+    question_type: string,
+    word_id: string
+}
+
+export type { StudyProgress, StudySet, Question };
 
 // a new word: watch once, repeat once, 

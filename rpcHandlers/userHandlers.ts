@@ -31,6 +31,14 @@ const getUserInfo = async (
     await db.collection("users")
       .insertOne(user);
   }
+
+  // flatten progress from array to object
+  const originalProgress = [...(user.progress || [])];
+  const newUserProgress: { [key: string]: any } = {};
+  originalProgress.forEach(p => {
+    newUserProgress[p.id] = p.progress;
+  })
+  user.progress = newUserProgress;
   return user;
 }
 
@@ -42,11 +50,22 @@ const updateUserInfo = async (
   const email = session?.user?.email || '' as string;
   const { db } = await connectToDatabase();
 
+  // unflatten progress from object to array
+  const originalProgress = { ...data.progress };
+  const newUserProgress: { id: string, progress: any }[] = [];
+  Object.keys(originalProgress).forEach(id => {
+    newUserProgress.push({
+      id, progress: originalProgress[id]
+    })
+  })
+
+
   await db.collection("users")
     .updateOne({ id: email },
       {
         $set: {
-          ...data
+          ...data,
+          ...(data.progress ? {progress: newUserProgress} : {})
         }
       })
 }

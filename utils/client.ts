@@ -25,12 +25,22 @@ class HttpClient {
       const parsedResult = JSON.parse(localStorage.getItem(`${uniqueRequestId}`) || 'null');
       if (!parsedResult) {
         const result = await axios.post('/api/rpc', data);
-        localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+        try {
+          localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+        } catch {
+          localStorage.clear();
+          // TODO: use memory
+        }
         onNewResultReceived && onNewResultReceived(result.data);
         return result.data;
       } else {
         axios.post('/api/rpc', data).then((result) => {
-          uniqueRequestId && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+          try {
+            uniqueRequestId && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+          } catch {
+            // TODO: use memory
+            localStorage.clear();
+          }
           onNewResultReceived && onNewResultReceived(result.data);
         })
         return parsedResult.data;

@@ -25,8 +25,8 @@ export function generateColorTheme(col: string) {
 
         if (g > 255) g = 255;
         else if (g < 0) g = 0;
-
-        return (usePound ? "#" : "") + (g | (b << 8) | (r << 16)).toString(16);
+        const result = ((g | (b << 8) | (r << 16)).toString(16));
+        return (usePound ? "#" : "") + (result.length === 6 ? result : ('0' + result))
     }
 
     const result = []; // 5 colors;

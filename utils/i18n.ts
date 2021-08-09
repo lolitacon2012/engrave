@@ -13,7 +13,7 @@ const getTranslation = (key: string, locale: Locale, placeholder: {[key: string]
     const translated = keyTranslation[locale as string] || keyTranslation[Locale.ZH_CN] || key;
     let hydrated = translated;
     Object.keys(placeholder || {}).forEach(key => {
-        hydrated = translated.replaceAll(`{${key}}`, placeholder[key] || '')
+        hydrated = hydrated.replaceAll(`{${key}}`, placeholder[key] || '')
     });
     return hydrated;
 }

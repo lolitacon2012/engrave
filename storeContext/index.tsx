@@ -5,6 +5,8 @@ import { Locale } from "cafe-types/i18n";
 import { DEFAULT_LOCALE } from "cafe-constants/index";
 import { Deck } from "cafe-types/deck";
 import { StudyProgress } from "cafe-types/study";
+import client from "cafe-utils/client";
+import { RPC } from "cafe-rpc/rpc";
 const NOOP = () => undefined;
 interface GlobalStoreInterface {
   user?: Partial<UserData> | undefined,
@@ -18,6 +20,7 @@ interface GlobalStoreInterface {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   isUserLoading: boolean,
   isLocaleLoading: boolean,
+  updateUser: () => void,
 }
 export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   setUser: NOOP,
@@ -30,6 +33,7 @@ export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   setLoading: NOOP,
   isUserLoading: true,
   isLocaleLoading: true,
+  updateUser: NOOP,
 });
 
 export default function GlobalStoreProvider({ children }: { children: React.ReactNode }) {
@@ -42,13 +46,21 @@ export default function GlobalStoreProvider({ children }: { children: React.Reac
   const setLocale = (locale?: string) => {
     localSetLocale(locale || DEFAULT_LOCALE)
   }
+  const updateUser = () => {
+    client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then((result: Partial<UserData>) => {
+      store.setUser({
+        ...store.user, ...result
+      });
+    })
+  }
   const t = (key: string, placeholder?: { [key: string]: string }) => {
     return getTranslation(key, (locale || DEFAULT_LOCALE) as Locale, placeholder || {});
   }
   const store = {
-    isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
+    updateUser, isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
   }
   return <GlobalStoreContext.Provider value={store}>
     {children}
   </GlobalStoreContext.Provider>
 }
+

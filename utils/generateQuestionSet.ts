@@ -12,7 +12,7 @@ const sampleSize = ([...arr], n = 1) => {
 
 export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<StudyProgress>, size: number): StudySet => {
     const questionSet: {
-        word: Word, rank_delta: number, question_type: 'NEW_WORD' | 'REPEAT' | 'REVIEW' | 'LONG_TERM_REVIEW'
+        word?: Word, rank_delta: number, question_type: 'NEW_WORD' | 'REPEAT' | 'REVIEW' | 'LONG_TERM_REVIEW', word_id: string
     }[] = [];
     const wordIdToWord = new Map();
     deck.words?.forEach(w => {
@@ -33,7 +33,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
             questionSet.push({
                 word: wordIdToWord.get(w),
                 rank_delta: 0,
-                question_type: 'REVIEW'
+                question_type: 'REVIEW',
+                word_id: w,
             })
         });
         return {
@@ -47,7 +48,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
-            question_type: 'REPEAT'
+            question_type: 'REPEAT',
+            word_id: w,
         })
     });
 
@@ -56,7 +58,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
-            question_type: 'NEW_WORD'
+            question_type: 'NEW_WORD',
+            word_id: w,
         })
     });
 
@@ -65,7 +68,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
-            question_type: 'REVIEW'
+            question_type: 'REVIEW',
+            word_id: w,
         })
     });
 
@@ -74,7 +78,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
-            question_type: 'REVIEW'
+            question_type: 'REVIEW',
+            word_id: w,
         })
     });
 
@@ -83,7 +88,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
-            question_type: 'LONG_TERM_REVIEW'
+            question_type: 'LONG_TERM_REVIEW',
+            word_id: w,
         })
     });
 

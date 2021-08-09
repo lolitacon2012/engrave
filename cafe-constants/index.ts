@@ -1,1 +1,2 @@
 export const DEFAULT_LOCALE = 'EN_US';
+export const RECOMMEND_THEME_COLORS = ['#e42c64', '#fff591', '#5bd1d7', '#1ee3cf', '#8134af', '#dd2a7b', '#eec60a', '#2d2d2d', '#2E94B9', '#A94CAF', '#6abe83', '#593E1A', '#00a03e', '#3366CC', '#791E94', '#FF82A9', '#b38766'];

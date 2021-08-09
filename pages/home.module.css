@@ -1,7 +1,63 @@
 .deckCardsRow {
-    display: flex;
+    display              : grid;
+    grid-gap             : 64px;
+    grid-template-columns: repeat(auto-fill, 256px);
+    width                : 100%;
+    margin               : 24px 0;
 }
 
-.deckCardsRow > :not(:last-child) {
-    margin-right: 64px;
+
+.deckCardsRow::after {
+    content: "";
+    flex   : 1;
+}
+
+.deckCreationFormContainer {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+.deckCreationFormRightContainer {
+    display        : flex;
+    flex           : 1;
+    justify-content: center;
+    flex-direction : column;
+    margin-left    : 24px;
+}
+
+.deckCreationFormInputItem {
+    display        : flex;
+    align-items    : center;
+    justify-content: space-between;
+    margin         : 12px 0;
+}
+
+.deckCreationFormInputItem>input {
+    border          : none;
+    font-size       : 1rem;
+    padding         : 0 12px;
+    flex            : 1;
+    background-color: var(--cafe-light-grey);
+    height          : 40px;
+    border          : 2px solid var(--cafe-grey);
+    transition      : all 0.3s;
+    max-width       : 220px;
+}
+
+.deckCreationFormInputItem>h4 {
+    margin      : 0;
+    margin-right: 12px;
+    overflow    : hidden;
+    font-size   : 1rem;
+}
+
+.deckCreationFormInputItem>input:focus {
+    outline: none;
+}
+
+.deckCreationSubmitButton {
+    display       : flex;
+    flex-direction: row-reverse;
+    margin-top    : 24px;
 }

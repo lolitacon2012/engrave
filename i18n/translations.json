@@ -7,6 +7,30 @@
         "EN_US": "En",
         "ZH_CN": "中"
     },
+    "time_yesterday": {
+        "EN_US": "Yesterday",
+        "ZH_CN": "昨天"
+    },
+    "time_today": {
+        "EN_US": "Today",
+        "ZH_CN": "今天"
+    },
+    "time_2_days_ago": {
+        "EN_US": "2 days ago",
+        "ZH_CN": "前天"
+    },
+    "time_unknown": {
+        "EN_US": "Unknown",
+        "ZH_CN": "未知"
+    },
+    "time_yyyy_mm_dd": {
+        "EN_US": "{yyyy}-{mm}-{dd}",
+        "ZH_CN": "{yyyy}年{mm}月{dd}日"
+    },
+    "time_just_now": {
+        "EN_US": "Just now",
+        "ZH_CN": "刚刚"
+    },
     "homepage_title": {
         "EN_US": "Qahva",
         "ZH_CN": "Qahva"
@@ -67,6 +91,14 @@
         "EN_US": "Continue Study",
         "ZH_CN": "继续学习"
     },
+    "deck_page_begin_study": {
+        "EN_US": "Begin Study",
+        "ZH_CN": "开始学习"
+    },
+    "deck_page_back_to_list": {
+        "EN_US": "Deck List",
+        "ZH_CN": "返回列表"
+    },
     "deck_page_flashcard": {
         "EN_US": "Flashcard",
         "ZH_CN": "单词卡片"
@@ -99,6 +131,10 @@
         "EN_US": "Cancel",
         "ZH_CN": "取消"
     },
+    "general_ok": {
+        "EN_US": "Ok",
+        "ZH_CN": "好的"
+    },
     "deck_page_search_tip": {
         "EN_US": "Search word or meaning",
         "ZH_CN": "搜索单词或释意"
@@ -107,17 +143,45 @@
         "EN_US": "Are you sure to delete this word?",
         "ZH_CN": "您确定要删除该词条？"
     },
-    "deck_page_empty_list":{
+    "deck_page_empty_list": {
         "EN_US": "This deck has no word added yet.",
         "ZH_CN": "此单词集尚未添加任何词条。"
     },
-    "deck_page_add_first_word":{
+    "deck_page_add_first_word": {
         "EN_US": "Add first word",
         "ZH_CN": "添加第一个词条"
     },
     "deck_component_words": {
         "EN_US": " words",
         "ZH_CN": "个单词"
+    },
+    "deck_component_no_progress": {
+        "EN_US": "You have not started studying this word set",
+        "ZH_CN": "您还没有开始本单词集的学习"
+    },
+    "deck_component_create_new": {
+        "EN_US": "Create new deck",
+        "ZH_CN": "新建单词集"
+    },
+    "deck_component_new": {
+        "EN_US": "New",
+        "ZH_CN": "未学习"
+    },
+    "deck_component_studying": {
+        "EN_US": "Studying",
+        "ZH_CN": "学习中"
+    },
+    "deck_component_reviewing": {
+        "EN_US": "Reviewing",
+        "ZH_CN": "巩固中"
+    },
+    "deck_component_finished": {
+        "EN_US": "Finished",
+        "ZH_CN": "已牢记"
+    },
+    "deck_component_last_studied": {
+        "EN_US": "Updated",
+        "ZH_CN": "上次学习"
     },
     "study_your_answer": {
         "EN_US": "Your answer:",
@@ -147,6 +211,10 @@
         "EN_US": "Exit",
         "ZH_CN": "退出学习"
     },
+    "study_exit_warning": {
+        "EN_US": "Your current study progress will be lost.",
+        "ZH_CN": "您当前的学习进度将会丢失。"
+    },
     "study_guessed": {
         "EN_US": "I was lucky",
         "ZH_CN": "我是瞎蒙的"
@@ -174,5 +242,29 @@
     "study_meaning": {
         "EN_US": "Meaning: ",
         "ZH_CN": "释意："
+    },
+    "home_title": {
+        "EN_US": "Currently studying",
+        "ZH_CN": "学习中"
+    },
+    "home_all_decks": {
+        "EN_US": "All Decks",
+        "ZH_CN": "全部单词集"
+    },
+    "home_create_deck_name": {
+        "EN_US": "Name:",
+        "ZH_CN": "名称："
+    },
+    "home_create_deck_upload_image": {
+        "EN_US": "Title image",
+        "ZH_CN": "上传单词集图标"
+    },
+    "home_create_deck_theme_color": {
+        "EN_US": "Color:",
+        "ZH_CN": "主题色："
+    },
+    "home_create_deck_submit": {
+        "EN_US": "Create",
+        "ZH_CN": "创建"
     }
 }
