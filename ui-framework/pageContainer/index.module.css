@@ -1,10 +1,17 @@
 .container {
-    min-height: 100vh;
-    padding: 72px 320px 0px 320px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: flex-start;
-    min-height: 100vh;
-    width: 100%;
+  min-height     : 100vh;
+  padding        : 0px 12% 0px 12%;
+  display        : flex;
+  flex-direction : column;
+  justify-content: flex-start;
+  align-items    : flex-start;
+  width          : 100vw;
+}
+
+@media only screen and (max-width: 540px) {
+
+  /* For mobile phones: */
+  .container {
+    padding: 72px 12px 0px 12px;
   }
+}

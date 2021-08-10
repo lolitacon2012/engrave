@@ -26,6 +26,7 @@ interface GlobalStoreInterface {
   errorMessageStack: string[],
   setErrorMessageStack: React.Dispatch<React.SetStateAction<string[]>>,
   pushErrorMessageStack: (e: string) => void,
+  updateUserLocally: (data: Partial<UserData>) => void;
 }
 export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   setUser: NOOP,
@@ -39,6 +40,7 @@ export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   isUserLoading: true,
   isLocaleLoading: true,
   updateUser: NOOP,
+  updateUserLocally: NOOP,
   setError: NOOP,
   hasError: 0,
   errorMessageStack: [],
@@ -69,11 +71,16 @@ export default function GlobalStoreProvider({ children }: { children: React.Reac
       });
     })
   }
+  const updateUserLocally = (data: Partial<UserData>) => {
+    setUser({
+      ...user, ...data
+    });
+  }
   const t = (key: string, placeholder?: { [key: string]: string }) => {
     return getTranslation(key, (locale || DEFAULT_LOCALE) as Locale, placeholder || {});
   }
   const store = {
-    pushErrorMessageStack, setErrorMessageStack, errorMessageStack, hasError, setError, updateUser, isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
+    updateUserLocally, pushErrorMessageStack, setErrorMessageStack, errorMessageStack, hasError, setError, updateUser, isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
   }
   return <GlobalStoreContext.Provider value={store}>
     {children}

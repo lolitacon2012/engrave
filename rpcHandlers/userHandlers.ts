@@ -12,6 +12,8 @@ const getUserInfo = async (
   try {
     const session = await getSession({ req });
     const hashedEmail = getHashedEmail(session?.user?.email || '');
+    const avatar = session?.user?.image;
+    const name = session?.user?.name;
     const { db } = await connectToDatabase();
     const now = new Date().getTime();
     let user = null;
@@ -41,6 +43,8 @@ const getUserInfo = async (
       newUserProgress[p.id] = p.progress;
     })
     user.progress = newUserProgress;
+    user.avatar = avatar;
+    user.name = name;
     return {
       data: user, error: ''
     };

@@ -34,8 +34,9 @@ export const commitDeckChange = async (deckId: string, onFinished: () => void) =
     })
     const newWordIdList = JSON.parse(localStorage.getItem(DECK_WORD_ID_LIST) || 'null');
     const deletingWords = JSON.parse(localStorage.getItem(WORDS_TO_DELETE_ID_LIST) || 'null');
-
-    await newWordIdList && client.callRPC({
+    const needUpdateWords = !![...(pendingWords || []), ...(deletingWords || [])].length;
+    const needUpdateDeck = !!newWordIdList?.length;
+    needUpdateDeck && await client.callRPC({
         rpc: RPC.RPC_UPDATE_DECK_BY_ID,
         data: {
             id: deckId,
@@ -44,7 +45,7 @@ export const commitDeckChange = async (deckId: string, onFinished: () => void) =
     });
 
 
-    await client.callRPC({
+    needUpdateWords && await client.callRPC({
         rpc: RPC.RPC_UPDATE_WORDS_BY_IDS,
         data: {
             id: deckId,
@@ -53,9 +54,15 @@ export const commitDeckChange = async (deckId: string, onFinished: () => void) =
         }
     });
 
-    onFinished();
+    (needUpdateWords || needUpdateDeck) && onFinished();
     localStorage.removeItem(DECK_WORD_ID_LIST);
     localStorage.removeItem(WORD_ID_PENDING);
     localStorage.removeItem(WORDS_TO_DELETE_ID_LIST);
     pendingWordIds.forEach((id: string) => localStorage.removeItem(id));
+}
+
+export const cleanCache = () => {
+    localStorage.removeItem(DECK_WORD_ID_LIST);
+    localStorage.removeItem(WORD_ID_PENDING);
+    localStorage.removeItem(WORDS_TO_DELETE_ID_LIST);
 }

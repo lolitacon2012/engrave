@@ -25,7 +25,7 @@ const Navbar = () => {
             rpc: RPC.RPC_UPDATE_USER_INFO,
             data: { locale }
         })
-    }, 1000), []);
+    }, 0), []);
     const canLogin = !id && !userLoading && !store.authenticatingInProgress;
     const userMenuItems = [{ key: 'PROFILE', title: <div className={styles.avatarDropdownMenuItem}>{t('navbar_profile')}</div> }, null, { key: 'SIGNOUT', title: <div className={styles.avatarDropdownMenuItem}>{t('navbar_signout')}</div> }]
     useEffect(() => {

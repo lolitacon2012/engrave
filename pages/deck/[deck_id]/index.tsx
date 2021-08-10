@@ -11,7 +11,7 @@ import Button from 'cafe-ui/button';
 import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
-import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool } from 'cafe-utils/deckUpdatePoolUtils';
+import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
 import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline } from "react-icons/io5";
 import Swal from 'sweetalert2';
 import cn from 'classnames';
@@ -38,6 +38,7 @@ export default function DeckPage() {
         setTimeout(() => {
             document.getElementById('editing_word_input')?.focus();
         }, 0)
+        batchUpdateDeck(currentDeckId);
     }
     const [pendingNewWordTempIds, setPendingNewWordTempIds] = useState<string[]>([]);
     const [oldNewWordIdmapping, setOldNewWordIdmapping] = useState<{ [key: string]: string }>({});
@@ -77,7 +78,6 @@ export default function DeckPage() {
         })
         if (!isTempWord) {
             addDeckWordUpdatePool(originalWord.id, newContent);
-            deck?.id && debouncedBatchUpdateDeck(deck.id);
         }
     }
 
@@ -99,7 +99,7 @@ export default function DeckPage() {
                     })
                     addDeckWordInsertPool(newWords.map(w => w.id));
                     addWordDeletePool(wordId);
-                    debouncedBatchUpdateDeck(currentDeckId);
+                    batchUpdateDeck(currentDeckId);
                 }
             }
         })
@@ -153,10 +153,12 @@ export default function DeckPage() {
     const sortedFilteredWordList = calculateDeckList();
     const onSearch = useCallback(debounce((keyword: string) => {
         setDebouncedSearchKeyword(keyword);
+        batchUpdateDeck(currentDeckId);
+        setEditingWord(undefined);
     }, 500), [])
-    const debouncedBatchUpdateDeck = useCallback(debounce((currentDeckId?: string) => {
+    const batchUpdateDeck = useCallback(debounce((currentDeckId?: string) => {
         currentDeckId && commitDeckChange(currentDeckId, () => store.updateUser());
-    }, 500), [])
+    }, 300), [])
 
     const onTabWithWordListLastWord = (e: KeyboardEvent) => {
         if (document.activeElement?.id === 'editing_meaning_input_last') {
@@ -210,14 +212,14 @@ export default function DeckPage() {
             setOldNewWordIdmapping({});
             setPendingNewWordTempIds(pendingNewWordTempIds.filter(i => !keys.includes(i)));
             addDeckWordInsertPool(newWordIds);
-            debouncedBatchUpdateDeck(deck?.id)
+            batchUpdateDeck(deck?.id)
         }
     }, [oldNewWordIdmapping])
 
     useEffect(() => {
         const onFinishLoading = (deck: Deck) => {
             setDeck(deck);
-            if(!deck){
+            if (!deck) {
                 store.setError(404);
             }
         }
@@ -236,7 +238,7 @@ export default function DeckPage() {
     }, [store.user?.id, currentDeckId])
 
     useEffect(() => {
-        deck?.id && commitDeckChange(deck?.id, () => { });
+        deck?.id && cleanCache();
     }, [deck?.id])
 
     useEffect(() => {
@@ -317,10 +319,12 @@ export default function DeckPage() {
             {isOwnDeck && !editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(true);
                 setEditingWord(undefined);
+                batchUpdateDeck(deck?.id);
             }}>{t('deck_page_edit')}</Button>}
             {isOwnDeck && editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
                 setEditing(false)
                 setEditingWord(undefined);
+                batchUpdateDeck(deck?.id);
 
             }}>{t('deck_page_exit_edit')}</Button>}
 

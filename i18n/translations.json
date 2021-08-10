@@ -112,8 +112,8 @@
         "ZH_CN": "编辑词库"
     },
     "deck_page_exit_edit": {
-        "EN_US": "Exit Edit",
-        "ZH_CN": "退出编辑"
+        "EN_US": "Save & Exit",
+        "ZH_CN": "保存并退出"
     },
     "deck_page_created_by": {
         "EN_US": "Created by ",

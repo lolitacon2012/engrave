@@ -21,7 +21,7 @@ class HttpClient {
   };
 
   private _handleRpcErrorMessage = (error: string) => {
-    console.log(error)
+    // console.log(error)
   };
 
   public setRpcOnErrorMessage = (callback: (e: string) => void) => {

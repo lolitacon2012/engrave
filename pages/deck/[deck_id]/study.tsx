@@ -127,7 +127,7 @@ export default function DeckPage() {
                 }
             }
         })
-        store.setUser({
+        store.updateUserLocally({
             ...store.user, progress: {
                 ...store.user?.progress,
                 [currentDeckId]: newProgress

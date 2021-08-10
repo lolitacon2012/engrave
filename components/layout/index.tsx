@@ -36,15 +36,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }, [])
     useEffect(() => {
         if (!loading && session) {
-            console.log('with user')
             client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then(({ data, error }: { data?: Partial<UserData>, error: string }) => {
                 store.setUser({
-                    ...store.user, ...data, loading: false, email: session.user?.email || '', avatar: session.user?.image || '', name: session.user?.name || ''
+                    ...store.user, ...data, loading: false
                 });
                 store.setLocale(data?.locale);
             })
         } else {
-            console.log('gone')
             store.setUser({
                 loading
             });
