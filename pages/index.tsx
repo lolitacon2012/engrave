@@ -3,12 +3,15 @@ import styles from './index.module.css'
 import { useContext } from 'react';
 import { useRouter } from 'next/router'
 import { GlobalStoreContext } from 'cafe-store/index';
+import { useEffect } from 'react';
 
 export default function Home() {
   const router = useRouter();
   const store = useContext(GlobalStoreContext);
   const t = store.t;
-  store.setLoading(false);
+  useEffect(() => {
+    store.setLoading(false);
+  }, [])
   return (
     <div>
       <div className={styles.container}>

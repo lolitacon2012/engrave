@@ -9,12 +9,17 @@ import { RPC } from "cafe-rpc/rpc";
 import { useCallback } from "react";
 import debounce from "lodash/debounce";
 import { IoLanguage, IoLogIn } from "react-icons/io5";
+import classNames from "classnames";
+import { useEffect } from "react";
+import { useState } from "react";
 
 const Navbar = () => {
     const store = useContext(GlobalStoreContext);
     const t = store.t;
     const { name, avatar, id, loading: userLoading } = store.user || {};
     const router = useRouter();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [errorStyle, setErrorStyle] = useState(false);
     const debouncedSetUserLocale = useCallback(debounce((locale: string) => {
         client.callRPC({
             rpc: RPC.RPC_UPDATE_USER_INFO,
@@ -23,10 +28,27 @@ const Navbar = () => {
     }, 1000), []);
     const canLogin = !id && !userLoading && !store.authenticatingInProgress;
     const userMenuItems = [{ key: 'PROFILE', title: <div className={styles.avatarDropdownMenuItem}>{t('navbar_profile')}</div> }, null, { key: 'SIGNOUT', title: <div className={styles.avatarDropdownMenuItem}>{t('navbar_signout')}</div> }]
-    return <div className={styles.container}>
+    useEffect(() => {
+        if (store.errorMessageStack.length > 0 && !errorMessage) {
+            const errorMessage = store.errorMessageStack[0];
+            setErrorMessage(errorMessage);
+            setErrorStyle(true);
+            setTimeout(() => {
+                setErrorStyle(false);
+            }, 5000)
+            setTimeout(() => {
+                setErrorMessage('');
+                store.setErrorMessageStack([]) // only 1 message is allowed for now
+            }, 5500)
+        }
+    }, [store.errorMessageStack])
+    return <div className={classNames(styles.container, errorStyle && styles.error)}>
         <span className={styles.logo} onClick={() => {
             router.push('/')
         }}>{store.t('global_app_name')}</span>
+        <span className={classNames(styles.errorMessage, errorStyle && styles.error)}>{
+            errorMessage
+        }</span>
         {<div className={styles.rightContainer}>
             {/* {name && <span>{name}</span>} */}
             {canLogin && <div className={styles.navBarRoundButton} onClick={() => signIn()}><IoLogIn /></div>}
@@ -49,7 +71,6 @@ const Navbar = () => {
                     </DropdownMenu>)}
             {(
                 <DropdownMenu onItemClicked={(locale: string) => {
-                    localStorage.setItem('locale', locale)
                     store.setLocale(locale);
                     id && debouncedSetUserLocale(locale);
                 }} items={[{ key: 'EN_US', title: 'English' }, { key: 'ZH_CN', title: '简体中文' }]}>

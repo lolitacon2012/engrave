@@ -10,7 +10,7 @@ export type UserData = ChangableUserData & {
   loading: boolean;
   id: string,
   registerTime: number,
-  email: string,
+  email: string, // not hashed, read from OAuth session
   avatar: string,
   name: string,
 }

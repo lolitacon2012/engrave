@@ -12,6 +12,12 @@
     right           : 0;
     top             : 0;
     z-index         : 9999;
+    transition      : all 0.3s;
+}
+
+.container.error {
+    background-image: linear-gradient(to right, var(--cafe-light-yellow), var(--cafe-light-yellow));
+    transition      : all 0.3s;
 }
 
 .rightContainer {
@@ -54,6 +60,18 @@
     align-items     : center;
 }
 
-.avatarDropdownMenuItem{
+.avatarDropdownMenuItem {
     min-width: 128px;
+}
+
+.errorMessage {
+    color     : var(--cafe-red);
+    font-size : 1rem;
+    text-align: center;
+    transition: all 0.3s;
+    opacity   : 0;
+}
+
+.errorMessage.error {
+    opacity: 1;
 }

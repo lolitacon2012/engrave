@@ -5,6 +5,7 @@ type Word = {
     deck_id: string;
     created_at: number;
     edited_at: number;
+    creator_id: string;
     content: WordContent;
 }
 

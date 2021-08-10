@@ -20,7 +20,12 @@ interface GlobalStoreInterface {
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   isUserLoading: boolean,
   isLocaleLoading: boolean,
+  setError: React.Dispatch<React.SetStateAction<number>>,
+  hasError: number;
   updateUser: () => void,
+  errorMessageStack: string[],
+  setErrorMessageStack: React.Dispatch<React.SetStateAction<string[]>>,
+  pushErrorMessageStack: (e: string) => void,
 }
 export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   setUser: NOOP,
@@ -34,11 +39,21 @@ export const GlobalStoreContext = React.createContext<GlobalStoreInterface>({
   isUserLoading: true,
   isLocaleLoading: true,
   updateUser: NOOP,
+  setError: NOOP,
+  hasError: 0,
+  errorMessageStack: [],
+  setErrorMessageStack: NOOP,
+  pushErrorMessageStack: NOOP,
 });
 
 export default function GlobalStoreProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<Partial<UserData> | undefined>(undefined);
   const [loading, setLoading] = useState<boolean>(true);
+  const [hasError, setError] = useState<number>(0);
+  const [errorMessageStack, setErrorMessageStack] = useState<string[]>([]);
+  const pushErrorMessageStack = (e: string) => {
+    setErrorMessageStack([...errorMessageStack, e]);
+  }
   const [authenticatingInProgress, setAuthenticatingInProgress] = useState<boolean | undefined>(undefined);
   const [locale, localSetLocale] = useState<string>('');
   const isUserLoading = !!user?.loading || !!authenticatingInProgress;
@@ -48,9 +63,9 @@ export default function GlobalStoreProvider({ children }: { children: React.Reac
     localStorage?.setItem('locale', locale || DEFAULT_LOCALE)
   }
   const updateUser = () => {
-    client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then((result: Partial<UserData>) => {
-      store.setUser({
-        ...store.user, ...result
+    client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then(({ data, error }: { data?: Partial<UserData>, error: string }) => {
+      setUser({
+        ...user, ...data
       });
     })
   }
@@ -58,7 +73,7 @@ export default function GlobalStoreProvider({ children }: { children: React.Reac
     return getTranslation(key, (locale || DEFAULT_LOCALE) as Locale, placeholder || {});
   }
   const store = {
-    updateUser, isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
+    pushErrorMessageStack, setErrorMessageStack, errorMessageStack, hasError, setError, updateUser, isLocaleLoading, isUserLoading, loading, setLoading, user, setUser, t, setLocale, currentLocale: locale, setAuthenticatingInProgress, authenticatingInProgress,
   }
   return <GlobalStoreContext.Provider value={store}>
     {children}

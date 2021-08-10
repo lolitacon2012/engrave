@@ -137,10 +137,10 @@ export default function Home() {
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {
                     ids: allDecks
                 }
-            }, `RPC_GET_DECK_BY_IDS[${allDecks.join(',')}]`, ((result: Deck[]) => {
-                setDecks(result.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
-            })).then((result: Deck[]) => {
-                setDecks(result.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
+            }, `RPC_GET_DECK_BY_IDS[${allDecks.join(',')}]`, ((result: { data?: Deck[], error: string }) => {
+                setDecks(result.data?.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
+            })).then((result: { data?: Deck[], error: string }) => {
+                setDecks(result.data?.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
             })
         } else {
             setDecks([])

@@ -16,27 +16,47 @@ class HttpClient {
 
   private _handleResponse = ({ data }: AxiosResponse) => data;
 
-  private _handleError = (error: any) => Promise.reject(error);
+  private _handleError = (error: any) => {
+    Promise.reject(error)
+  };
+
+  private _handleRpcErrorMessage = (error: string) => {
+    console.log(error)
+  };
+
+  public setRpcOnErrorMessage = (callback: (e: string) => void) => {
+    this._handleRpcErrorMessage = (err: string) => (callback(err));
+  }
 
   public callRPC = async (data: {
     rpc: string, data: any
-  }, uniqueRequestId?: string, onNewResultReceived?: (newResult: any) => void) => {
+  }, uniqueRequestId?: string, onNewResultReceived?: (newResult: {
+    error: string, data?: any
+  }) => void): Promise<{
+    error: string, data?: any
+  }> => {
     if (uniqueRequestId) {
       const parsedResult = JSON.parse(localStorage.getItem(`${uniqueRequestId}`) || 'null');
       if (!parsedResult) {
         const result = await axios.post('/api/rpc', data);
+        const hasError = result.status !== 200 || result.data?.error;
+        result.data?.error && this._handleRpcErrorMessage(result.data?.error);
         try {
-          localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+          !hasError && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
         } catch {
           localStorage.clear();
           // TODO: use memory
         }
+        hasError && localStorage.setItem(`${uniqueRequestId}`, '');
         onNewResultReceived && onNewResultReceived(result.data);
         return result.data;
       } else {
         axios.post('/api/rpc', data).then((result) => {
+          const hasError = result.status !== 200 || result.data?.error;
+          result.data?.error && this._handleRpcErrorMessage(result.data?.error);
           try {
-            uniqueRequestId && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+            !hasError && uniqueRequestId && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
+            hasError && localStorage.setItem(`${uniqueRequestId}`, '');
           } catch {
             // TODO: use memory
             localStorage.clear();
@@ -48,6 +68,7 @@ class HttpClient {
 
     } else {
       const result = await axios.post('/api/rpc', data);
+      result.data?.error && this._handleRpcErrorMessage(result.data?.error);
       return result.data;
     }
   }

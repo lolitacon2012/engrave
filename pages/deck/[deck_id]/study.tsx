@@ -55,10 +55,10 @@ export default function DeckPage() {
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {
                     ids: [currentDeckId]
                 }
-            }, `RPC_GET_DECK_BY_IDS[${currentDeckId}]`, ((result: Deck[]) => {
-                setCurrentStudyingDeck(result[0]);
-            })).then((result: Deck[]) => {
-                setCurrentStudyingDeck(result[0]);
+            }, `RPC_GET_DECK_BY_IDS[${currentDeckId}]`, (({ data, error }) => {
+                setCurrentStudyingDeck(data[0]);
+            })).then(({ data, error }) => {
+                setCurrentStudyingDeck(data[0]);
             })
         }
     }, [currentDeckId])
@@ -113,6 +113,10 @@ export default function DeckPage() {
             // @ts-ignore
             newProgress['level_' + (lv)] = currentLevel.filter(id => !toRemoveFromCurrentLevel.includes(id));
             newProgress.updated_at = new Date().getTime();
+
+            // sort lv0 words
+            const referArray = currentStudyingDeck?.words.map(w => w.id) || [];
+            newProgress.level_0 = newProgress.level_0.sort((a, b) => (referArray.indexOf(a) - referArray.indexOf(b)) > 0 ? 1 : -1)
         }
         client.callRPC({
             rpc: RPC.RPC_UPDATE_USER_INFO,

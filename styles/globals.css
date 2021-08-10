@@ -37,12 +37,13 @@ a {
   --cafe-7: #9dd3a8;
 
 
-  --cafe-background : #E6EBE6;
-  --cafe-black      : #3D3F44;
-  --cafe-grey       : #aaaaaa;
-  --cafe-light-grey : #dddddd;
-  --cafe-light-green: #C9E3AA;
-  --cafe-light-red  : #ffcfcb;
-  --cafe-red        : rgb(255, 119, 119);
-  --font-hei        : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+  --cafe-background  : #E6EBE6;
+  --cafe-black       : #3D3F44;
+  --cafe-grey        : #aaaaaa;
+  --cafe-light-grey  : #dddddd;
+  --cafe-light-green : #C9E3AA;
+  --cafe-light-red   : #ffcfcb;
+  --cafe-red         : rgb(255, 119, 119);
+  --cafe-light-yellow: rgb(255, 242, 169);
+  --font-hei         : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
 }

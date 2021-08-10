@@ -210,7 +210,7 @@ export default function QuestionSet(props: Props) {
         </div>
         <div className={styles.footerContainer}>
             <Button onClick={() => {
-                stage !== QuestionStage.Finished && Swal.fire({
+                stage !== QuestionStage.Finished ? Swal.fire({
                     title: t('study_exit'),
                     text: t('study_exit_warning'),
                     showCancelButton: true,
@@ -222,7 +222,7 @@ export default function QuestionSet(props: Props) {
                     if (r.isConfirmed) {
                         result && props.onExit(result);
                     }
-                })
+                }) : (result && props.onExit(result));
             }}>{t('study_exit')}</Button>
             {stage === QuestionStage.Finished && <Button onClick={() => {
                 result && props.onContinue(result);

@@ -114,6 +114,7 @@ export default function DeckPage() {
         const newEmptyWord = {
             id: tempUuid,
             deck_id: currentDeckId,
+            creator_id: store.user?.id,
             created_at: new Date().getTime(),
             edited_at: new Date().getTime(),
             content: {
@@ -142,7 +143,7 @@ export default function DeckPage() {
                 }]
             }
         });
-        const newId = res.newIds[0];
+        const newId = res.data.newIds[0];
         setOldNewWordIdmapping({
             ...oldNewWordIdmapping,
             [tempUuid]: newId
@@ -214,16 +215,22 @@ export default function DeckPage() {
     }, [oldNewWordIdmapping])
 
     useEffect(() => {
+        const onFinishLoading = (deck: Deck) => {
+            setDeck(deck);
+            if(!deck){
+                store.setError(404);
+            }
+        }
         // Fetch current deck
         if (currentDeckId) {
             client.callRPC({
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {
                     ids: [currentDeckId]
                 }
-            }, `RPC_GET_DECK_BY_IDS[${currentDeckId}]`, ((result: Deck[]) => {
-                setDeck(result[0]);
-            })).then((result: Deck[]) => {
-                setDeck(result[0]);
+            }, `RPC_GET_DECK_BY_IDS[${currentDeckId}]`, (({ data, error }) => {
+                onFinishLoading(data[0])
+            })).then(({ data, error }) => {
+                onFinishLoading(data[0])
             })
         }
     }, [store.user?.id, currentDeckId])

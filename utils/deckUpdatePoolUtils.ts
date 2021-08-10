@@ -27,14 +27,13 @@ export const addWordDeletePool = (wordId: string) => {
     }
 }
 
-export const commitDeckChange = async (deckId: string, onFinished: ()=>void) => {
+export const commitDeckChange = async (deckId: string, onFinished: () => void) => {
     const pendingWordIds = JSON.parse(localStorage.getItem(WORD_ID_PENDING) || '[]');
     const pendingWords = pendingWordIds.map((id: string) => {
         return { ...JSON.parse(localStorage.getItem(id) || 'null'), id }
     })
     const newWordIdList = JSON.parse(localStorage.getItem(DECK_WORD_ID_LIST) || 'null');
     const deletingWords = JSON.parse(localStorage.getItem(WORDS_TO_DELETE_ID_LIST) || 'null');
-
 
     await newWordIdList && client.callRPC({
         rpc: RPC.RPC_UPDATE_DECK_BY_ID,
@@ -44,6 +43,7 @@ export const commitDeckChange = async (deckId: string, onFinished: ()=>void) => 
         }
     });
 
+
     await client.callRPC({
         rpc: RPC.RPC_UPDATE_WORDS_BY_IDS,
         data: {
@@ -52,6 +52,7 @@ export const commitDeckChange = async (deckId: string, onFinished: ()=>void) => 
             wordIdsToDelete: deletingWords || [],
         }
     });
+
     onFinished();
     localStorage.removeItem(DECK_WORD_ID_LIST);
     localStorage.removeItem(WORD_ID_PENDING);

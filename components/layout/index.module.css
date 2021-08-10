@@ -1,14 +1,22 @@
 @keyframes bounce {
     0% {
         transform: scale(1, 1) translateY(0);
+        color    : var(--cafe-1);
     }
 
-    50% {
-        transform: scale(1.11, .8) translateY(0);
+    33% {
+        transform: scale(1, 1) translateY(0);
+        color    : var(--cafe-4);
+    }
+
+    66% {
+        transform: scale(1, 1) translateY(0);
+        color    : var(--cafe-7);
     }
 
     100% {
         transform: scale(1, 1) translateY(0);
+        color    : var(--cafe-1);
     }
 }
 
@@ -28,13 +36,12 @@
     text-align      : center;
     transition      : all 0.3s ease-out;
     flex-direction  : column;
-    color           : var(--cafe-black);
 }
 
 .loadingScreen>.coffee {
     animation-name           : bounce;
-    animation-timing-function: cubic-bezier(0.280, 0.840, 0.420, 1);
-    animation-duration       : 1s;
+    animation-timing-function: linear;
+    animation-duration       : 3s;
     animation-iteration-count: infinite;
 }
 
@@ -67,4 +74,17 @@
 
 .childContainer {
     min-height: 100vh;
+}
+
+.error404Container {
+    min-height     : 100vh;
+    font-size      : 1.2rem;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    flex-direction : column;
+}
+
+.error404Container>h3 {
+    margin: 0 0 24px 0;
 }

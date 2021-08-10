@@ -135,6 +135,10 @@
         "EN_US": "Ok",
         "ZH_CN": "好的"
     },
+    "general_back_to_homepage": {
+        "EN_US": "Back to Homepage",
+        "ZH_CN": "返回首页"
+    },
     "deck_page_search_tip": {
         "EN_US": "Search word or meaning",
         "ZH_CN": "搜索单词或释意"
@@ -266,5 +270,9 @@
     "home_create_deck_submit": {
         "EN_US": "Create",
         "ZH_CN": "创建"
+    },
+    "error_unknown": {
+        "EN_US": "Something went wrong.",
+        "ZH_CN": "发生了未知错误。"
     }
 }
