@@ -159,7 +159,7 @@ export default function QuestionSet(props: Props) {
     }
 
 
-    return normalizedStudySet ? <div className={cn(styles.card, (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
+    return normalizedStudySet ? <div className={cn(styles.card, 'withNormalShadow', (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
         {wordContent && stage !== QuestionStage.Finished && <><h3 className={styles.questionTitle}>{questionIndex + 1}/{normalizedStudySet.questions.length}</h3>
             <h1 className={styles.questionBody}>{isLearningNewWord ? (decodeRubyWithFallback(wordContent.word)) : (wordContent.meaning || '')}</h1>
             <h3 className={styles.questionTips}>{tips}</h3>

@@ -9,14 +9,6 @@
     transition      : all 0.3s;
 }
 
-.deckCard.withNormalShadow {
-    box-shadow: 12px 12px rgba(0, 0, 0, 0.12);
-}
-
-.deckCard.withSmallShadow {
-    box-shadow: 4px 4px rgba(0, 0, 0, 0.12);
-}
-
 .deckCard.clickable {
     cursor: pointer;
 }
@@ -29,8 +21,8 @@
 .deckCard.placeHolder {
     border       : 4px dashed var(--cafe-grey);
     border-radius: 4px;
-    min-width    : 248px;
-    max-width    : 248px;
+    min-width    : 256px;
+    max-width    : 256px;
 }
 
 .deckCard>.imageContainer {
@@ -43,7 +35,7 @@
 .deckCard>.imageContainer>.titleImage {
     width           : 128px;
     height          : 128px;
-    background-color: var(--cafe-1);
+    background-color: var(--cafe-3);
     position        : absolute;
     top             : 64px;
     left            : 64px;

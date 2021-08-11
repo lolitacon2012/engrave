@@ -10,6 +10,8 @@ import { v4 as uuid } from 'uuid';
 import { Db } from 'mongodb';
 import { RPCError } from 'cafe-types/rpc/error';
 import { getHashedEmail } from 'cafe-utils/hash';
+import { NEW_PROGRESS_TEMPLATE } from 'cafe-constants/index';
+import { StudyProgress } from 'cafe-types/study';
 
 const MAX_WORD_SIZE = 1000;
 
@@ -29,19 +31,19 @@ const deckChecker = async (deck: Partial<Deck>, userId: string, db: Db): Promise
     }
   }
 
-  if (deck.name!==undefined && !deck.name?.length) {
+  if (deck.name !== undefined && !deck.name?.length) {
     return {
       error: 'error_deck_name_empty'
     }
   }
 
-  if (deck.name!==undefined && deck.name?.length > 256) {
+  if (deck.name !== undefined && deck.name?.length > 256) {
     return {
       error: 'error_deck_name_size_too_large'
     }
   }
 
-  if (deck.color!==undefined && (!deck.color?.length || deck.color?.length > 7)) {
+  if (deck.color !== undefined && (!deck.color?.length || deck.color?.length > 7)) {
     return {
       error: 'error_deck_color_error'
     }
@@ -105,6 +107,12 @@ const createDeck = async (
     });
     // @ts-ignore
     newDeck.words = newDeckWordsIds;
+    const NEW_PROGRESS: StudyProgress = {
+      deck_id: newDeckId,
+      started_at: new Date().getTime(),
+      updated_at: new Date().getTime(),
+      ...NEW_PROGRESS_TEMPLATE
+    }
     const { db } = await connectToDatabase();
     let error = await deckChecker(newDeck, hashedEmail, db);
     if (!error.error) {
@@ -112,7 +120,12 @@ const createDeck = async (
       await Promise.all([db.collection("decks")
         .insertOne(newDeck), db.collection("users").updateOne({ id: hashedEmail },
           {
-            $push: { owningDeckIds: newDeck.id },
+            $push: {
+              owningDeckIds: newDeck.id, progress: {
+                id: newDeckId,
+                progress: NEW_PROGRESS
+              }
+            },
           }), db.collection("words")
             .insertMany(newWords)])
 
@@ -155,7 +168,11 @@ const updateDeckById = async (
       { "id": id },
       {
         $set: {
-          "edited_at": now, "words": wordIds
+          "edited_at": now,
+          ...(wordIds && wordIds.length > 0 && {"words": wordIds}),
+          ...name && {name},
+          ...avatar && {avatar},
+          ...color && {color},
         }
       }
     )

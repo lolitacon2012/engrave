@@ -5,7 +5,7 @@ import { StudyProgress } from 'cafe-types/study';
 import { GlobalStoreContext } from 'cafe-store/index';
 import React, { useContext } from 'react';
 import { generateColorTheme } from 'cafe-utils/generateColorTheme';
-import { IoTimeOutline, IoPricetagsSharp, IoGolfSharp } from 'react-icons/io5';
+import { IoTimeOutline, IoPricetags, IoGolf } from 'react-icons/io5';
 import { getTimeString } from 'cafe-utils/getTimeTillNow';
 
 export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlaceholder, isMiniCard }: { isMiniCard?: boolean, isPlaceholder?: boolean, deck?: Deck | undefined, progress?: StudyProgress | undefined, onClickEnter?: () => void, shadow: 'NORMAL' | 'SMALL' }) {
@@ -24,9 +24,9 @@ export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlace
 
     const { key, placeholder } = getTimeString(progress?.updated_at || 0);
     const isImageSrc = deck?.avatar.indexOf('data:image') === 0 || deck?.avatar.indexOf('https://') === 0;
-    return (<div onClick={() => { onClickEnter && onClickEnter() }} className={cn(styles.deckCard, onClickEnter && styles.clickable, shadow === 'NORMAL' && styles.withNormalShadow, shadow === 'SMALL' && styles.withSmallShadow, isPlaceholder && styles.placeHolder)}>
+    return (<div onClick={() => { onClickEnter && onClickEnter() }} className={cn(styles.deckCard, onClickEnter && styles.clickable, shadow === 'NORMAL' && 'withNormalShadow', shadow === 'SMALL' && 'withSmallShadow', isPlaceholder && styles.placeHolder)}>
         {!deck && isPlaceholder && <div className={styles.placeHolderContainer}>
-            <h2><IoPricetagsSharp /></h2>
+            <h2><IoPricetags /></h2>
             <h3>{t('deck_component_create_new')}</h3>
         </div>}
         {deck && <div className={styles.imageContainer} style={{ backgroundColor: themeColorSet[8] }}>
@@ -58,7 +58,7 @@ export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlace
                 </div> */}
             </div>}
             {noStudyProgress && !isMiniCard && <div className={cn(styles.cardProgress, styles.noProgress)}>
-                <span><IoGolfSharp></IoGolfSharp></span>
+                <span><IoGolf></IoGolf></span>
                 <h4>{t('deck_component_no_progress')}</h4>
             </div>}
 

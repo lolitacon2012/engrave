@@ -67,7 +67,7 @@ const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, 
             </div>
         </div>
     </div>
-        <div className={styles.deckCreationSubmitButton}>
+    <div className={styles.deckCreationSubmitButtonContainer}><div className={styles.deckCreationSubmitButtonRow}>
             <Button disabled={!newDeckName || isLoading} onClick={async () => {
                 setIsLoading(true)
                 await props.onSubmit({
@@ -80,7 +80,7 @@ const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, 
             <Button disabled={isLoading} onClick={() => {
                 ReactSwal.close();
             }} loading={isLoading}>{t('general_cancel')}</Button>
-        </div>
+        </div></div>
     </>
 };
 
@@ -151,11 +151,11 @@ export default function Home() {
     }, [decks, store.isLocaleLoading || store.isUserLoading])
 
     const studyingCards = decks?.filter(deck => {
-        return !!store.user?.progress?.[deck.id];
+        return !!store.user?.progress?.[deck.id]?.has_started;
     })
 
     const nonStudyingCards = decks?.filter(deck => {
-        return !!!store.user?.progress?.[deck.id];
+        return !!!store.user?.progress?.[deck.id].has_started;
     })
 
     const renderDeckCard = (isStudying?: boolean) => {
@@ -169,27 +169,30 @@ export default function Home() {
     return hasAuthenticated && (
         <>
             <Container>
-                {studyingCards?.length ? <><h1>{t('home_title')}</h1>
-                    <div className={styles.deckCardsRow}>
-                        {renderDeckCard(true)}
-                    </div></> : null}
-                <h1>{t('home_all_decks')}</h1>
-                <div className={styles.deckCardsRow}>
-                    <DeckCard isPlaceholder shadow={"NORMAL"} onClickEnter={() => {
-                        ReactSwal.fire({
-                            allowOutsideClick: false,
-                            title: <p>{t('deck_component_create_new')}</p>,
-                            html: <CreateDeckForm t={store.t} onSubmit={async (newDeck: NewDeck) => {
-                                await createNewDeck(newDeck);
-                            }} />,
-                            showConfirmButton: false,
-                            didOpen: () => {
-                                document.getElementById(CREATE_DECK_FORM_NAME_INPUT_ID)?.focus();
-                            }
-                        })
-                    }} />
-                    {renderDeckCard()}
-                </div>
+                <div className={styles.sectionOuterContainer}>
+                    <div className={styles.section}>
+                        {studyingCards?.length ? <><div className={styles.titleRow}><h1>{t('home_title')}</h1></div>
+                            <div className={styles.deckCardsRow}>
+                                {renderDeckCard(true)}
+                            </div></> : null}</div>
+                    <div className={styles.section}>
+                        <div className={styles.titleRow}><h1>{t('home_all_decks')}</h1></div>
+                        <div className={styles.deckCardsRow}>
+                            <DeckCard isPlaceholder shadow={"NORMAL"} onClickEnter={() => {
+                                ReactSwal.fire({
+                                    allowOutsideClick: false,
+                                    title: <p>{t('deck_component_create_new')}</p>,
+                                    html: <CreateDeckForm t={store.t} onSubmit={async (newDeck: NewDeck) => {
+                                        await createNewDeck(newDeck);
+                                    }} />,
+                                    showConfirmButton: false,
+                                    didOpen: () => {
+                                        document.getElementById(CREATE_DECK_FORM_NAME_INPUT_ID)?.focus();
+                                    }
+                                })
+                            }} />
+                            {renderDeckCard()}
+                        </div></div></div>
             </Container>
         </>
     )

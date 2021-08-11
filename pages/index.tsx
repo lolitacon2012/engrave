@@ -4,6 +4,7 @@ import { useContext } from 'react';
 import { useRouter } from 'next/router'
 import { GlobalStoreContext } from 'cafe-store/index';
 import { useEffect } from 'react';
+import Button from 'cafe-ui/button';
 
 export default function Home() {
   const router = useRouter();
@@ -16,15 +17,19 @@ export default function Home() {
     <div>
       <div className={styles.container}>
         <main className={styles.main}>
-          <h1 className={styles.title}>
+          <h1 className={styles.title} onClick={() => {
+            router.push('/home')
+          }}>
             {t('homepage_title')}
           </h1>
 
-          <p className={styles.description}>
+          <p onClick={() => {
+            router.push('/home')
+          }} className={styles.description}>
             {t('homepage_subtitle')}
           </p>
 
-          <div className={styles.grid}>
+          {/* <div className={styles.grid}>
             <a className={styles.card}>
               <h2>{t('homepage_subtitle_create')} ✍</h2>
               <p>{t('homepage_subtitle_create_intro')}</p>
@@ -60,7 +65,7 @@ export default function Home() {
               <h2>{t('homepage_subtitle_support')} ☕</h2>
               <p>{t('homepage_subtitle_support_intro')}</p>
             </a>
-          </div>
+          </div> */}
         </main>
       </div>
     </div>

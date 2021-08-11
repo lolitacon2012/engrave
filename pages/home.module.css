@@ -1,9 +1,19 @@
+.titleRow {
+    margin: 24px 0;
+}
+
+.sectionOuterContainer {
+    display       : flex;
+    width         : 100%;
+    flex-direction: column;
+}
+
 .deckCardsRow {
     display              : grid;
-    grid-gap             : 64px;
+    grid-gap             : 24px;
     grid-template-columns: repeat(auto-fill, 256px);
     width                : 100%;
-    margin               : 24px 0;
+    margin-bottom        : 48px;
 }
 
 
@@ -56,12 +66,20 @@
     outline: none;
 }
 
-.deckCreationSubmitButton {
-    display       : flex;
-    flex-direction: row-reverse;
-    margin-top    : 24px;
+.deckCreationSubmitButtonContainer {
+    width : 100%;
+    height: 44px;
 }
 
-.deckCreationSubmitButton :not(:first-child) {
+.deckCreationSubmitButtonRow {
+    display       : flex;
+    flex-direction: row-reverse;
+    padding       : 0;
+    position      : absolute;
+    bottom        : 24px;
+    right         : 28px;
+}
+
+.deckCreationSubmitButtonRow :not(:first-child) {
     margin-right: 12px;
 }

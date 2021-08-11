@@ -1,3 +1,4 @@
+import { DEFAULT_STUDY_SET_SIZE } from "cafe-constants/index";
 import { Deck, Word } from "cafe-types/deck";
 import { StudyProgress, StudySet } from "cafe-types/study";
 import { v4 as uuid } from 'uuid';
@@ -19,7 +20,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         wordIdToWord.set(w.id, w);
     })
 
-    const numberOfQuestions = size || 24;
+    const numberOfQuestions = size || DEFAULT_STUDY_SET_SIZE;
     const newWords = progress.level_0 || [];
     const toRepeat = [...progress.level_1 || [], ...progress.level_2 || []];
     const toReview = [...progress.level_3 || [], ...progress.level_4 || [], ...progress.level_5 || []];
@@ -54,7 +55,17 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
     });
 
     //2. in the rest of space, fill in 20% new words.
-    newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
+    !progress.use_random_order && newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
+        questionSet.push({
+            word: wordIdToWord.get(w),
+            rank_delta: 0,
+            question_type: 'NEW_WORD',
+            word_id: w,
+        })
+    });
+
+    //2.5 if random order, fill in randomly instead of picking from front
+    progress.use_random_order && sampleSize(newWords, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,

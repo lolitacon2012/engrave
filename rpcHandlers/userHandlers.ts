@@ -62,6 +62,7 @@ const updateUserInfo = async (
   try {
     const session = await getSession({ req });
     const hashedEmail = getHashedEmail(session?.user?.email || '');
+    const setLastStudied = !!data.setLastStudied;
     const { db } = await connectToDatabase();
 
     // unflatten progress from object to array
@@ -69,10 +70,11 @@ const updateUserInfo = async (
     const newUserProgress: { id: string, progress: any }[] = [];
     Object.keys(originalProgress).forEach(id => {
       newUserProgress.push({
-        id, progress: originalProgress[id]
+        id, progress: { ...originalProgress[id], ...(setLastStudied ? { updated_at: new Date().getTime() } : {}) }
       })
     })
 
+    delete data.setLastStudied;
 
     await db.collection("users")
       .updateOne({ id: hashedEmail },

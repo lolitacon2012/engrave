@@ -6,8 +6,26 @@
     display         : flex;
     justify-content : space-between;
     align-items     : center;
+    align-items     : center;
     position        : relative;
     overflow        : hidden;
+    transition      : all 0.3s;
+}
+
+.button:not(.disabled):hover {
+    transform : translateX(-2px) translateY(-2px);
+    box-shadow: 7px 7px 2px 1px rgba(0, 0, 0, 0.12);
+}
+
+.button.disabled {
+    background-color: var(--cafe-grey);
+    color           : var(--cafe-light-grey);
+}
+
+.textContainer {
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
 }
 
 @keyframes spin {
@@ -32,4 +50,12 @@
     overflow : hidden;
     display  : flex;
     animation: spin 1.5s linear infinite;
+}
+
+.iconContainer {
+    height         : 100%;
+    display        : flex;
+    justify-content: center;
+    align-items    : center;
+    margin-right   : 8px;
 }

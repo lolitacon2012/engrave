@@ -11,6 +11,7 @@ import cn from "classnames";
 import Head from "next/head";
 import Button from "cafe-ui/button";
 import { Router, useRouter } from "next/router";
+import Swal from "sweetalert2";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const store = React.useContext(GlobalStoreContext);
@@ -27,6 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }, [])
     useEffect(() => {
         const onRouterChange = (url: string) => {
+            Swal.close();
             store.setError(0);
         }
         Router.events.on('routeChangeStart', onRouterChange);
@@ -62,7 +64,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <div className={styles.error404Container}>
                 <h3>{code} - {t(hasNoProperErrorMessage ? 'error_unknown' : 'error_' + code)}</h3>
                 <Button onClick={() => {
-                    router.replace('/');
+                    window.location.replace('/');
                 }}>{t('general_back_to_homepage')}</Button>
             </div>
         )
@@ -83,8 +85,4 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <span className={styles.disclaimer}>DISCLAIMER: This website is still at pre-alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Please use it at your own risk.</span>
         </footer>
     </>;
-}
-
-function t(arg0: string): React.ReactNode {
-    throw new Error("Function not implemented.");
 }

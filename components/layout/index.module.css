@@ -59,7 +59,7 @@
     flex-direction  : column;
     justify-content : center;
     align-items     : center;
-    background-image: linear-gradient(to right, var(--cafe-4), var(--cafe-5));
+    background-color: white;
 }
 
 .version {

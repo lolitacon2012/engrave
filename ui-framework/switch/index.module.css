@@ -1,0 +1,45 @@
+.toggle {
+    cursor : pointer;
+    display: inline-block;
+}
+
+.toggleSwitch {
+    display       : inline-block;
+    background    : var(--cafe-grey);
+    border-radius : 12px;
+    width         : 48px;
+    height        : 24px;
+    position      : relative;
+    vertical-align: middle;
+    transition    : all 0.3s;
+}
+
+.toggleSwitch:before,
+.toggleSwitch:after {
+    content: "";
+}
+
+.toggleSwitch:before {
+    display      : block;
+    background   : white;
+    border-radius: 50%;
+    width        : 20px;
+    height       : 20px;
+    position     : absolute;
+    top          : 2px;
+    left         : 2px;
+    transition   : left 0.25s;
+}
+
+.toggleCheckbox:checked+.toggleSwitch {
+    background: var(--cafe-3);
+}
+
+.toggleCheckbox:checked+.toggleSwitch:before {
+    left: 26px;
+}
+
+.toggleCheckbox {
+    position  : absolute;
+    visibility: hidden;
+}

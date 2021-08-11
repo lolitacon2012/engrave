@@ -19,22 +19,12 @@ import { generateQuestionSet } from '../../../utils/generateQuestionSet';
 import { StudyProgress, StudySet } from 'cafe-types/study';
 import QuestionSet from 'cafe-components/questionSet';
 import debounce from 'lodash/debounce';
+import { DEFAULT_STUDY_SET_SIZE, NEW_PROGRESS_TEMPLATE } from 'cafe-constants/index';
 
 const NEW_PROGRESS = {
     started_at: new Date().getTime(),
     updated_at: new Date().getTime(),
-    section_size: 30,
-    level_0: [],
-    level_1: [],
-    level_2: [],
-    level_3: [],
-    level_4: [],
-    level_5: [],
-    level_6: [],
-    level_7: [],
-    level_8: [],
-    level_9: [],
-    level_10: [],
+    ...NEW_PROGRESS_TEMPLATE
 }
 
 
@@ -100,7 +90,12 @@ export default function DeckPage() {
             questions.forEach(q => {
                 if (q.word && currentLevel.includes(q.word.id) && !processedIds.includes(q.word.id)) {
                     processedIds.push(q.word.id);
-                    const toLevel = Math.min(Math.max(lv + q.rank_delta, 0), 10);
+                    let adjustedRankDelta = q.rank_delta;
+                    if (currentDeckProgress.use_easy_mode) {
+                        // no penalty for easy mode
+                        adjustedRankDelta >= -10 && (adjustedRankDelta = Math.max(0, adjustedRankDelta))
+                    }
+                    const toLevel = Math.min(Math.max(lv + adjustedRankDelta, 0), 10);
                     if (toLevel === lv) {
                         return;
                     } else {
@@ -117,6 +112,7 @@ export default function DeckPage() {
             // sort lv0 words
             const referArray = currentStudyingDeck?.words.map(w => w.id) || [];
             newProgress.level_0 = newProgress.level_0.sort((a, b) => (referArray.indexOf(a) - referArray.indexOf(b)) > 0 ? 1 : -1)
+            newProgress.has_started = true;
         }
         client.callRPC({
             rpc: RPC.RPC_UPDATE_USER_INFO,
@@ -124,7 +120,8 @@ export default function DeckPage() {
                 progress: {
                     ...store.user?.progress,
                     [currentDeckId]: newProgress
-                }
+                },
+                setLastStudied: true,
             }
         })
         store.updateUserLocally({
@@ -140,7 +137,7 @@ export default function DeckPage() {
         <QuestionSet key={currentQuestionSet.temp_id} onResultConfirmed={(result) => {
             updateProgress(result);
         }} questionSet={currentQuestionSet} onExit={() => {
-            router.push(`/deck/${currentDeckId}`)
+            router.replace(`/deck/${currentDeckId}`)
         }} onContinue={() => {
             const questionSet = generateQuestionSet(currentStudyingDeck!, currentDeckProgress!, currentDeckProgress!.section_size);
             setCurrentQuestionSet(questionSet);

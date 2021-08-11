@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap');
+
 html,
 body {
   padding           : 0;
@@ -29,30 +31,39 @@ a {
 
 h1 {
   font-size: 2rem;
+  margin   : 0;
+  font-weight: normal;
 }
 
 h2 {
   font-size: 1.5rem;
+  margin   : 0;
+  font-weight: normal;
 }
 
 h3 {
   font-size: 1.2rem;
+  margin   : 0;
 }
 
 h4 {
   font-size: 1rem;
+  margin   : 0;
 }
 
 h5 {
   font-size: 0.8rem;
+  margin   : 0;
 }
 
 h6 {
   font-size: 0.7rem;
+  margin   : 0;
 }
 
 p {
   font-size: 1rem;
+  margin   : 1rem 0;
 }
 
 @media only screen and (max-width: 540px) {
@@ -65,9 +76,10 @@ p {
 
 :host,
 :root {
+  --cafe-0: #ca4d51;
   --cafe-1: #ffb6b9;
   --cafe-2: #fae3d9;
-  --cafe-3: #bbded6;
+  --cafe-3: #94BBBC;
   --cafe-4: #8ac6d1;
   --cafe-5: #d9d9f3;
   --cafe-6: #ceefe4;
@@ -82,5 +94,13 @@ p {
   --cafe-light-red   : #ffcfcb;
   --cafe-red         : rgb(255, 119, 119);
   --cafe-light-yellow: rgb(255, 242, 169);
-  --font-hei         : -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+  --font-hei         : -apple-system, 'Red Hat Display', "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+}
+
+.withSmallShadow {
+  box-shadow: 4px 4px rgba(0, 0, 0, 0.12);
+}
+
+.withNormalShadow {
+  box-shadow: 12px 12px rgba(0, 0, 0, 0.12);
 }

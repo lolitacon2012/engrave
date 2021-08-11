@@ -9,7 +9,7 @@
     top             : 100%;
     background-color: transparent;
     color           : var(--cafe-black);
-    padding-top     : 8px;
+    padding-top     : 12px;
     transform       : translateY(-6px);
 }
 
@@ -22,7 +22,7 @@
     overflow        : hidden;
     display         : block;
     padding         : 8px 0;
-    box-shadow      : 4px 4px rgba(0, 0, 0, 0.12);
+    box-shadow      : 0px 0px 8px 0px rgba(0, 0, 0, 0.12);
 }
 
 .dropdownMenuInnerContainer>.dropdownMenuItem {
@@ -40,7 +40,7 @@
 }
 
 .dropdownMenuInnerContainer>.dropdownMenuItem:hover {
-    background-color: var(--cafe-4);
+    background-color: var(--cafe-3);
     color           : white;
     cursor          : pointer;
 }

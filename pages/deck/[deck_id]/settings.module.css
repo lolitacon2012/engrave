@@ -1,0 +1,64 @@
+.titleRow {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    width          : 100%;
+    margin         : 24px 0;
+}
+
+.formContainer {
+    display         : flex;
+    flex-direction  : column;
+    max-width       : 768px;
+    width           : 100%;
+    background-color: white;
+    padding         : 12px 24px;
+    margin          : 0 auto;
+}
+
+.formRow {
+    display        : flex;
+    justify-content: space-between;
+    align-items    : center;
+    margin         : 12px 0;
+    flex-wrap      : wrap;
+}
+
+.formDivider {
+    color : var(--cafe-grey);
+    margin: 32px 0 12px 0;
+}
+
+.formRowTitle {
+    margin   : 12px 0;
+    max-width: 480px;
+}
+
+
+.formRowController {
+    margin: 12px 0;
+}
+
+.formRowController input {
+    outline      : none;
+    border       : none;
+    border-bottom: 2px solid var(--cafe-black);
+    font-size    : 1.2rem;
+    width        : 100%;
+    max-width    : 240px;
+    text-align   : center;
+    transition   : all 0.3s;
+}
+
+.colorSampleContainer {
+    display       : flex;
+    padding       : 0 6px;
+    flex-direction: row-reverse;
+}
+
+.colorSample {
+    width : 16px;
+    height: 16px;
+    margin: 12px 6px;
+    border: 2px solid var(--cafe-grey);
+}

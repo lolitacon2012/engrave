@@ -1,10 +1,13 @@
 import { Word } from "cafe-types/deck";
 
 type StudyProgress = {
+    has_started: boolean;
     deck_id: string;
     started_at: number;
     updated_at: number;
     section_size: number;
+    use_random_order: boolean;
+    use_easy_mode: boolean;
     level_0: string[]; // new words
     level_1: string[]; // watch done
     level_2: string[]; // repeat done

@@ -2,7 +2,6 @@
     width           : 100%;
     max-width       : 1024px;
     background-color: white;
-    box-shadow      : 12px 12px rgba(0, 0, 0, 0.12);
     height          : 640px;
     margin          : 64px auto;
     display         : flex;
@@ -23,10 +22,10 @@
 }
 
 .newWord {
-    border          : none;
-    font-size       : 1.2rem;
-    width           : 100%;
-    height          : 40px;
+    border   : none;
+    font-size: 1.2rem;
+    width    : 100%;
+    height   : 40px;
 }
 
 .correct .answerInput {
@@ -76,6 +75,11 @@
     align-items    : center;
     flex-direction : column;
 }
+
+.result h1 {
+    margin: 12px 0 24px 0;
+}
+
 
 .footerContainer {
     display       : flex;

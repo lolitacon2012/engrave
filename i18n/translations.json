@@ -96,7 +96,7 @@
         "ZH_CN": "开始学习"
     },
     "deck_page_back_to_list": {
-        "EN_US": "Deck List",
+        "EN_US": "All Decks",
         "ZH_CN": "返回列表"
     },
     "deck_page_flashcard": {
@@ -123,6 +123,14 @@
         "EN_US": "Anonymous",
         "ZH_CN": "匿名"
     },
+    "deck_page_search_result_title": {
+        "EN_US": "{number} results found for keyword \"{keyword}\":",
+        "ZH_CN": "为“{keyword}”找到了{number}条结果:"
+    },
+    "deck_page_search_result_empty_title": {
+        "EN_US": "No result found for keyword \"{keyword}\".",
+        "ZH_CN": "找不到包含“{keyword}”的单词。"
+    },
     "general_delete": {
         "EN_US": "Delete",
         "ZH_CN": "删除"
@@ -138,6 +146,10 @@
     "general_back_to_homepage": {
         "EN_US": "Back to Homepage",
         "ZH_CN": "返回首页"
+    },
+    "deck_page_list": {
+        "EN_US": "Deck",
+        "ZH_CN": "单词集"
     },
     "deck_page_search_tip": {
         "EN_US": "Search word or meaning",
@@ -272,7 +284,59 @@
         "ZH_CN": "创建"
     },
     "error_unknown": {
-        "EN_US": "Something went wrong.",
-        "ZH_CN": "发生了未知错误。"
+        "EN_US": "Oops, something went wrong...",
+        "ZH_CN": "哎呀，出错了..."
+    },
+    "deck_settings_page_deck_section": {
+        "EN_US": "Deck Metadata",
+        "ZH_CN": "单词集信息"
+    },
+    "deck_settings_page_progress_section": {
+        "EN_US": "Learning Style",
+        "ZH_CN": "学习偏好"
+    },
+    "deck_settings_page_deck_name": {
+        "EN_US": "Deck Name",
+        "ZH_CN": "单词集名称"
+    },
+    "deck_settings_page_deck_avatar": {
+        "EN_US": "Deck Image",
+        "ZH_CN": "单词集图标"
+    },
+    "deck_settings_page_deck_avatar_instruction": {
+        "EN_US": "Please select an image less than 500KB.",
+        "ZH_CN": "图片大小上限为500KB。"
+    },
+    "deck_settings_page_deck_color": {
+        "EN_US": "Theme Color",
+        "ZH_CN": "主题颜色"
+    },
+    "deck_settings_page_study_size": {
+        "EN_US": "Number of Words per Study",
+        "ZH_CN": "每组学习的单词数量"
+    },
+    "deck_settings_page_study_size_instruction": {
+        "EN_US": "This does not include words in \"Repeat\" stage.",
+        "ZH_CN": "重复练习状态中的单词不计入每组学习单词量内。"
+    },
+    "deck_settings_page_study_is_random_order": {
+        "EN_US": "Random Order",
+        "ZH_CN": "随机单词顺序"
+    },
+    "deck_settings_page_study_is_random_order_instruction": {
+        "EN_US": "If toggled, new words will be picked with random order. Currently existing progress will not be affected.",
+        "ZH_CN": "使用随机顺序学习新单词。改变此选项不会影响当前学习中单词的进度。"
+    },
+    "deck_settings_page_study_is_easy_mode": {
+        "EN_US": "Easy Mode",
+        "ZH_CN": "简单模式"
+    },
+    "deck_settings_page_study_is_easy_mode_instruction": {
+        "EN_US": "If toggled, no penalty on word's hidden score would be given if user makes mistakes. This will make a word easier to get to \"Mastered\" stage.",
+        "ZH_CN": "在简单模式下，回答错误不会导致单词的隐藏分下降。这会让单词更快进入\"已掌握\"状态。"
+    },
+    "deck_settings_page_back_to_deck": {
+        "EN_US": "Back to Deck",
+        "ZH_CN": "返回单词集"
     }
 }

@@ -10,22 +10,22 @@ interface ButtonProps {
     children: string | string[] | React.ReactNode | React.ReactNode[];
     disabled?: boolean,
     loading?: boolean,
+    iconRenderer?: () => React.ReactNode;
 }
 const Button = (props: ButtonProps) => {
     const height = (props.type === 'SMALL' && 24) || (props.type === 'NORMAL' && 32) || (props.type === 'LARGE' && 40) || 32;
     const fontSize = (props.type === 'SMALL' && '0.8rem') || (props.type === 'NORMAL' && '1rem') || (props.type === 'LARGE' && '1.2rem') || '1rem';
-    const backgroundColor = (props.color === 'BLACK-ALPHA' && 'rgba(0,0,0,0.16)') || (props.color === 'PRIMARY' && '#8ac6d1') || '#8ac6d1';
-    const color = (props.color === 'BLACK-ALPHA' && 'white') || (props.color === 'PRIMARY' && 'white') || 'white';
-    return <button className={style.button} style={
+    const backgroundColor = (props.color === 'PRIMARY' && 'var(--cafe-3)') || 'var(--cafe-3)';
+    const color = (props.color === 'PRIMARY' && 'white') || 'white';
+    return <button className={classNames(style.button, 'withSmallShadow', props.disabled && style.disabled)} style={
         {
-            height, fontSize, backgroundColor, color, ...(props.disabled && {
-                cursor: 'not-allowed'
-            })
+            height, fontSize, ...(!props.disabled && { backgroundColor, color })
         }
     } onClick={(e) => { !props.disabled && props.onClick && props.onClick(e) }}>
-        <div style={{
+        <div className={(style.textContainer)} style={{
             visibility: props.loading ? 'hidden' : 'visible'
         }}>
+            {props.iconRenderer && <div className={style.iconContainer}>{props.iconRenderer()}</div>}
             {props.children}
         </div>
         <div className={classNames(style.loadingContainer, props.loading && style.loading)}>

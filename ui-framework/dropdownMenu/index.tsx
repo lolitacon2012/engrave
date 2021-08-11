@@ -1,5 +1,6 @@
 import styles from './index.module.css';
 import cn from 'classnames';
+import classNames from 'classnames';
 
 interface DropdownMenuProps {
     children: React.ReactNode,
@@ -15,10 +16,10 @@ export default function DropdownMenu(props: DropdownMenuProps) {
     return <div className={cn(styles.dropdownMenuIconContainer, hoverToExpand && styles.onHoverMenuIcon)}>
         {children}
         <div className={styles.dropdownMenuOuterContainer}>
-            <div className={styles.dropdownMenuInnerContainer}>
-                {items.map(item => 
-                item ? <div onClick={()=>{onItemClicked(item.key)}} key={item.key} className={styles.dropdownMenuItem}>{item.title}</div> : <div key={Math.random() + '_divider'} className={styles.dropdownMenuDivider} />
-                
+            <div className={classNames(styles.dropdownMenuInnerContainer, 'withSmallShadow')}>
+                {items.map(item =>
+                    item ? <div onClick={() => { onItemClicked(item.key) }} key={item.key} className={styles.dropdownMenuItem}>{item.title}</div> : <div key={Math.random() + '_divider'} className={styles.dropdownMenuDivider} />
+
                 )}
             </div>
         </div>

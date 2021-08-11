@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline } from "react-icons/io5";
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolfOutline, IoSettingsOutline, IoPencilOutline, IoSaveOutline } from "react-icons/io5";
 import Swal from 'sweetalert2';
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
@@ -254,7 +254,7 @@ export default function DeckPage() {
         const isDev = (process.env.NODE_ENV) === 'development';
         return (
             <div key={key} style={style} data-word-id={isDev ? wordId : undefined} className={cn(styles.wordRowOuterContainer, highlight && styles.highlightWord)}>
-                <div className={styles.wordRow}>
+                <div className={cn(styles.wordRow, 'withSmallShadow')}>
                     {<div className={styles.wordWord}>{(editing || isEditingThisWord) ? <input id={isEditingThisWord ? 'editing_word_input' : undefined} value={content.word} onChange={(e) => {
                         onEditWord(e.target.value, content.meaning, wordId)
                     }} /> : decodeRubyWithFallback(content.word)}</div>}
@@ -290,14 +290,14 @@ export default function DeckPage() {
     }
     return hasAuthenticated && <Container fullHeight>
         <div className={styles.titleRow}>
-            <h1>{deck?.name}</h1>
+            <h1>{deck?.name} - {t('deck_page_list')}</h1>
             <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>
         </div>
         <div className={styles.controllerRow}>
-            {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+            {!editing && <Button color={'PRIMARY'} onClick={() => {
                 router.push(`/home`)
-            }}>{t('deck_page_back_to_list')}</Button>}
-            {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+            }} iconRenderer={() => <IoArrowBack></IoArrowBack>}>{t('deck_page_back_to_list')}</Button>}
+            {!editing && <Button color={'PRIMARY'} onClick={() => {
                 if (!deck?.words?.length) {
                     Swal.fire({
                         text: t('deck_page_empty_list'),
@@ -307,29 +307,29 @@ export default function DeckPage() {
                 } else {
                     router.push(`/deck/${currentDeckId}/study`)
                 }
+            }} iconRenderer={() => <IoGolfOutline></IoGolfOutline>}>{t(store.user?.progress?.[currentDeckId]?.has_started ? 'deck_page_continue_study' : 'deck_page_begin_study')}</Button>}
+            {/* {!editing && <Button color={'PRIMARY'} onClick={() => {
 
-            }}>{t(store.user?.progress?.[currentDeckId] ? 'deck_page_continue_study' : 'deck_page_begin_study')}</Button>}
-            {/* {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
-                router.push(`/deck/${currentDeckId}/study`)
             }}>{t('deck_page_flashcard')} ✔️</Button>} */}
-            {!editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
-                // TODO: set deck and progress style
-                alert('Not implemented yet 😅')
+            {!editing && <Button iconRenderer={() => <IoSettingsOutline />} color={'PRIMARY'} onClick={() => {
+                setEditingWord(undefined);
+                batchUpdateDeck(deck?.id);
+                router.push(`/deck/${currentDeckId}/settings`)
             }}>{t('deck_page_settings')}</Button>}
-            {isOwnDeck && !editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+            {isOwnDeck && !editing && <Button color={'PRIMARY'} onClick={() => {
                 setEditing(true);
                 setEditingWord(undefined);
                 batchUpdateDeck(deck?.id);
-            }}>{t('deck_page_edit')}</Button>}
-            {isOwnDeck && editing && <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+            }} iconRenderer={() => <IoPencilOutline />}>{t('deck_page_edit')}</Button>}
+            {isOwnDeck && editing && <Button color={'PRIMARY'} onClick={() => {
                 setEditing(false)
                 setEditingWord(undefined);
                 batchUpdateDeck(deck?.id);
 
-            }}>{t('deck_page_exit_edit')}</Button>}
+            }} iconRenderer={() => <IoSaveOutline></IoSaveOutline>}>{t('deck_page_exit_edit')}</Button>}
 
             <div className={styles.flexPlaceholder} />
-            {!editing && <input className={styles.searchBar} placeholder={t('deck_page_search_tip')} value={searchKeyword} onChange={(keyword) => {
+            {!editing && <input className={cn(styles.searchBar, 'withSmallShadow')} placeholder={t('deck_page_search_tip')} value={searchKeyword} onChange={(keyword) => {
                 onSearch(keyword.target.value);
                 setSearchKeyword(keyword.target.value);
             }} />}
@@ -341,12 +341,16 @@ export default function DeckPage() {
                     <div className={styles.emptyWordList}>
                         <h1><IoClipboardOutline /></h1>
                         <h2>{t('deck_page_empty_list')}</h2>
-                        <Button type={'LARGE'} color={'PRIMARY'} onClick={() => {
+                        <Button color={'PRIMARY'} onClick={() => {
                             onAddWord();
                         }}>{t('deck_page_add_first_word')} ⛳</Button>
                     </div> :
                     <>
-                        {debouncedSearchKeyword && (sortedFilteredWordList.length > 0 ? <h3 className={styles.searchTitle}>Showing {sortedFilteredWordList.length} results for keyword &quot;{debouncedSearchKeyword}&quot;:</h3> : <h3 className={styles.searchTitle}>Keyword &quot;{debouncedSearchKeyword}&quot; has no search result.</h3>)}
+                        {debouncedSearchKeyword && (sortedFilteredWordList.length > 0 ? <h3 className={styles.searchTitle}>{t("deck_page_search_result_title", {
+                            number: sortedFilteredWordList.length + '', keyword: debouncedSearchKeyword
+                        })}</h3> : <h3 className={styles.searchTitle}>{t("deck_page_search_result_empty_title", {
+                            keyword: debouncedSearchKeyword
+                        })}</h3>)}
                         <AutoSizer>
                             {({ height, width }) => {
                                 const heightDelta = debouncedSearchKeyword ? 52 : 0;
