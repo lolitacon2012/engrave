@@ -4,6 +4,7 @@ export const DEFAULT_STUDY_SET_SIZE = 24;
 export const NEW_PROGRESS_TEMPLATE = {
     section_size: DEFAULT_STUDY_SET_SIZE,
     use_random_order: false,
+    use_ruby_only: false,
     use_easy_mode: false,
     has_started: false,
     level_0: [],

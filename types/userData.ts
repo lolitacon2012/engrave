@@ -1,7 +1,7 @@
 import { StudyProgress } from "./study";
 export type ChangableUserData = {
   owningDeckIds: string[],
-  studyingDeckIds: string[],
+  followingDeckIds: string[],
   progress: { [key: string]: StudyProgress },
   alias: string,
   locale: string,

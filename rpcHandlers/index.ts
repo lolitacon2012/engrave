@@ -1,7 +1,7 @@
 import { RPC } from './rpc';
 import { updateWordsByIds, createWords } from './wordHandlers';
 import { getUserInfo, updateUserInfo } from './userHandlers';
-import { updateDeckById, createDeck, getDeckByIds } from './deckHandlers';
+import { updateDeckById, createDeck, getDeckByIds, getDeckByInvideCode } from './deckHandlers';
 
 const RPC_HANDLERS = {
     [RPC.RPC_GET_DECK_BY_IDS]: getDeckByIds,
@@ -11,6 +11,7 @@ const RPC_HANDLERS = {
     [RPC.RPC_CREATE_WORDS]: createWords,
     [RPC.RPC_UPDATE_DECK_BY_ID]: updateDeckById,
     [RPC.RPC_UPDATE_USER_INFO]: updateUserInfo,
+    [RPC.RPC_GET_DECK_BY_INVITE_CODE]: getDeckByInvideCode,
 }
 
 export default RPC_HANDLERS;

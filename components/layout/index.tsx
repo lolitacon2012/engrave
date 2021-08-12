@@ -6,12 +6,12 @@ import client from 'cafe-utils/client';
 import { UserData } from "cafe-types/userData";
 import Navbar from "cafe-components/navbar";
 import styles from './index.module.css';
-import { IoCafe } from "react-icons/io5";
+import { IoAirplane, IoCafe } from "react-icons/io5";
 import cn from "classnames";
 import Head from "next/head";
 import Button from "cafe-ui/button";
 import { Router, useRouter } from "next/router";
-import Swal from "sweetalert2";
+import modal from "cafe-ui/modal";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const store = React.useContext(GlobalStoreContext);
@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     }, [])
     useEffect(() => {
         const onRouterChange = (url: string) => {
-            Swal.close();
+            modal.closeAll();
             store.setError(0);
         }
         Router.events.on('routeChangeStart', onRouterChange);
@@ -81,7 +81,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>}
         {store.hasError ? renderError() : <div className={(styles.childContainer)}>{children}</div>}
         <footer className={styles.footer}>
-            <p className={styles.version}>pre-alpha 0.0.2</p>
             <span className={styles.disclaimer}>DISCLAIMER: This website is still at pre-alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Please use it at your own risk.</span>
         </footer>
     </>;

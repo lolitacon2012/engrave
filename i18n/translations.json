@@ -35,6 +35,10 @@
         "EN_US": "Qahva",
         "ZH_CN": "Qahva"
     },
+    "homepage_enter": {
+        "EN_US": "Start Using",
+        "ZH_CN": "开始使用"
+    },
     "homepage_subtitle": {
         "EN_US": "A pure vocabulary learning tool",
         "ZH_CN": "纯粹的单词背诵工具"
@@ -260,12 +264,48 @@
         "ZH_CN": "释意："
     },
     "home_title": {
-        "EN_US": "Currently studying",
-        "ZH_CN": "学习中"
+        "EN_US": "Deck List",
+        "ZH_CN": "单词集列表"
+    },
+    "home_studying": {
+        "EN_US": "Studying({count})",
+        "ZH_CN": "学习中（{count}）"
+    },
+    "home_mine": {
+        "EN_US": "My Decks({count})",
+        "ZH_CN": "我的单词集（{count}）"
+    },
+    "home_following": {
+        "EN_US": "Following({count})",
+        "ZH_CN": "关注中（{count}）"
     },
     "home_all_decks": {
         "EN_US": "All Decks",
         "ZH_CN": "全部单词集"
+    },
+    "home_join_via_code": {
+        "EN_US": "Invitation Code",
+        "ZH_CN": "邀请码"
+    },
+    "home_search_code": {
+        "EN_US": "Search",
+        "ZH_CN": "搜索"
+    },
+    "home_search_code_follow": {
+        "EN_US": "Follow",
+        "ZH_CN": "关注"
+    },
+    "home_search_code_error_following": {
+        "EN_US": "You are already following this deck.",
+        "ZH_CN": "您已关注此单词集。"
+    },
+    "home_search_code_error_owning": {
+        "EN_US": "You are already the owner of this deck.",
+        "ZH_CN": "您是此单词集的作者。"
+    },
+    "home_search_code_error_invalid": {
+        "EN_US": "Invalid code.",
+        "ZH_CN": "该邀请码不存在或已过期。"
     },
     "home_create_deck_name": {
         "EN_US": "Name:",
@@ -324,7 +364,7 @@
         "ZH_CN": "随机单词顺序"
     },
     "deck_settings_page_study_is_random_order_instruction": {
-        "EN_US": "If toggled, new words will be picked with random order. Currently existing progress will not be affected.",
+        "EN_US": "If enabled, new words will be picked with random order. Currently existing progress will not be affected.",
         "ZH_CN": "使用随机顺序学习新单词。改变此选项不会影响当前学习中单词的进度。"
     },
     "deck_settings_page_study_is_easy_mode": {
@@ -332,8 +372,16 @@
         "ZH_CN": "简单模式"
     },
     "deck_settings_page_study_is_easy_mode_instruction": {
-        "EN_US": "If toggled, no penalty on word's hidden score would be given if user makes mistakes. This will make a word easier to get to \"Mastered\" stage.",
+        "EN_US": "If enabled, no penalty on word's hidden score would be given if user makes mistakes. This will make a word easier to get to \"Mastered\" stage.",
         "ZH_CN": "在简单模式下，回答错误不会导致单词的隐藏分下降。这会让单词更快进入\"已掌握\"状态。"
+    },
+    "deck_settings_page_study_ruby_only": {
+        "EN_US": "Only consider word's reading as correct answer",
+        "ZH_CN": "仅以单词读音作为正确答案"
+    },
+    "deck_settings_page_study_ruby_only_instruction": {
+        "EN_US": "You can add a word reading by inputing \"::\" for a word. This option is useful for languages such as Japanese: if this option is enabled, only Furigana of a word is considered as the correct answer.",
+        "ZH_CN": "您可以使用“：：”标记，为一个单词增加读音。当此选项开启时，以日语为例，只有输入正确的振假名才会被判定为正确答案。输入汉字会导致错误答案。"
     },
     "deck_settings_page_back_to_deck": {
         "EN_US": "Back to Deck",

@@ -1,30 +1,35 @@
-import ReactDOM from 'react-dom';
 import Container from "cafe-ui/pageContainer";
 import styles from "./home.module.css";
 import { useRouter } from 'next/router'
 import client from 'cafe-utils/client';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { RPC } from 'cafe-rpc/rpc';
 import { GlobalStoreContext } from "cafe-store/index";
 import { Deck } from "cafe-types/deck";
 import DeckCard from "cafe-components/deckCard";
 import useAuthGuard from "hooks/useAuthGuard";
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content'
 import { ImageUploader } from "cafe-ui/imageUploader";
 import Button from 'cafe-ui/button';
-import { RECOMMEND_THEME_COLORS } from 'cafe-constants/index';
+import { NEW_PROGRESS_TEMPLATE, RECOMMEND_THEME_COLORS } from 'cafe-constants/index';
 import { generateColorTheme } from 'cafe-utils/generateColorTheme';
-const ReactSwal = withReactContent(Swal);
+import { Switch } from 'cafe-ui/switch';
+import classNames from 'classnames';
+import modal from "cafe-ui/modal";
+import { IoCreate, IoPeopleCircle } from "react-icons/io5";
 
 const CREATE_DECK_FORM_NAME_INPUT_ID = 'CREATE_DECK_FORM_NAME_INPUT_ID';
+const INVITATION_CODE_INPUT_ID = 'INVITATION_CODE_INPUT_ID';
 interface NewDeck {
     avatar: string,
     name: string,
     color: string
 }
 
-const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, t: (key: string) => string; }) => {
+enum DECK_CATEGORY {
+    STUDYING = 'STUDYING', FOLLOWING = 'FOLLOWING', OWNING = 'OWNING'
+}
+
+const CreateDeckForm = (props: { closeModal: () => void, onSubmit: (newDeck: NewDeck) => Promise<void>, t: (key: string) => string; }) => {
     const { t } = props;
     const [newDeckName, setNewDeckName] = useState('');
     const [newDeckAvatar, setNewDeckAvatar] = useState('');
@@ -36,7 +41,7 @@ const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, 
         return /^#[0-9A-F]{6}$/i.test(normalizedColor);
     }
     const themeSet = validateDeckThemeColor() ? generateColorTheme(normalizedColor) : [];
-    return <><div className={styles.deckCreationFormContainer}>
+    return <><div className={styles.modalFormContainer}>
         <ImageUploader emptyImageText={t('home_create_deck_upload_image')} onImageChanged={(data) => {
             const imageBase64 = data[0].dataURL;
             setNewDeckAvatar(imageBase64 || '');
@@ -67,7 +72,7 @@ const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, 
             </div>
         </div>
     </div>
-    <div className={styles.deckCreationSubmitButtonContainer}><div className={styles.deckCreationSubmitButtonRow}>
+        <div className={styles.modalButtonRowContainer}><div className={styles.modalButtonRowInnerContainer}>
             <Button disabled={!newDeckName || isLoading} onClick={async () => {
                 setIsLoading(true)
                 await props.onSubmit({
@@ -75,11 +80,65 @@ const CreateDeckForm = (props: { onSubmit: (newDeck: NewDeck) => Promise<void>, 
                     name: newDeckName,
                     color: validateDeckThemeColor() ? normalizedColor : '#ff0000'
                 })
-                ReactSwal.close();
+                props.closeModal();
             }} loading={isLoading}>{t('home_create_deck_submit')}</Button>
-            <Button disabled={isLoading} onClick={() => {
-                ReactSwal.close();
+            <Button type="SECONDARY" disabled={isLoading} onClick={() => {
+                props.closeModal();
             }} loading={isLoading}>{t('general_cancel')}</Button>
+        </div></div>
+    </>
+};
+
+const InvitationCodeForm = (props: { closeModal: () => void, onFollowDeck: (id: string) => void; t: (key: string) => string; followingDeckIds: string[], owningDeckIds: string[] }) => {
+    const { t } = props;
+    const [code, setCode] = useState('');
+    const [result, setResult] = useState<Deck>();
+    const [error, setError] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const fetchDeckViaCode = async (code: string, followingDeckIds: string[], owningDeckIds: string[]) => {
+        const result = await client.callRPC({
+            rpc: RPC.RPC_GET_DECK_BY_INVITE_CODE, data: {
+                code
+            }
+        })
+        setIsLoading(false);
+        if (result.data) {
+            if (followingDeckIds.includes(result.data?.id)) {
+                setError(t('home_search_code_error_following'))
+            } else if (owningDeckIds.includes(result.data?.id)) {
+                setError(t('home_search_code_error_owning'))
+            } else {
+                setResult(result.data);
+            }
+        } else {
+            setError(t('home_search_code_error_invalid'))
+        }
+    }
+
+    return <><div className={classNames(styles.modalFormContainer, styles.modalFormContainerVertical)} style={{ marginBottom: 24 }}>
+        {!result && <input onChange={(e) => setCode(e.target.value)} value={code} disabled={isLoading} id={INVITATION_CODE_INPUT_ID} className={styles.codeSearchBar}></input>}
+        {result && <DeckCard externali18n={t} isMiniCard={true} shadow={"SMALL"} deck={result} />}
+        {error && <span className={styles.codeSearchError}>{error}</span>}
+    </div>
+        <div className={styles.modalButtonRowContainer}><div className={styles.modalButtonRowInnerContainer}>
+
+            {!result && <Button disabled={isLoading || !code} onClick={async () => {
+                setError('');
+                setIsLoading(true);
+                fetchDeckViaCode(code, props.followingDeckIds, props.owningDeckIds);
+            }} loading={isLoading}>{t('home_search_code')}</Button>}
+
+            {!error && !!result && <Button onClick={async () => {
+                setIsLoading(true);
+                await result && props.onFollowDeck(result?.id);
+                setIsLoading(false);
+                props.closeModal();
+            }}>{t('home_search_code_follow')}</Button>}
+
+            <Button type="SECONDARY" onClick={() => {
+                props.closeModal();
+            }}>{t('general_cancel')}</Button>
         </div></div>
     </>
 };
@@ -91,29 +150,11 @@ export default function Home() {
     const t = store.t;
     const hasAuthenticated = (store.authenticatingInProgress === false);
     const [decks, setDecks] = useState<Deck[]>();
-    // const createDeck = (fullDeck?: string) => {
-    //     const words = (fullDeck || '').split('========').map((w: string) => {
-    //         const ww = w.split('--------')[0];
-    //         const meaning = w.split('--------')[1];
-    //         return {
-    //             content: {
-    //                 word: ww,
-    //                 meaning: meaning,
-    //                 customized_fields: []
-    //             }
-    //         }
-    //     })
-    //     const newDeck = {
-    //         name: "O'zbek tili",
-    //         avatar: "Uz",
-    //         color: "#73A0A4",
-    //     }
-    //     client.callRPC({
-    //         rpc: RPC.RPC_CREATE_DECK, data: {
-    //             deck: newDeck, words: words
-    //         }
-    //     });
-    // }
+    const [showingCategories, setShowingCategories] = useState<{ [key: string]: boolean }>({
+        [DECK_CATEGORY.FOLLOWING]: false,
+        [DECK_CATEGORY.OWNING]: false,
+        [DECK_CATEGORY.STUDYING]: true,
+    });
     const createNewDeck = async (newDeck: NewDeck) => {
         await client.callRPC({
             rpc: RPC.RPC_CREATE_DECK, data: {
@@ -129,18 +170,22 @@ export default function Home() {
         store.updateUser();
     }
 
+    const followingDecks = decks?.filter((d) => store.user?.followingDeckIds?.includes(d.id)) || [];
+    const owningDecks = decks?.filter((d) => store.user?.owningDeckIds?.includes(d.id)) || [];
+    const studyingDecks = decks?.filter((d) => store.user?.progress?.[d.id]?.has_started) || [];
+
     useEffect(() => {
         // Fetch all decks and progress
-        const allDecks = [...store.user?.studyingDeckIds || [], ...store.user?.owningDeckIds || []];
+        const allDecks = [...store.user?.followingDeckIds || [], ...store.user?.owningDeckIds || []];
         if (allDecks.length > 0) {
             client.callRPC({
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {
                     ids: allDecks
                 }
             }, `RPC_GET_DECK_BY_IDS[${allDecks.join(',')}]`, ((result: { data?: Deck[], error: string }) => {
-                setDecks(result.data?.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
+                setDecks(result.data?.sort((a, b) => (store.user?.progress?.[a.id].updated_at || 0) - (store.user?.progress?.[b.id].updated_at || 0) > 0 ? -1 : 1))
             })).then((result: { data?: Deck[], error: string }) => {
-                setDecks(result.data?.sort((a, b) => a.created_at - b.created_at > 0 ? -1 : 1))
+                setDecks(result.data?.sort((a, b) => (store.user?.progress?.[a.id].updated_at || 0) - (store.user?.progress?.[b.id].updated_at || 0) > 0 ? -1 : 1))
             })
         } else {
             setDecks([])
@@ -150,49 +195,122 @@ export default function Home() {
         store.setLoading(store.isLocaleLoading || store.isUserLoading || !decks);
     }, [decks, store.isLocaleLoading || store.isUserLoading])
 
-    const studyingCards = decks?.filter(deck => {
-        return !!store.user?.progress?.[deck.id]?.has_started;
-    })
+    const followDeck = async (id: string) => {
+        const NEW_PROGRESS = {
+            started_at: new Date().getTime(),
+            updated_at: new Date().getTime(),
+            ...NEW_PROGRESS_TEMPLATE
+        }
+        await client.callRPC({
+            rpc: RPC.RPC_UPDATE_USER_INFO,
+            data: {
+                followingDeckIds: [...store.user?.followingDeckIds || [], id],
+                progress: {
+                    ...store.user?.progress,
+                    [id]: {
+                        ...NEW_PROGRESS,
+                        deck_id: id,
+                    }
+                },
+            }
+        })
+        await store.updateUser();
+        setTimeout(() => {
+            router.push('/deck/' + id)
+        }, 300)
+    }
 
-    const nonStudyingCards = decks?.filter(deck => {
-        return !!!store.user?.progress?.[deck.id].has_started;
-    })
+    const renderDeckCard = (category: DECK_CATEGORY) => {
+        const renderDeckCardSingle = (mini: boolean, deck?: Deck) => deck?.id ? <DeckCard isMiniCard={mini} shadow={"NORMAL"} key={`deck_card_${deck?.id}`} deck={deck} progress={store.user?.progress?.[deck?.id]} onClickEnter={() => {
+            deck && router.push(`/deck/${deck.id}`)
+        }} /> : null;
 
-    const renderDeckCard = (isStudying?: boolean) => {
-        return ((isStudying ? studyingCards : nonStudyingCards) || []).map((deck) =>
-            <DeckCard isMiniCard={!isStudying} shadow={"NORMAL"} key={`deck_card_${deck?.id}`} deck={deck} progress={store.user?.progress?.[deck?.id]} onClickEnter={() => {
-                deck && router.push(`/deck/${deck.id}`)
-            }} />
-        )
+        switch (category) {
+            case DECK_CATEGORY.FOLLOWING: {
+                return followingDecks.map((deck) => renderDeckCardSingle(true, deck))
+            }
+            case DECK_CATEGORY.OWNING: {
+                return owningDecks.map((deck) => renderDeckCardSingle(true, deck))
+            }
+            case DECK_CATEGORY.STUDYING: {
+                return studyingDecks.map((deck) => renderDeckCardSingle(false, deck))
+            }
+        }
     }
 
     return hasAuthenticated && (
         <>
             <Container>
                 <div className={styles.sectionOuterContainer}>
-                    <div className={styles.section}>
-                        {studyingCards?.length ? <><div className={styles.titleRow}><h1>{t('home_title')}</h1></div>
-                            <div className={styles.deckCardsRow}>
-                                {renderDeckCard(true)}
-                            </div></> : null}</div>
-                    <div className={styles.section}>
-                        <div className={styles.titleRow}><h1>{t('home_all_decks')}</h1></div>
-                        <div className={styles.deckCardsRow}>
-                            <DeckCard isPlaceholder shadow={"NORMAL"} onClickEnter={() => {
-                                ReactSwal.fire({
-                                    allowOutsideClick: false,
-                                    title: <p>{t('deck_component_create_new')}</p>,
-                                    html: <CreateDeckForm t={store.t} onSubmit={async (newDeck: NewDeck) => {
+                    <div className={styles.titleRow}><h1>{t('home_title')}</h1></div>
+                    <div className={styles.controlRow}>
+                        <div className={styles.controlRowLeft}>
+                            <Switch value={showingCategories[DECK_CATEGORY.STUDYING]} onChange={(v) => setShowingCategories({ ...showingCategories, [DECK_CATEGORY.STUDYING]: v })} label={t('home_studying', { count: studyingDecks.length + '' })} />
+                            <Switch value={showingCategories[DECK_CATEGORY.OWNING]} onChange={(v) => setShowingCategories({ ...showingCategories, [DECK_CATEGORY.OWNING]: v })} label={t('home_mine', { count: owningDecks.length + '' })} />
+                            <Switch value={showingCategories[DECK_CATEGORY.FOLLOWING]} onChange={(v) => setShowingCategories({ ...showingCategories, [DECK_CATEGORY.FOLLOWING]: v })} label={t('home_following', { count: followingDecks.length + '' })} />
+                        </div>
+                        <div className={styles.controlRowRight}>
+                            {/* <input className={styles.searchBar}></input> */}
+                            <Button iconRenderer={() => <IoCreate />} onClick={() => {
+                                modal.fire({
+                                    contentRendererWillRenderButton: true,
+                                    hideButtons: true,
+                                    hideIcon: true,
+                                    translator: t,
+                                    disableClickOutside: true,
+                                    title: t('deck_component_create_new'),
+                                    contentRenderer: (closeModal) => <CreateDeckForm closeModal={closeModal} t={store.t} onSubmit={async (newDeck: NewDeck) => {
                                         await createNewDeck(newDeck);
                                     }} />,
-                                    showConfirmButton: false,
                                     didOpen: () => {
                                         document.getElementById(CREATE_DECK_FORM_NAME_INPUT_ID)?.focus();
                                     }
                                 })
-                            }} />
+                            }}>{t('deck_component_create_new')}</Button>
+                            <Button iconRenderer={() => <IoPeopleCircle />} onClick={() => {
+                                modal.fire({
+                                    translator: t,
+                                    hideButtons: true,
+                                    hideIcon: true,
+                                    contentRendererWillRenderButton: true,
+                                    disableClickOutside: true,
+                                    title: t('home_join_via_code'),
+                                    contentRenderer: (closeModal) => <InvitationCodeForm closeModal={closeModal} onFollowDeck={(id: string) => followDeck(id)} t={store.t} owningDeckIds={store.user?.owningDeckIds || []} followingDeckIds={store.user?.followingDeckIds || []} />,
+                                    didOpen: () => {
+                                        document.getElementById(INVITATION_CODE_INPUT_ID)?.focus();
+                                    }
+                                })
+                            }}>{t('home_join_via_code')}</Button>
+                        </div>
+                    </div>
+                    {/* <DeckCard isPlaceholder shadow={"NORMAL"} onClickEnter={() => {
+
+                    }} /> */}
+                    <div className={styles.section}>
+                        {showingCategories[DECK_CATEGORY.STUDYING] ? <><div className={styles.titleRow}><h1>{t('home_studying', { count: studyingDecks.length + '' })}</h1></div>
+                            <div className={styles.deckCardsRow}>
+                                {renderDeckCard(DECK_CATEGORY.STUDYING)}
+                            </div></> : null}
+                    </div>
+                    <div className={styles.section}>
+                        {showingCategories[DECK_CATEGORY.OWNING] ? <><div className={styles.titleRow}><h1>{t('home_mine', { count: owningDecks.length + '' })}</h1></div>
+                            <div className={styles.deckCardsRow}>
+                                {renderDeckCard(DECK_CATEGORY.OWNING)}
+                            </div></> : null}
+                    </div>
+                    <div className={styles.section}>
+                        {showingCategories[DECK_CATEGORY.FOLLOWING] ? <><div className={styles.titleRow}><h1>{t('home_following', { count: followingDecks.length + '' })}</h1></div>
+                            <div className={styles.deckCardsRow}>
+                                {renderDeckCard(DECK_CATEGORY.FOLLOWING)}
+                            </div></> : null}
+                    </div>
+                    {/* <div className={styles.section}>
+                        <div className={styles.titleRow}><h1>{t('home_all_decks')}</h1></div>
+                        <div className={styles.deckCardsRow}>
                             {renderDeckCard()}
-                        </div></div></div>
+                        </div>
+                    </div> */}
+                </div>
             </Container>
         </>
     )

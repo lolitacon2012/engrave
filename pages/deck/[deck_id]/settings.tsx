@@ -5,18 +5,12 @@ import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { RPC } from 'cafe-rpc/rpc';
 import { GlobalStoreContext } from 'cafe-store/index';
 import client from 'cafe-utils/client';
-import { Deck, Word } from 'cafe-types/deck'
+import { Deck } from 'cafe-types/deck'
 
 import Button from 'cafe-ui/button';
-import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
-import DeckCard from 'cafe-components/deckCard';
-import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolfOutline, IoSettingsOutline, IoPencilOutline, IoSaveOutline } from "react-icons/io5";
-import Swal from 'sweetalert2';
+
 import cn from 'classnames';
-import { v4 as uuid } from 'uuid';
-import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
 import { Switch } from 'cafe-ui/switch';
 import { ImageUploader } from 'cafe-ui/imageUploader';
@@ -36,6 +30,7 @@ interface Form {
     isEasyMode: boolean;
     studySize?: number | '';
     isRandomOrder: boolean;
+    isRubyOnly: boolean,
 }
 
 // actions:
@@ -82,6 +77,7 @@ export default function DeckPage() {
                 studySize: store.user?.progress?.[deck.id].section_size || DEFAULT_STUDY_SET_SIZE,
                 isEasyMode: !!store.user?.progress?.[deck.id].use_easy_mode,
                 isRandomOrder: !!store.user?.progress?.[deck.id].use_random_order,
+                isRubyOnly: !!store.user?.progress?.[deck.id].use_ruby_only,
             });
         }
         // Fetch current deck
@@ -125,6 +121,7 @@ export default function DeckPage() {
                             section_size: newForm.studySize || DEFAULT_STUDY_SET_SIZE,
                             use_random_order: !!newForm.isRandomOrder,
                             use_easy_mode: !!newForm.isEasyMode,
+                            use_ruby_only: !!newForm.isRubyOnly,
                         }
                     }
                 },
@@ -141,7 +138,7 @@ export default function DeckPage() {
     return hasAuthenticated && <Container>
         <div className={styles.titleRow}>
             <h1>{deck?.name} - {t('deck_page_settings')}</h1>
-            <Button onClick={()=>{router.push(`/deck/${currentDeckId}`)}}>{t('deck_settings_page_back_to_deck')}</Button>
+            <Button onClick={() => { router.push(`/deck/${currentDeckId}`) }}>{t('deck_settings_page_back_to_deck')}</Button>
         </div>
         <div className={cn(styles.formContainer, 'withSmallShadow')}>
             <h4 className={styles.formDivider}>{t('deck_settings_page_deck_section')}</h4>
@@ -208,7 +205,7 @@ export default function DeckPage() {
                         }} /></div>
                 </div>
             </div>
-            
+
             <h4 className={styles.formDivider}>{t('deck_settings_page_progress_section')}</h4>
             <div className={styles.formRow}>
                 <div className={styles.formRowTitle}>
@@ -265,9 +262,18 @@ export default function DeckPage() {
                     <span>{t('deck_settings_page_study_ruby_only_instruction')}</span>
                 </div>
                 <div className={styles.formRowController}>
-                    <Switch />
+                    <Switch onChange={(v) => {
+                        partialUpdateForm({
+                            isRubyOnly: v
+                        })
+                    }} value={!!form.isRubyOnly} />
+                    <div className={styles.rubyExample} ><span><ruby>祝詞<rt>のりと</rt></ruby></span>&nbsp;⇒&nbsp;祝詞&nbsp;{!form.isRubyOnly ? '✔' : '✖'}&nbsp;&nbsp;&nbsp;&nbsp;のりと&nbsp;✔</div>
                 </div>
             </div>
+            <div className={styles.formBottomControlRow}>
+                <Button onClick={() => { router.push(`/deck/${currentDeckId}`) }}>{t('deck_settings_page_back_to_deck')}</Button>
+            </div>
+
         </div>
 
     </Container>

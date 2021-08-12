@@ -5,11 +5,12 @@ import { StudyProgress } from 'cafe-types/study';
 import { GlobalStoreContext } from 'cafe-store/index';
 import React, { useContext } from 'react';
 import { generateColorTheme } from 'cafe-utils/generateColorTheme';
-import { IoTimeOutline, IoPricetags, IoGolf } from 'react-icons/io5';
+import { IoTime, IoPricetags, IoGolfOutline } from 'react-icons/io5';
 import { getTimeString } from 'cafe-utils/getTimeTillNow';
 
-export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlaceholder, isMiniCard }: { isMiniCard?: boolean, isPlaceholder?: boolean, deck?: Deck | undefined, progress?: StudyProgress | undefined, onClickEnter?: () => void, shadow: 'NORMAL' | 'SMALL' }) {
-    const { t, user } = useContext(GlobalStoreContext);
+export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlaceholder, isMiniCard, externali18n }: { isMiniCard?: boolean, isPlaceholder?: boolean, deck?: Deck | undefined, progress?: StudyProgress | undefined, externali18n?: (s: string, k: any)=>string, onClickEnter?: () => void, shadow: 'NORMAL' | 'SMALL' }) {
+    const { t: storeT, user } = useContext(GlobalStoreContext);
+    const t = externali18n || storeT;
     const totalWord = deck?.words.length || 0;
     const authorName = deck?.creator_name;
     const authorAvatar = deck?.creator_avatar;
@@ -39,7 +40,7 @@ export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlace
         </div>}
         {deck && <div className={styles.contentContainer}>
             <h3 className={styles.titleText}>{deck.name}</h3>
-            {!noStudyProgress && <div className={styles.cardProgress}>
+            {!noStudyProgress && !isMiniCard && <div className={styles.cardProgress}>
                 <div className={styles.progressBarContainer}>
                     <div className={styles.finished} style={{ flex: inFinalStage, backgroundColor: themeColorSet[2] }}></div>
                     <div className={styles.reviewing} style={{ flex: inReviewStage, backgroundColor: themeColorSet[4] }}></div>
@@ -51,14 +52,14 @@ export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlace
                     <div className={styles.progressTextContainer}><div className={cn(styles.progressColorIcon)} style={{ backgroundColor: themeColorSet[6] }} /><h4 className={styles.title}>{t('deck_component_studying')}</h4><h4>{inRepeatStage}</h4></div>
                     <div className={styles.progressTextContainer}><div className={cn(styles.progressColorIcon)} style={{ backgroundColor: themeColorSet[4] }} /><h4 className={styles.title}>{t('deck_component_reviewing')}</h4><h4>{inReviewStage}</h4></div>
                     <div className={styles.progressTextContainer}><div className={cn(styles.progressColorIcon)} style={{ backgroundColor: themeColorSet[2] }} /><h4 className={styles.title}>{t('deck_component_finished')}</h4><h4>{inFinalStage}</h4></div>
-                    <div className={styles.progressTextContainer}><IoTimeOutline className={cn(styles.progressColorIcon)} style={{ color: themeColorSet[2] }} /><h4 className={styles.title}>{t('deck_component_last_studied')}</h4><h4>{t(key, placeholder)}</h4></div>
+                    <div className={styles.progressTextContainer}><IoTime className={cn(styles.progressColorIcon)} style={{ color: themeColorSet[2] }} /><h4 className={styles.title}>{t('deck_component_last_studied')}</h4><h4>{t(key, placeholder)}</h4></div>
                 </div>
                 {/* <div className={styles.controlButtonContainer}>
                     {onClickEnter && <div className={styles.deckControlButton} style={{ backgroundColor: themeColorSet[1] }} onClick={onClickEnter}><IoBook /></div>}
                 </div> */}
             </div>}
             {noStudyProgress && !isMiniCard && <div className={cn(styles.cardProgress, styles.noProgress)}>
-                <span><IoGolf></IoGolf></span>
+                <span><IoGolfOutline /></span>
                 <h4>{t('deck_component_no_progress')}</h4>
             </div>}
 

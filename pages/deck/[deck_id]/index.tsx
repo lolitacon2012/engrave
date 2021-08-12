@@ -12,12 +12,13 @@ import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolfOutline, IoSettingsOutline, IoPencilOutline, IoSaveOutline } from "react-icons/io5";
-import Swal from 'sweetalert2';
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings } from "react-icons/io5";
+
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
+import modal from 'cafe-ui/modal';
 
 
 export default function DeckPage() {
@@ -82,15 +83,13 @@ export default function DeckPage() {
     }
 
     const onDeleteWord = (wordId: string) => {
-        Swal.fire({
-            text: t('deck_page_delete_modal_text'),
-            showCancelButton: true,
+        modal.fire({
+            translator: t,
+            contentText: t('deck_page_delete_modal_text'),
             cancelButtonText: t("general_cancel"),
             confirmButtonText: t("general_delete"),
-            confirmButtonColor: '#ff0000',
-            icon: 'warning',
-        }).then((result) => {
-            if (result.isConfirmed) {
+            type: 'DANGER',
+            onConfirm: (closeModal) => {
                 if (deck?.words) {
                     const newWords = deck?.words.filter(word => word.id !== wordId);
                     setDeck({
@@ -100,6 +99,7 @@ export default function DeckPage() {
                     addDeckWordInsertPool(newWords.map(w => w.id));
                     addWordDeletePool(wordId);
                     batchUpdateDeck(currentDeckId);
+                    closeModal();
                 }
             }
         })
@@ -294,39 +294,40 @@ export default function DeckPage() {
             <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>
         </div>
         <div className={styles.controllerRow}>
-            {!editing && <Button color={'PRIMARY'} onClick={() => {
+            {!editing && <Button type={'PRIMARY'} onClick={() => {
                 router.push(`/home`)
             }} iconRenderer={() => <IoArrowBack></IoArrowBack>}>{t('deck_page_back_to_list')}</Button>}
-            {!editing && <Button color={'PRIMARY'} onClick={() => {
+            {!editing && <Button type={'PRIMARY'} onClick={() => {
                 if (!deck?.words?.length) {
-                    Swal.fire({
-                        text: t('deck_page_empty_list'),
+                    modal.fire({
+                        contentText: t('deck_page_empty_list'),
                         confirmButtonText: t("general_ok"),
-                        icon: 'warning',
+                        translator: t,
+                        hideCancelButton: true,
                     })
                 } else {
                     router.push(`/deck/${currentDeckId}/study`)
                 }
-            }} iconRenderer={() => <IoGolfOutline></IoGolfOutline>}>{t(store.user?.progress?.[currentDeckId]?.has_started ? 'deck_page_continue_study' : 'deck_page_begin_study')}</Button>}
-            {/* {!editing && <Button color={'PRIMARY'} onClick={() => {
+            }} iconRenderer={() => <IoGolf />}>{t(store.user?.progress?.[currentDeckId]?.has_started ? 'deck_page_continue_study' : 'deck_page_begin_study')}</Button>}
+            {/* {!editing && <Button type={'PRIMARY'} onClick={() => {
 
             }}>{t('deck_page_flashcard')} ✔️</Button>} */}
-            {!editing && <Button iconRenderer={() => <IoSettingsOutline />} color={'PRIMARY'} onClick={() => {
+            {!editing && <Button iconRenderer={() => <IoSettings />} type={'PRIMARY'} onClick={() => {
                 setEditingWord(undefined);
                 batchUpdateDeck(deck?.id);
                 router.push(`/deck/${currentDeckId}/settings`)
             }}>{t('deck_page_settings')}</Button>}
-            {isOwnDeck && !editing && <Button color={'PRIMARY'} onClick={() => {
+            {isOwnDeck && !editing && <Button type={'PRIMARY'} onClick={() => {
                 setEditing(true);
                 setEditingWord(undefined);
                 batchUpdateDeck(deck?.id);
-            }} iconRenderer={() => <IoPencilOutline />}>{t('deck_page_edit')}</Button>}
-            {isOwnDeck && editing && <Button color={'PRIMARY'} onClick={() => {
+            }} iconRenderer={() => <IoPencil />}>{t('deck_page_edit')}</Button>}
+            {isOwnDeck && editing && <Button type={'PRIMARY'} onClick={() => {
                 setEditing(false)
                 setEditingWord(undefined);
                 batchUpdateDeck(deck?.id);
 
-            }} iconRenderer={() => <IoSaveOutline></IoSaveOutline>}>{t('deck_page_exit_edit')}</Button>}
+            }} iconRenderer={() => <IoSave />}>{t('deck_page_exit_edit')}</Button>}
 
             <div className={styles.flexPlaceholder} />
             {!editing && <input className={cn(styles.searchBar, 'withSmallShadow')} placeholder={t('deck_page_search_tip')} value={searchKeyword} onChange={(keyword) => {
@@ -341,9 +342,9 @@ export default function DeckPage() {
                     <div className={styles.emptyWordList}>
                         <h1><IoClipboardOutline /></h1>
                         <h2>{t('deck_page_empty_list')}</h2>
-                        <Button color={'PRIMARY'} onClick={() => {
+                        <Button iconRenderer={()=><IoAddCircle />} type={'PRIMARY'} onClick={() => {
                             onAddWord();
-                        }}>{t('deck_page_add_first_word')} ⛳</Button>
+                        }}>{t('deck_page_add_first_word')}</Button>
                     </div> :
                     <>
                         {debouncedSearchKeyword && (sortedFilteredWordList.length > 0 ? <h3 className={styles.searchTitle}>{t("deck_page_search_result_title", {

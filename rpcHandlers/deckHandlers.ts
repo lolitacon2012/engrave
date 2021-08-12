@@ -169,10 +169,10 @@ const updateDeckById = async (
       {
         $set: {
           "edited_at": now,
-          ...(wordIds && wordIds.length > 0 && {"words": wordIds}),
-          ...name && {name},
-          ...avatar && {avatar},
-          ...color && {color},
+          ...(wordIds && wordIds.length > 0 && { "words": wordIds }),
+          ...name && { name },
+          ...avatar && { avatar },
+          ...color && { color },
         }
       }
     )
@@ -223,4 +223,46 @@ const getDeckByIds = async (
   }
 }
 
-export { createDeck, updateDeckById, getDeckByIds };
+
+
+const getDeckByInvideCode = async (
+  data: { code: string }
+) => {
+  try {
+    if (!data.code) {
+      return {
+        error: ''
+      }
+    }
+    const { db } = await connectToDatabase();
+    const now = new Date().getTime();
+    const inviteCodeData = await db.collection("inviteCodes")
+      .findOne({ code: data.code }) as { deck_id: string, code: string, expire: number } | undefined;
+    if (!inviteCodeData || (((inviteCodeData?.expire) || 0) < now) || (!inviteCodeData?.deck_id)) {
+      return {
+        error: '',
+      };
+    } else {
+      const deckId = inviteCodeData?.deck_id || '';
+      const result = await getDeckByIds({ ids: [deckId] });
+      if (result?.error) {
+        return {
+          error: result?.error
+        }
+      }
+      const data = result.data;
+      if (data && data.length && data[0]) {
+        return {
+          data: data[0], error: ''
+        }
+      }
+    }
+    return {
+      error: '',
+    };
+  } catch (err) {
+    return { error: err.toString() }
+  }
+}
+
+export { createDeck, updateDeckById, getDeckByIds, getDeckByInvideCode };

@@ -1,0 +1,91 @@
+.modalBackground {
+    position        : fixed;
+    left            : 0;
+    right           : 0;
+    top             : 0;
+    bottom          : 0;
+    background-color: rgba(0, 0, 0, 0.48);
+    transition      : all 0.3s;
+    display         : flex;
+    justify-content : center;
+    align-items     : center;
+}
+
+.modalBackground.hidden {
+    background-color: rgba(0, 0, 0, 0);
+    transition      : all 0.3s;
+}
+
+.modal {
+    margin          : auto;
+    width           : 512px;
+    background-color: white;
+    padding         : 24px;
+    opacity         : 1;
+    transition      : all 0.3s;
+}
+
+.modal.hidden {
+    transform : translateY(-32px);
+    opacity   : 0;
+    transition: all 0.3s;
+}
+
+.titleRow>h2 {
+    text-align: center;
+}
+
+.contentIcon {
+    text-align : center;
+    font-size  : 6rem;
+    line-height: 6rem;
+    height     : 6rem;
+    margin     : 1rem;
+    transition : all 1s;
+}
+
+.contentIcon.hidden {
+    transform : scale(1.5);
+    transition: all 1s;
+}
+
+.contentIcon.primary,
+.contentIcon.info {
+    color: var(--cafe-3);
+}
+
+.contentIcon.success {
+    color: var(--cafe-green);
+}
+
+.contentIcon.danger {
+    color: var(--cafe-red);
+}
+
+.contentIcon.warning {
+    color: var(--cafe-yellow);
+}
+
+.contentContainer {
+    margin: 1rem 0 2rem 0;
+    position: relative;
+}
+
+.contentContainer>p {
+    text-align: center;
+    margin    : 0;
+}
+
+.buttonContainer {
+    display        : flex;
+    justify-content: center;
+    align-items    : flex-end;
+}
+
+.buttonContainer.buttonToRight {
+    justify-content: flex-end;
+}
+
+.buttonContainer> :not(:last-child) {
+    margin-right: 12px;
+}

@@ -22,10 +22,14 @@
     flex   : 1;
 }
 
-.deckCreationFormContainer {
+.modalFormContainer {
     display        : flex;
     justify-content: space-between;
     align-items    : center;
+}
+
+.modalFormContainerVertical {
+    flex-direction: column;
 }
 
 .deckCreationFormRightContainer {
@@ -66,20 +70,60 @@
     outline: none;
 }
 
-.deckCreationSubmitButtonContainer {
-    width : 100%;
-    height: 44px;
+.modalButtonRowContainer {
+    width: 100%;
 }
 
-.deckCreationSubmitButtonRow {
+.modalButtonRowInnerContainer {
     display       : flex;
     flex-direction: row-reverse;
     padding       : 0;
-    position      : absolute;
-    bottom        : 24px;
-    right         : 28px;
+    margin-top    : 12px;
 }
 
-.deckCreationSubmitButtonRow :not(:first-child) {
+.modalButtonRowInnerContainer> :not(:first-child) {
     margin-right: 12px;
+}
+
+.controlRow {
+    display        : flex;
+    margin-bottom  : 24px;
+    width          : 100%;
+    justify-content: space-between;
+    align-items    : center;
+}
+
+.controlRowLeft,
+.controlRowRight {
+    display    : flex;
+    align-items: center;
+}
+
+.controlRowLeft> :not(:last-child),
+.controlRowRight>:not(:last-child) {
+    margin-right: 24px;
+}
+
+.codeSearchBar {
+    border       : none;
+    font-size    : 1rem;
+    padding      : 0 12px;
+    width        : 100%;
+    height       : 32px;
+    border-bottom: 1px solid var(--cafe-black);
+    text-align   : center;
+}
+
+.codeSearchError {
+    margin   : 12px 0 0 0;
+    color    : var(--cafe-red);
+    font-size: 1rem;
+}
+
+.codeSearchBar::placeholder {
+    color: rgba(0, 0, 0, 0.24);
+}
+
+.codeSearchBar:focus {
+    outline: none;
 }

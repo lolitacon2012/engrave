@@ -1,4 +1,8 @@
+
+- P0 implement use ruby option
+
 - Give warning when deleting last word, "this will reset your study progress"
 - add navigation button to settings page, and i18n
 - basic responsiveness
-- add "share link" and "join deck"
+- add "share link"
+- clean localstorage on sign out

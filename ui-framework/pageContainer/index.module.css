@@ -1,17 +1,20 @@
 .container {
+  min-height: 100vh;
+  width     : 100%;
+  min-width : 1280px;
+  padding   : 0;
+  margin    : 0;
+}
+
+.widthLimiter {
+  padding        : 64px 128px 64px 128px;
+  max-width      : 1920px;
   min-height     : 100vh;
-  padding        : 64px 12% 64px 12%;
+  width          : 100%;
+  height         : 100%;
+  margin         : 0 auto;
   display        : flex;
   flex-direction : column;
   justify-content: flex-start;
   align-items    : flex-start;
-  width          : 100vw;
-}
-
-@media only screen and (max-width: 540px) {
-
-  /* For mobile phones: */
-  .container {
-    padding: 72px 12px 0px 12px;
-  }
 }

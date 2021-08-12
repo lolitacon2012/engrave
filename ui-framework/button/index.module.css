@@ -10,16 +10,14 @@
     position        : relative;
     overflow        : hidden;
     transition      : all 0.3s;
+    height          : 32px;
+    font-size       : 1rem;
+    box-sizing      : border-box;
 }
 
 .button:not(.disabled):hover {
     transform : translateX(-2px) translateY(-2px);
     box-shadow: 7px 7px 2px 1px rgba(0, 0, 0, 0.12);
-}
-
-.button.disabled {
-    background-color: var(--cafe-grey);
-    color           : var(--cafe-light-grey);
 }
 
 .textContainer {
@@ -58,4 +56,28 @@
     justify-content: center;
     align-items    : center;
     margin-right   : 8px;
+}
+
+.button.primary {
+    background-color: var(--cafe-3);
+    color           : white;
+}
+
+.button.primary.disabled {
+    background-color: var(--cafe-grey);
+    color           : var(--cafe-light-grey);
+}
+
+
+.button.secondary {
+    background-color: white;
+    color           : var(--cafe-3);
+    border          : 2px solid var(--cafe-3);
+    padding         : 0 10px;
+}
+
+.button.secondary.disabled {
+    background-color: var(--cafe-light-grey);
+    color           : white;
+    border          : 2px solid var(--cafe-grey);
 }

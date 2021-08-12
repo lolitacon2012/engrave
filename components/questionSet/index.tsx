@@ -10,7 +10,7 @@ import { useEffect } from "react";
 import { debounce } from "lodash";
 import { useRef } from "react";
 import { AutoSizer, List } from "react-virtualized";
-import Swal from 'sweetalert2';
+import modal from "cafe-ui/modal";
 interface Props {
     questionSet: StudySet,
     onExit: (r: StudySet) => void;
@@ -210,19 +210,14 @@ export default function QuestionSet(props: Props) {
         </div>
         <div className={styles.footerContainer}>
             <Button onClick={() => {
-                stage !== QuestionStage.Finished ? Swal.fire({
+                stage !== QuestionStage.Finished ? modal.fire({
+                    translator: store.t,
                     title: t('study_exit'),
-                    text: t('study_exit_warning'),
-                    showCancelButton: true,
-                    cancelButtonText: t("general_cancel"),
+                    contentText: t('study_exit_warning'),
                     confirmButtonText: t("study_exit"),
-                    confirmButtonColor: '#ff0000',
-                    icon: 'warning',
-                }).then((r) => {
-                    if (r.isConfirmed) {
-                        result && props.onExit(result);
-                    }
-                }) : (result && props.onExit(result));
+                    type: 'DANGER',
+                    onConfirm: () => { result && props.onExit(result) },
+                }) : (result && props.onExit(result))
             }}>{t('study_exit')}</Button>
             {stage === QuestionStage.Finished && <Button onClick={() => {
                 result && props.onContinue(result);

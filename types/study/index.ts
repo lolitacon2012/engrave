@@ -7,6 +7,7 @@ type StudyProgress = {
     updated_at: number;
     section_size: number;
     use_random_order: boolean;
+    use_ruby_only: boolean;
     use_easy_mode: boolean;
     level_0: string[]; // new words
     level_1: string[]; // watch done

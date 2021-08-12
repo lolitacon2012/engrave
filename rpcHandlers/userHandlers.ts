@@ -30,7 +30,7 @@ const getUserInfo = async (
         registerTime: now,
         locale,
         owningDeckIds: [],
-        studyingDeckIds: [],
+        followingDeckIds: [],
         progress: [],
       }
       await db.collection("users")

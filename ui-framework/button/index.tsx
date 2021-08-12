@@ -4,8 +4,8 @@ import { IoReloadCircle } from "react-icons/io5";
 import style from './index.module.css';
 
 interface ButtonProps {
-    type?: 'SMALL' | 'NORMAL' | 'LARGE',
-    color?: 'BLACK-ALPHA' | 'PRIMARY',
+    // type?: 'SMALL' | 'NORMAL' | 'LARGE',
+    type?: 'SECONDARY' | 'PRIMARY',
     onClick?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
     children: string | string[] | React.ReactNode | React.ReactNode[];
     disabled?: boolean,
@@ -13,15 +13,11 @@ interface ButtonProps {
     iconRenderer?: () => React.ReactNode;
 }
 const Button = (props: ButtonProps) => {
-    const height = (props.type === 'SMALL' && 24) || (props.type === 'NORMAL' && 32) || (props.type === 'LARGE' && 40) || 32;
-    const fontSize = (props.type === 'SMALL' && '0.8rem') || (props.type === 'NORMAL' && '1rem') || (props.type === 'LARGE' && '1.2rem') || '1rem';
-    const backgroundColor = (props.color === 'PRIMARY' && 'var(--cafe-3)') || 'var(--cafe-3)';
-    const color = (props.color === 'PRIMARY' && 'white') || 'white';
-    return <button className={classNames(style.button, 'withSmallShadow', props.disabled && style.disabled)} style={
-        {
-            height, fontSize, ...(!props.disabled && { backgroundColor, color })
-        }
-    } onClick={(e) => { !props.disabled && props.onClick && props.onClick(e) }}>
+    // const height = (props.type === 'SMALL' && 24) || (props.type === 'NORMAL' && 32) || (props.type === 'LARGE' && 40) || 32;
+    // const fontSize = (props.type === 'SMALL' && '0.8rem') || (props.type === 'NORMAL' && '1rem') || (props.type === 'LARGE' && '1.2rem') || '1rem';
+    // const backgroundColor = (props.color === 'PRIMARY' && 'var(--cafe-3)') || (props.color === 'SECONDARY' && 'white') || 'var(--cafe-3)';
+    // const color = (props.color === 'PRIMARY' && 'white') || 'white';
+    return <button className={classNames(style.button, 'withSmallShadow', (props.type === 'PRIMARY' || !props.type) && style.primary, (props.type === 'SECONDARY') && style.secondary, props.disabled && style.disabled)} onClick={(e) => { !props.disabled && props.onClick && props.onClick(e) }}>
         <div className={(style.textContainer)} style={{
             visibility: props.loading ? 'hidden' : 'visible'
         }}>
