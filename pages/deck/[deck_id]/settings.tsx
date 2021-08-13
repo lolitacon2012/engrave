@@ -16,6 +16,8 @@ import { Switch } from 'cafe-ui/switch';
 import { ImageUploader } from 'cafe-ui/imageUploader';
 import { generateColorTheme } from 'cafe-utils/generateColorTheme';
 import { DEFAULT_STUDY_SET_SIZE } from 'cafe-constants/index';
+import { IoArrowBack, IoTrashBin } from 'react-icons/io5';
+import modal, { alertDeveloping } from 'cafe-ui/modal';
 
 interface Form {
     // deck
@@ -98,6 +100,11 @@ export default function DeckPage() {
         store.setLoading(store.isLocaleLoading || store.isUserLoading || !deck || deck.id !== currentDeckId);
     }, [deck, store.isLocaleLoading || store.isUserLoading])
 
+    const deleteDeck = () => {
+        // words need to be deleted as well.
+        alertDeveloping(t);
+    }
+
     const saveChanges = useCallback(debounce(async (newForm: Partial<Form>) => {
         if (!currentDeckId) {
             return;
@@ -135,82 +142,105 @@ export default function DeckPage() {
         Object.keys(form).length && hasChanges && saveChanges(form);
     }, [Object.values(form)]);
 
+    const renderBackButton = useCallback(() => <Button iconRenderer={() => <IoArrowBack />} onClick={() => { router.push(`/deck/${currentDeckId}`) }}>{t('deck_settings_page_back_to_deck')}</Button>, [store.currentLocale, currentDeckId])
+    const normalizedAvatarSrc = (form.deckAvatar || '').indexOf('data:') !== 0 ? ((form.deckAvatar || '').indexOf('https://') !== 0 ? '' : form.deckAvatar) : form.deckAvatar;
     return hasAuthenticated && <Container>
         <div className={styles.titleRow}>
             <h1>{deck?.name} - {t('deck_page_settings')}</h1>
-            <Button onClick={() => { router.push(`/deck/${currentDeckId}`) }}>{t('deck_settings_page_back_to_deck')}</Button>
+            {renderBackButton()}
         </div>
         <div className={cn(styles.formContainer, 'withSmallShadow')}>
-            <h4 className={styles.formDivider}>{t('deck_settings_page_deck_section')}</h4>
-            <div className={styles.formRow}>
-                <div className={styles.formRowTitle}>
-                    <h3>{t('deck_settings_page_deck_name')}</h3>
-                </div>
+            {isOwnDeck && <><h4 className={styles.formDivider}>{t('deck_settings_page_deck_section')}</h4>
+                <div className={styles.formRow}>
+                    <div className={styles.formRowTitle}>
+                        <h3>{t('deck_settings_page_deck_name')}</h3>
+                    </div>
 
-                <div className={styles.formRowController}>
-                    <input value={form.deckName || ''} onChange={(e) => {
-                        partialUpdateForm({ deckName: e.target.value })
-                    }} />
-                </div>
-            </div>
-            <div className={styles.formRow}>
-                <div className={styles.formRowTitle}>
-                    <h3>{t('deck_settings_page_deck_avatar')}</h3>
-                    <span>{t('deck_settings_page_deck_avatar_instruction')}</span>
-                </div>
-
-                <div className={styles.formRowController}>
-                    <ImageUploader emptyImageText={t('home_create_deck_upload_image')} onImageChanged={(data) => {
-                        const imageBase64 = data[0].dataURL;
-                        partialUpdateForm({ deckAvatar: imageBase64 })
-                    }} initialDataUrls={[form.deckAvatar || '']} onError={(e) => {
-                        if (e?.acceptType) {
-                            alert(t('File type not accepted.'))
-                        } else if (e?.maxFileSize) {
-                            alert(t('Please select an image with size less than 1mb.'))
-                        } else {
-                            alert('Unknown error.')
-                        }
-                    }} />
-                </div>
-            </div>
-            <div className={styles.formRow}>
-                <div className={styles.formRowTitle}>
-                    <h3>{t('deck_settings_page_deck_color')}</h3>
-                </div>
-
-                <div className={styles.formRowController}>
-                    <input type="text" value={form.deckColor || ''} onChange={(e) => {
-                        partialUpdateForm({ deckColor: e.target.value })
-                    }} style={validateDeckThemeColor() ? {
-                        color: themeSet[19],
-                        backgroundColor: themeSet[1],
-                    } : undefined} />
-                    <div className={styles.colorSampleContainer}>
-                        <div className={styles.colorSample} style={{
-                            backgroundColor: themeSet[2]
-                        }
-                        } />
-                        <div className={styles.colorSample} style={{
-                            backgroundColor: themeSet[4]
-                        }
-                        } />
-                        <div className={styles.colorSample} style={{
-                            backgroundColor: themeSet[6]
+                    <div className={styles.formRowController}>
+                        <input value={form.deckName || ''} onChange={(e) => {
+                            partialUpdateForm({ deckName: e.target.value })
                         }} />
-                        <div className={styles.colorSample} style={{
-                            backgroundColor: themeSet[12]
-                        }} /><div className={styles.colorSample} style={{
-                            backgroundColor: themeSet[18]
-                        }} /></div>
+                    </div>
                 </div>
-            </div>
+                <div className={styles.formRow}>
+                    <div className={styles.formRowTitle}>
+                        <h3>{t('deck_settings_page_deck_avatar')}</h3>
+                        <h5>{t('deck_settings_page_deck_avatar_instruction')}</h5>
+                    </div>
+
+                    <div className={styles.formRowController}>
+                        <ImageUploader emptyImageText={t('home_create_deck_upload_image')} onImageChanged={(data) => {
+                            const imageBase64 = data[0].dataURL;
+                            partialUpdateForm({ deckAvatar: imageBase64 })
+                        }} initialDataUrls={normalizedAvatarSrc ? [normalizedAvatarSrc] : []} onError={(e) => {
+                            if (e?.acceptType) {
+                                alert(t('File type not accepted.'))
+                            } else if (e?.maxFileSize) {
+                                alert(t('Please select an image with size less than 1mb.'))
+                            } else {
+                                alert('Unknown error.')
+                            }
+                        }} />
+                    </div>
+                </div>
+                <div className={styles.formRow}>
+                    <div className={styles.formRowTitle}>
+                        <h3>{t('deck_settings_page_deck_color')}</h3>
+                    </div>
+
+                    <div className={styles.formRowController}>
+                        <input type="text" value={form.deckColor || ''} onChange={(e) => {
+                            partialUpdateForm({ deckColor: e.target.value })
+                        }} style={validateDeckThemeColor() ? {
+                            color: themeSet[19],
+                            backgroundColor: themeSet[1],
+                        } : undefined} />
+                        <div className={styles.colorSampleContainer}>
+                            <div className={styles.colorSample} style={{
+                                backgroundColor: themeSet[2]
+                            }
+                            } />
+                            <div className={styles.colorSample} style={{
+                                backgroundColor: themeSet[4]
+                            }
+                            } />
+                            <div className={styles.colorSample} style={{
+                                backgroundColor: themeSet[6]
+                            }} />
+                            <div className={styles.colorSample} style={{
+                                backgroundColor: themeSet[12]
+                            }} /><div className={styles.colorSample} style={{
+                                backgroundColor: themeSet[18]
+                            }} /></div>
+                    </div>
+                </div>
+                <div className={styles.formRow}>
+                    <div className={styles.formRowTitle}>
+                        <h3>{t('deck_settings_page_delete_deck')}</h3>
+                        <h5>{t('deck_settings_page_delete_deck_instruction')}</h5>
+                    </div>
+
+                    <div className={styles.formRowController}>
+                        <Button onClick={() => {
+                            modal.fire({
+                                translator: t,
+                                type: 'DANGER',
+                                confirmButtonText: t('general_delete'),
+                                onConfirm: () => {
+                                    deleteDeck()
+                                },
+                                contentText: t('deck_settings_page_delete_deck_warning')
+                            })
+                        }} iconRenderer={() => <IoTrashBin />} type="DANGER">{t('deck_settings_page_delete_deck')}</Button>
+                    </div>
+                </div>
+            </>}
 
             <h4 className={styles.formDivider}>{t('deck_settings_page_progress_section')}</h4>
             <div className={styles.formRow}>
                 <div className={styles.formRowTitle}>
                     <h3>{t('deck_settings_page_study_size')}</h3>
-                    <span>{t('deck_settings_page_study_size_instruction')}</span>
+                    <h5>{t('deck_settings_page_study_size_instruction')}</h5>
                 </div>
 
                 <div className={styles.formRowController}>
@@ -231,7 +261,7 @@ export default function DeckPage() {
             <div className={styles.formRow}>
                 <div className={styles.formRowTitle}>
                     <h3>{t('deck_settings_page_study_is_random_order')}</h3>
-                    <span>{t('deck_settings_page_study_is_random_order_instruction')}</span>
+                    <h5>{t('deck_settings_page_study_is_random_order_instruction')}</h5>
                 </div>
 
                 <div className={styles.formRowController}>
@@ -245,7 +275,7 @@ export default function DeckPage() {
             <div className={styles.formRow}>
                 <div className={styles.formRowTitle}>
                     <h3>{t('deck_settings_page_study_is_easy_mode')}</h3>
-                    <span>{t('deck_settings_page_study_is_easy_mode_instruction')}</span>
+                    <h5>{t('deck_settings_page_study_is_easy_mode_instruction')}</h5>
                 </div>
 
                 <div className={styles.formRowController}>
@@ -259,7 +289,7 @@ export default function DeckPage() {
             <div className={styles.formRow}>
                 <div className={styles.formRowTitle}>
                     <h3>{t('deck_settings_page_study_ruby_only')}</h3>
-                    <span>{t('deck_settings_page_study_ruby_only_instruction')}</span>
+                    <h5>{t('deck_settings_page_study_ruby_only_instruction')}</h5>
                 </div>
                 <div className={styles.formRowController}>
                     <Switch onChange={(v) => {
@@ -271,7 +301,7 @@ export default function DeckPage() {
                 </div>
             </div>
             <div className={styles.formBottomControlRow}>
-                <Button onClick={() => { router.push(`/deck/${currentDeckId}`) }}>{t('deck_settings_page_back_to_deck')}</Button>
+                {renderBackButton()}
             </div>
 
         </div>

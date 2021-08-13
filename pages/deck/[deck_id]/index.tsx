@@ -12,13 +12,13 @@ import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings } from "react-icons/io5";
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare } from "react-icons/io5";
 
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
 import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
-import modal from 'cafe-ui/modal';
+import modal, { alertDeveloping } from 'cafe-ui/modal';
 
 
 export default function DeckPage() {
@@ -257,7 +257,7 @@ export default function DeckPage() {
                 <div className={cn(styles.wordRow, 'withSmallShadow')}>
                     {<div className={styles.wordWord}>{(editing || isEditingThisWord) ? <input id={isEditingThisWord ? 'editing_word_input' : undefined} value={content.word} onChange={(e) => {
                         onEditWord(e.target.value, content.meaning, wordId)
-                    }} /> : decodeRubyWithFallback(content.word)}</div>}
+                    }} /> : decodeRubyWithFallback(content.word).element}</div>}
                     {<div className={styles.wordMeaning}>{(editing || isEditingThisWord) ? <input id={isLastWord ? 'editing_meaning_input_last' : undefined} value={content.meaning} onChange={(e) => {
                         onEditWord(content.word, e.target.value, wordId)
                     }} /> : <span>{content.meaning}</span>}</div>}
@@ -291,12 +291,11 @@ export default function DeckPage() {
     return hasAuthenticated && <Container fullHeight>
         <div className={styles.titleRow}>
             <h1>{deck?.name} - {t('deck_page_list')}</h1>
-            <h5>{t('deck_page_created_by')}{deck?.creator_name || t('general_anonymous')}</h5>
         </div>
         <div className={styles.controllerRow}>
             {!editing && <Button type={'PRIMARY'} onClick={() => {
                 router.push(`/home`)
-            }} iconRenderer={() => <IoArrowBack></IoArrowBack>}>{t('deck_page_back_to_list')}</Button>}
+            }} iconRenderer={() => <IoArrowBack />}>{t('deck_page_back_to_list')}</Button>}
             {!editing && <Button type={'PRIMARY'} onClick={() => {
                 if (!deck?.words?.length) {
                     modal.fire({
@@ -328,12 +327,16 @@ export default function DeckPage() {
                 batchUpdateDeck(deck?.id);
 
             }} iconRenderer={() => <IoSave />}>{t('deck_page_exit_edit')}</Button>}
+            {!editing && <Button type={'PRIMARY'} onClick={() => {
+                alertDeveloping(t);
+            }} iconRenderer={() => <IoShare />}>{t('deck_generate_code')}</Button>}
 
             <div className={styles.flexPlaceholder} />
             {!editing && <input className={cn(styles.searchBar, 'withSmallShadow')} placeholder={t('deck_page_search_tip')} value={searchKeyword} onChange={(keyword) => {
                 onSearch(keyword.target.value);
                 setSearchKeyword(keyword.target.value);
             }} />}
+
         </div>
         <div className={styles.statsAndListRow}>
             <DeckCard shadow={"SMALL"} deck={deck as Deck} progress={store.user?.progress?.[currentDeckId]} />
@@ -342,7 +345,7 @@ export default function DeckPage() {
                     <div className={styles.emptyWordList}>
                         <h1><IoClipboardOutline /></h1>
                         <h2>{t('deck_page_empty_list')}</h2>
-                        <Button iconRenderer={()=><IoAddCircle />} type={'PRIMARY'} onClick={() => {
+                        <Button iconRenderer={() => <IoAddCircle />} type={'PRIMARY'} onClick={() => {
                             onAddWord();
                         }}>{t('deck_page_add_first_word')}</Button>
                     </div> :

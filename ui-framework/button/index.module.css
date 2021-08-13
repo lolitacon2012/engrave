@@ -76,6 +76,12 @@
     padding         : 0 10px;
 }
 
+.button.danger {
+    background-color: var(--cafe-red);
+    color           : white;
+}
+
+
 .button.secondary.disabled {
     background-color: var(--cafe-light-grey);
     color           : white;

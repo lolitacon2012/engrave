@@ -117,4 +117,15 @@ class Modal {
     }
 }
 
-export default new Modal();
+const modal = new Modal();
+const alertDeveloping = (t: (k: string, f?: any) => string) => {
+    modal.fire({
+        translator: t,
+        contentText: t('general_developing'),
+        hideCancelButton: true,
+        confirmButtonText: t('general_looking_forward'),
+        contentIconRenderer: () => '尬',
+    })
+}
+export default modal;
+export { alertDeveloping };

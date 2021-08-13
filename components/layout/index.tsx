@@ -74,6 +74,10 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <title>Qahva</title>
             <meta name="description" content={"Qahva - " + t('homepage_subtitle')} />
             <link rel="icon" href="/favicon.ico" />
+            <link
+                href="https://fonts.googleapis.com/css2?family=Red+Hat+Display&display=swap"
+                rel="stylesheet"
+            />
         </Head>
         <Navbar />
         {showLoadingScreen && <div className={cn(styles.loadingScreen, isReadyToDisplay && styles.fadingOut)}>

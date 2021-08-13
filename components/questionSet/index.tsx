@@ -1,13 +1,13 @@
-import { Question, StudySet } from "cafe-types/study";
+import { Question, StudyProgress, StudySet } from "cafe-types/study";
 import Button from "cafe-ui/button";
 import React, { useCallback, useState } from "react";
 import styles from './index.module.css';
 import cn from 'classnames';
-import { decodeRubyWithFallback, getRuby, getRubyMain } from 'cafe-utils/ruby';
+import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import { useContext } from "react";
 import { GlobalStoreContext } from "cafe-store/index";
 import { useEffect } from "react";
-import { debounce } from "lodash";
+import { debounce, includes } from "lodash";
 import { useRef } from "react";
 import { AutoSizer, List } from "react-virtualized";
 import modal from "cafe-ui/modal";
@@ -16,6 +16,7 @@ interface Props {
     onExit: (r: StudySet) => void;
     onResultConfirmed: (r: StudySet, wordIdsToDelete: string[]) => void;
     onContinue: (r: StudySet) => void;
+    progress: StudyProgress;
 }
 
 enum QuestionStage {
@@ -43,10 +44,12 @@ export default function QuestionSet(props: Props) {
     const [score, setScore] = useState(0);
 
     const inputRef = useRef<HTMLInputElement>(null);
-
-    const correctAnswer = getRuby(wordContent?.word || '') || getRubyMain(wordContent?.word || '');
-    const tips = (isLearningNewWord ? t('　') : (isRepeating ? t('study_please_repeat', { answer: correctAnswer }) : t(stage, { answer: correctAnswer })));
-
+    const rubyOnly = !!props.progress.use_ruby_only;
+    const decodedWord = decodeRubyWithFallback(wordContent?.word || '');
+    const correctAnswers = rubyOnly ? [decodedWord.rubyOnlyText] : [decodedWord.mainOnlyText, decodedWord.rubyOnlyText];
+    const tips = (isLearningNewWord ? '' : (isRepeating ? t('study_please_repeat') : t(stage)));
+    const answer = (rubyOnly ? <span>{decodedWord.rubyOnlyText}</span> : decodedWord.element);
+    const shouldShowAnser = isRepeating || (!isLearningNewWord && (stage !== QuestionStage.Question));
     // shortkeys
     const onKeyDown = useCallback(debounce((e: KeyboardEvent) => {
         const key = e.key || e.keyCode;
@@ -56,10 +59,10 @@ export default function QuestionSet(props: Props) {
                     ((isLearningNewWord) || (answerInput)) && evaluateAnswer()
                     break;
                 }
-                case QuestionStage.Finished: {
-                    result && props.onContinue(result);
-                    break;
-                }
+                // case QuestionStage.Finished: {
+                //     result && props.onContinue(result);
+                //     break;
+                // }
                 case QuestionStage.Fail:
                 case QuestionStage.Success: {
                     moveToNextQuestion();
@@ -120,7 +123,7 @@ export default function QuestionSet(props: Props) {
             changeResultWordRank(1);
             moveToNextQuestion();
             return;
-        } else if ((correctAnswer === input) || (correctAnswer === answerInput)) {
+        } else if ((correctAnswers.includes(input || '')) || (correctAnswers.includes(answerInput || ''))) {
             setStage(QuestionStage.Success);
             changeResultWordRank(1);
         } else {
@@ -153,7 +156,7 @@ export default function QuestionSet(props: Props) {
                 {<div className={cn(styles.reviewResult)}>{
                     skipped ? '😑' : (incorrect ? '😅' : '😄')
                 }</div>}
-                {<div className={cn(styles.reviewWord, incorrect && styles.reviewWrong, skipped && styles.skipped)}>{decodeRubyWithFallback(wordContent.word)}</div>}
+                {<div className={cn(styles.reviewWord, incorrect && styles.reviewWrong, skipped && styles.skipped)}>{decodeRubyWithFallback(wordContent.word).element}</div>}
                 {<div className={cn(styles.reviewMeaning)}><span>{wordContent.meaning}</span></div>}
             </div>) : null;
     }
@@ -161,16 +164,16 @@ export default function QuestionSet(props: Props) {
 
     return normalizedStudySet ? <div className={cn(styles.card, 'withNormalShadow', (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
         {wordContent && stage !== QuestionStage.Finished && <><h3 className={styles.questionTitle}>{questionIndex + 1}/{normalizedStudySet.questions.length}</h3>
-            <h1 className={styles.questionBody}>{isLearningNewWord ? (decodeRubyWithFallback(wordContent.word)) : (wordContent.meaning || '')}</h1>
-            <h3 className={styles.questionTips}>{tips}</h3>
-            {isLearningNewWord ? <span className={styles.newWord}>{t('study_meaning')}{wordContent.meaning || ''}</span> : <input ref={inputRef} disabled={stage !== QuestionStage.Question} className={cn(styles.answerInput)} placeholder={isRepeating ? correctAnswer : ''} value={answerInput} onChange={(e) => {
+            <h1 className={styles.questionBody}>{isLearningNewWord ? (decodeRubyWithFallback(wordContent.word).element) : (wordContent.meaning || '')}</h1>
+            <div className={styles.questionTips}><h3>{tips}</h3><h3>{shouldShowAnser && answer}</h3></div>
+            {isLearningNewWord ? <span className={styles.newWord}>{t('study_meaning')}{wordContent.meaning || ''}</span> : <input ref={inputRef} disabled={stage !== QuestionStage.Question} className={cn(styles.answerInput)} placeholder={isRepeating ? correctAnswers.join(' / ') : ''} value={answerInput} onChange={(e) => {
                 setAnswerInput(e.target.value);
-                if (e.target.value === correctAnswer && isRepeating) {
+                if (correctAnswers.includes(e.target.value) && isRepeating) {
                     evaluateAnswer(e.target.value);
                 }
             }} />}
             <div className={styles.buttonContainer}>
-                {stage === QuestionStage.Question && <Button onClick={() => {
+                {stage === QuestionStage.Question && <Button type="SECONDARY" onClick={() => {
                     moveToNextQuestion();
                 }}>{t('study_skip')}</Button>}
                 {stage === QuestionStage.Question && !isRepeating && <Button onClick={() => {

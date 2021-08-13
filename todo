@@ -1,8 +1,9 @@
-
-- P0 implement use ruby option
-
+- p0: allow select language for font issue
+- p0: add "it was an accideng" function
+- p0: allow "~" "～" treated samely
 - Give warning when deleting last word, "this will reset your study progress"
-- add navigation button to settings page, and i18n
-- basic responsiveness
+
 - add "share link"
 - clean localstorage on sign out
+- sign in via facebook
+- export words

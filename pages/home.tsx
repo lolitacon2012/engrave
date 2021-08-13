@@ -143,6 +143,8 @@ const InvitationCodeForm = (props: { closeModal: () => void, onFollowDeck: (id: 
     </>
 };
 
+const HOME_SHOWING_CATEGORIES = 'HOME_SHOWING_CATEGORIES';
+
 export default function Home() {
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
@@ -150,13 +152,17 @@ export default function Home() {
     const t = store.t;
     const hasAuthenticated = (store.authenticatingInProgress === false);
     const [decks, setDecks] = useState<Deck[]>();
-    const [showingCategories, setShowingCategories] = useState<{ [key: string]: boolean }>({
-        [DECK_CATEGORY.FOLLOWING]: false,
-        [DECK_CATEGORY.OWNING]: false,
+    const [showingCategories, setShowingCategoriesLocally] = useState<{ [key: string]: boolean }>({
+        [DECK_CATEGORY.FOLLOWING]: true,
+        [DECK_CATEGORY.OWNING]: true,
         [DECK_CATEGORY.STUDYING]: true,
     });
+    const setShowingCategories = (data: { [key: string]: boolean }) => {
+        localStorage.setItem(HOME_SHOWING_CATEGORIES, JSON.stringify(data));
+        setShowingCategoriesLocally(data);
+    }
     const createNewDeck = async (newDeck: NewDeck) => {
-        await client.callRPC({
+        const result = await client.callRPC({
             rpc: RPC.RPC_CREATE_DECK, data: {
                 deck: newDeck, words: [{
                     content: {
@@ -168,6 +174,7 @@ export default function Home() {
             }
         });
         store.updateUser();
+        return result.data;
     }
 
     const followingDecks = decks?.filter((d) => store.user?.followingDeckIds?.includes(d.id)) || [];
@@ -189,6 +196,12 @@ export default function Home() {
             })
         } else {
             setDecks([])
+        }
+        try {
+            const s = JSON.parse(localStorage.getItem(HOME_SHOWING_CATEGORIES) || 'null');
+            s && setShowingCategories(s);
+        } catch (e) {
+            console.warn(e);
         }
     }, [store.user])
     useEffect(() => {
@@ -260,7 +273,8 @@ export default function Home() {
                                     disableClickOutside: true,
                                     title: t('deck_component_create_new'),
                                     contentRenderer: (closeModal) => <CreateDeckForm closeModal={closeModal} t={store.t} onSubmit={async (newDeck: NewDeck) => {
-                                        await createNewDeck(newDeck);
+                                        const result = await createNewDeck(newDeck);
+                                        router.push("/deck/" + result.id);
                                     }} />,
                                     didOpen: () => {
                                         document.getElementById(CREATE_DECK_FORM_NAME_INPUT_ID)?.focus();
@@ -287,19 +301,19 @@ export default function Home() {
 
                     }} /> */}
                     <div className={styles.section}>
-                        {showingCategories[DECK_CATEGORY.STUDYING] ? <><div className={styles.titleRow}><h1>{t('home_studying', { count: studyingDecks.length + '' })}</h1></div>
+                        {studyingDecks.length && showingCategories[DECK_CATEGORY.STUDYING] ? <><div className={styles.titleRow}><h1>{t('home_studying', { count: studyingDecks.length + '' })}</h1></div>
                             <div className={styles.deckCardsRow}>
                                 {renderDeckCard(DECK_CATEGORY.STUDYING)}
                             </div></> : null}
                     </div>
                     <div className={styles.section}>
-                        {showingCategories[DECK_CATEGORY.OWNING] ? <><div className={styles.titleRow}><h1>{t('home_mine', { count: owningDecks.length + '' })}</h1></div>
+                        {owningDecks.length && showingCategories[DECK_CATEGORY.OWNING] ? <><div className={styles.titleRow}><h1>{t('home_mine', { count: owningDecks.length + '' })}</h1></div>
                             <div className={styles.deckCardsRow}>
                                 {renderDeckCard(DECK_CATEGORY.OWNING)}
                             </div></> : null}
                     </div>
                     <div className={styles.section}>
-                        {showingCategories[DECK_CATEGORY.FOLLOWING] ? <><div className={styles.titleRow}><h1>{t('home_following', { count: followingDecks.length + '' })}</h1></div>
+                        {followingDecks.length && showingCategories[DECK_CATEGORY.FOLLOWING] ? <><div className={styles.titleRow}><h1>{t('home_following', { count: followingDecks.length + '' })}</h1></div>
                             <div className={styles.deckCardsRow}>
                                 {renderDeckCard(DECK_CATEGORY.FOLLOWING)}
                             </div></> : null}

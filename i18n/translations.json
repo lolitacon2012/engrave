@@ -119,13 +119,17 @@
         "EN_US": "Save & Exit",
         "ZH_CN": "保存并退出"
     },
-    "deck_page_created_by": {
-        "EN_US": "Created by ",
-        "ZH_CN": "词库作者："
-    },
     "general_anonymous": {
         "EN_US": "Anonymous",
         "ZH_CN": "匿名"
+    },
+    "general_developing": {
+        "EN_US": "This function / page is currently under development.",
+        "ZH_CN": "这个功能/页面正在开发中，敬请期待。"
+    },
+    "general_looking_forward": {
+        "EN_US": "Ok sure...",
+        "ZH_CN": "我很期待"
     },
     "deck_page_search_result_title": {
         "EN_US": "{number} results found for keyword \"{keyword}\":",
@@ -208,8 +212,8 @@
         "ZH_CN": "您的回答："
     },
     "study_incorrect": {
-        "EN_US": "Incorrect. Correct answer is: {answer}",
-        "ZH_CN": "回答错误。正解：{answer}"
+        "EN_US": "Incorrect. Correct answer is: ",
+        "ZH_CN": "回答错误。正解："
     },
     "study_correct": {
         "EN_US": "Correct.",
@@ -256,8 +260,8 @@
         "ZH_CN": "您已完成 {words_count} 个词条的学习"
     },
     "study_please_repeat": {
-        "EN_US": "Please repeat: {answer}",
-        "ZH_CN": "请拼写：{answer}"
+        "EN_US": "Please repeat: ",
+        "ZH_CN": "请拼写："
     },
     "study_meaning": {
         "EN_US": "Meaning: ",
@@ -307,6 +311,10 @@
         "EN_US": "Invalid code.",
         "ZH_CN": "该邀请码不存在或已过期。"
     },
+    "deck_generate_code": {
+        "EN_US": "Invitation Code",
+        "ZH_CN": "邀请码"
+    },
     "home_create_deck_name": {
         "EN_US": "Name:",
         "ZH_CN": "名称："
@@ -342,6 +350,26 @@
     "deck_settings_page_deck_avatar": {
         "EN_US": "Deck Image",
         "ZH_CN": "单词集图标"
+    },
+    "deck_settings_page_delete_deck": {
+        "EN_US": "Delete Deck",
+        "ZH_CN": "删除单词集"
+    },
+    "deck_settings_page_delete_deck_warning": {
+        "EN_US": "Are you sure to delete this Deck? All your progress and words will be lost.",
+        "ZH_CN": "您确定要删除这个单词集么？这是一个不可逆的操作。"
+    },
+    "deck_settings_page_delete_deck_instruction": {
+        "EN_US": "If there are other users folloging this deck, it will be archived instead.",
+        "ZH_CN": "若尚有其他用户关注此单词集，它将会被归档而非删除。"
+    },
+    "deck_settings_page_unfollow_deck": {
+        "EN_US": "Unfollow",
+        "ZH_CN": "取消关注"
+    },
+    "deck_settings_page_reset_progress": {
+        "EN_US": "Reset Progress",
+        "ZH_CN": "重设进度"
     },
     "deck_settings_page_deck_avatar_instruction": {
         "EN_US": "Please select an image less than 500KB.",

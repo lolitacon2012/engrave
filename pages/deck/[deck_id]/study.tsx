@@ -123,13 +123,13 @@ export default function DeckPage() {
     }
 
     return currentQuestionSet ? <Container>
-        <QuestionSet key={currentQuestionSet.temp_id} onResultConfirmed={(result) => {
+        {currentDeckProgress && <QuestionSet progress={currentDeckProgress} key={currentQuestionSet.temp_id} onResultConfirmed={(result) => {
             updateProgress(result);
         }} questionSet={currentQuestionSet} onExit={() => {
             router.replace(`/deck/${currentDeckId}`)
         }} onContinue={() => {
             const questionSet = generateQuestionSet(currentStudyingDeck!, currentDeckProgress!, currentDeckProgress!.section_size);
             setCurrentQuestionSet(questionSet);
-        }} />
+        }} />}
     </Container> : null;
 }

@@ -25,12 +25,12 @@
 }
 
 .formBottomControlRow {
-    margin-top   : 32px;
-    margin-bottom: 12px;
-    display      : flex;
+    margin-top     : 32px;
+    margin-bottom  : 12px;
+    display        : flex;
     justify-content: center;
-    align-items: center;
-    width        : 100%;
+    align-items    : center;
+    width          : 100%;
 }
 
 .formDivider {

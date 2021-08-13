@@ -12,6 +12,7 @@ import { IoLanguage, IoLogIn } from "react-icons/io5";
 import classNames from "classnames";
 import { useEffect } from "react";
 import { useState } from "react";
+import { alertDeveloping } from "cafe-ui/modal";
 
 const Navbar = () => {
     const store = useContext(GlobalStoreContext);
@@ -61,7 +62,7 @@ const Navbar = () => {
                                 break;
                             }
                             case 'PROFILE': {
-                                alert('not available 😅')
+                                alertDeveloping(t);
                                 break;
                             }
                         }
