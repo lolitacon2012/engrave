@@ -1,9 +1,12 @@
 - p0: allow select language for font issue
 - p0: add "it was an accideng" function
-- p0: allow "~" "～" treated samely
 - Give warning when deleting last word, "this will reset your study progress"
+- p0 test filter out empty words
+- duplication warning
+- flashcard mode
 
 - add "share link"
 - clean localstorage on sign out
 - sign in via facebook
 - export words
+- should block a user fetching deck data if he not owning or following that deck

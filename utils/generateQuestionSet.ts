@@ -20,7 +20,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         wordIdToWord.set(w.id, w);
     })
 
-    const numberOfQuestions = size || DEFAULT_STUDY_SET_SIZE;
+    let numberOfQuestions = size || DEFAULT_STUDY_SET_SIZE;
     const newWords = progress.level_0 || [];
     const toRepeat = [...progress.level_1 || [], ...progress.level_2 || []];
     const toReview = [...progress.level_3 || [], ...progress.level_4 || [], ...progress.level_5 || []];
@@ -44,7 +44,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         }
     }
 
-    //1. add in all "to Repeat". To Repeat does not count towards to total words...
+    //1. add in all "to Repeat".
     toRepeat.forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
@@ -53,6 +53,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
             word_id: w,
         })
     });
+
+    numberOfQuestions -= questionSet.length;
 
     //2. in the rest of space, fill in 20% new words.
     !progress.use_random_order && newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {

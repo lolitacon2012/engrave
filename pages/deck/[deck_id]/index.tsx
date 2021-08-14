@@ -161,12 +161,24 @@ export default function DeckPage() {
     }, 300), [])
 
     const onTabWithWordListLastWord = (e: KeyboardEvent) => {
-        if (document.activeElement?.id === 'editing_meaning_input_last') {
+        if ((document.activeElement?.className || '').includes('editing_meaning_input')) {
+
+            const lastword = sortedFilteredWordList?.slice(-1)[0];
+
+            const isEditingLastWord = (sortedFilteredWordList?.slice(-1)[0].id === editingWord?.id) || ((document.activeElement?.className || '').includes('editing_meaning_input_last'))
+
+            if (!isEditingLastWord && editing) {
+                return;
+            }
             e.preventDefault();
             if (!!editingWord) {
                 setEditingWord(undefined);
             }
-            onAddWord('', true);
+            if (isEditingLastWord || editing) {
+                onAddWord('', true);
+            } else {
+                setEditingWord(sortedFilteredWordList[sortedFilteredWordList.findIndex(w => w.id === editingWord?.id) + 1]);
+            }
         }
     }
 
@@ -181,7 +193,7 @@ export default function DeckPage() {
     useEffect(() => {
         document.addEventListener('keydown', onTabKeyDown)
         return () => { document.removeEventListener('keydown', onTabKeyDown) }
-    }, [sortedFilteredWordList])
+    }, [sortedFilteredWordList, editingWord, editing])
 
     // listening on new word's new id
     useEffect(() => {
@@ -258,7 +270,7 @@ export default function DeckPage() {
                     {<div className={styles.wordWord}>{(editing || isEditingThisWord) ? <input id={isEditingThisWord ? 'editing_word_input' : undefined} value={content.word} onChange={(e) => {
                         onEditWord(e.target.value, content.meaning, wordId)
                     }} /> : decodeRubyWithFallback(content.word).element}</div>}
-                    {<div className={styles.wordMeaning}>{(editing || isEditingThisWord) ? <input id={isLastWord ? 'editing_meaning_input_last' : undefined} value={content.meaning} onChange={(e) => {
+                    {<div className={styles.wordMeaning}>{(editing || isEditingThisWord) ? <input className={`editing_meaning_input${isLastWord ? '_last' : ''}`} value={content.meaning} onChange={(e) => {
                         onEditWord(content.word, e.target.value, wordId)
                     }} /> : <span>{content.meaning}</span>}</div>}
                     {isOwnDeck && <div className={styles.wordControllers}>

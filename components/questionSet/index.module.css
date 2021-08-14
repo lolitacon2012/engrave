@@ -10,6 +10,12 @@
     transition      : all 0.3s;
 }
 
+.card.cardHiddenBottom {
+    transform     : scale(1.05) translateY(48px);
+    opacity       : 0;
+    pointer-events: none;
+}
+
 .answerInput {
     border          : none;
     font-size       : 1.2rem;

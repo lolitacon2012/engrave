@@ -11,6 +11,8 @@ import { debounce, includes } from "lodash";
 import { useRef } from "react";
 import { AutoSizer, List } from "react-virtualized";
 import modal from "cafe-ui/modal";
+import isConsideredAsCorrect from "cafe-utils/compareAnswer";
+const MAIN_QUESTION_STAGE_ID = 'MAIN_QUESTION_STAGE';
 interface Props {
     questionSet: StudySet,
     onExit: (r: StudySet) => void;
@@ -41,22 +43,27 @@ export default function QuestionSet(props: Props) {
     const isRepeating = questionType === 'REPEAT';
     const isLongTermReview = questionType === 'LONG_TERM_REVIEW';
     const [result, setResult] = useState(normalizedStudySet);
+    const [isAnimating, setIsAnimating] = useState(true);
     const [score, setScore] = useState(0);
 
     const inputRef = useRef<HTMLInputElement>(null);
     const rubyOnly = !!props.progress.use_ruby_only;
     const decodedWord = decodeRubyWithFallback(wordContent?.word || '');
-    const correctAnswers = rubyOnly ? [decodedWord.rubyOnlyText] : [decodedWord.mainOnlyText, decodedWord.rubyOnlyText];
+    const correctAnswers = rubyOnly ? [decodedWord.rubyOnlyText] : (decodedWord.mainOnlyText !== decodedWord.rubyOnlyText ? [decodedWord.mainOnlyText, decodedWord.rubyOnlyText] : [decodedWord.mainOnlyText]);
     const tips = (isLearningNewWord ? '' : (isRepeating ? t('study_please_repeat') : t(stage)));
     const answer = (rubyOnly ? <span>{decodedWord.rubyOnlyText}</span> : decodedWord.element);
     const shouldShowAnser = isRepeating || (!isLearningNewWord && (stage !== QuestionStage.Question));
     // shortkeys
     const onKeyDown = useCallback(debounce((e: KeyboardEvent) => {
+        if (isAnimating) {
+            return;
+        }
         const key = e.key || e.keyCode;
         if (key === 13 || key === "Enter") {
             switch (stage) {
                 case QuestionStage.Question: {
-                    ((isLearningNewWord) || (answerInput)) && evaluateAnswer()
+
+                    !isRepeating && ((isLearningNewWord) || (answerInput)) && evaluateAnswer()
                     break;
                 }
                 // case QuestionStage.Finished: {
@@ -71,16 +78,17 @@ export default function QuestionSet(props: Props) {
             }
         }
         // dependency should be same as keyboard listener useEffect
-    }, 300), [stage, questionIndex, wordContent, answerInput, result]);
+    }, 300), [stage, questionIndex, wordContent, answerInput, result, isAnimating, isRepeating]);
 
     useEffect(() => {
         document.addEventListener('keydown', onKeyDown)
         return () => { document.removeEventListener('keydown', onKeyDown) }
-    }, [stage, questionIndex, wordContent, answerInput, result])
+    }, [stage, questionIndex, wordContent, answerInput, result, isAnimating, isRepeating])
 
     useEffect(() => {
         setTimeout(() => {
             inputRef.current?.focus();
+            setIsAnimating(false);
         }, 1)
         const normalized: Question[] = [];
         const emptyWordsId: string[] = [];
@@ -118,14 +126,19 @@ export default function QuestionSet(props: Props) {
         });
     }
 
-    const evaluateAnswer = (input?: string) => {
+    const evaluateAnswer = (input?: string, autoMoveOnCorrect?: boolean) => {
         if (isLearningNewWord) {
             changeResultWordRank(1);
             moveToNextQuestion();
             return;
-        } else if ((correctAnswers.includes(input || '')) || (correctAnswers.includes(answerInput || ''))) {
+        } else if ((correctAnswers.some(a => isConsideredAsCorrect(input || '', a))) || (correctAnswers.some(a => isConsideredAsCorrect((answerInput || ''), a)))) {
             setStage(QuestionStage.Success);
-            changeResultWordRank(1);
+            changeResultWordRank(2);
+            if (autoMoveOnCorrect) {
+                setTimeout(() => {
+                    moveToNextQuestion();
+                }, 800)
+            }
         } else {
             setStage(QuestionStage.Fail);
             changeResultWordRank(isLongTermReview ? -2 : -1);
@@ -133,18 +146,25 @@ export default function QuestionSet(props: Props) {
     }
 
     const moveToNextQuestion = () => {
-        if (questionIndex < ((normalizedStudySet?.questions.length || 0) - 1)) {
-            setQuestionIndex(questionIndex + 1);
-            setStage(QuestionStage.Question)
-            setAnswerInput('');
-            setTimeout(() => {
-                inputRef.current?.focus();
-            }, 1)
+        setIsAnimating(true);
+        setTimeout(() => {
+            if (questionIndex < ((normalizedStudySet?.questions.length || 0) - 1)) {
+                setQuestionIndex(questionIndex + 1);
+                setStage(QuestionStage.Question)
+                setAnswerInput('');
+                setTimeout(() => {
+                    inputRef.current?.focus();
+                }, 1)
 
-        } else {
-            result && props.onResultConfirmed(result, wordIdsToDelete);
-            showFinalResult();
-        }
+            } else {
+                result && props.onResultConfirmed(result, wordIdsToDelete);
+                showFinalResult();
+            }
+        }, 350)
+        
+        setTimeout(() => {
+            setIsAnimating(false);
+        }, 400)
     }
     const rowRenderer = ({ key, index, style }: { key: string, index: number, style: any }) => {
         const wordData = result?.questions[index];
@@ -162,14 +182,14 @@ export default function QuestionSet(props: Props) {
     }
 
 
-    return normalizedStudySet ? <div className={cn(styles.card, 'withNormalShadow', (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
+    return normalizedStudySet ? <div id={'MAIN_QUESTION_STAGE'} className={cn(styles.card, isAnimating && styles.cardHiddenBottom, 'withNormalShadow', (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
         {wordContent && stage !== QuestionStage.Finished && <><h3 className={styles.questionTitle}>{questionIndex + 1}/{normalizedStudySet.questions.length}</h3>
             <h1 className={styles.questionBody}>{isLearningNewWord ? (decodeRubyWithFallback(wordContent.word).element) : (wordContent.meaning || '')}</h1>
-            <div className={styles.questionTips}><h3>{tips}</h3><h3>{shouldShowAnser && answer}</h3></div>
+            <div className={styles.questionTips}><h3>{tips}</h3>&nbsp;<h3>{shouldShowAnser && answer}</h3></div>
             {isLearningNewWord ? <span className={styles.newWord}>{t('study_meaning')}{wordContent.meaning || ''}</span> : <input ref={inputRef} disabled={stage !== QuestionStage.Question} className={cn(styles.answerInput)} placeholder={isRepeating ? correctAnswers.join(' / ') : ''} value={answerInput} onChange={(e) => {
                 setAnswerInput(e.target.value);
-                if (correctAnswers.includes(e.target.value) && isRepeating) {
-                    evaluateAnswer(e.target.value);
+                if ((correctAnswers.some(a => isConsideredAsCorrect((e.target.value || ''), a))) && isRepeating) {
+                    evaluateAnswer(e.target.value, true);
                 }
             }} />}
             <div className={styles.buttonContainer}>
@@ -179,15 +199,15 @@ export default function QuestionSet(props: Props) {
                 {stage === QuestionStage.Question && !isRepeating && <Button onClick={() => {
                     evaluateAnswer();
                 }}>{t(isLearningNewWord ? 'study_i_remembered' : 'study_confirm')}</Button>}
-                {!isRepeating && stage === QuestionStage.Success && <Button onClick={() => {
-                    changeResultWordRank(-1);
-                    moveToNextQuestion();
-                }}>{t('study_guessed')}</Button>}
-                {stage === QuestionStage.Fail && <Button onClick={() => {
+                {stage === QuestionStage.Fail && <Button　type="SECONDARY"  onClick={() => {
                     changeResultWordRank(-9999);
                     moveToNextQuestion();
-                }}>{t('study_restudy')}</Button>}
-                {stage !== QuestionStage.Question && <Button onClick={() => {
+                }}>{t('study_I_forgot')}</Button>}
+                {!isRepeating && stage === QuestionStage.Fail && <Button type="SECONDARY" onClick={() => {
+                    changeResultWordRank(0);
+                    moveToNextQuestion();
+                }}>{t('study_accident')}</Button>}
+                {stage !== QuestionStage.Question && !isRepeating && <Button onClick={() => {
                     moveToNextQuestion();
                 }}>{t('study_next')}</Button>}
             </div></>}
@@ -212,7 +232,17 @@ export default function QuestionSet(props: Props) {
             </>}
         </div>
         <div className={styles.footerContainer}>
-            <Button onClick={() => {
+
+            {stage === QuestionStage.Finished && <Button onClick={() => {
+                setIsAnimating(true);
+                setTimeout(() => {
+                    result && props.onContinue(result);
+                }, 300)
+                setTimeout(() => {
+                    setIsAnimating(false);
+                }, 1000)
+            }}>{t('study_continue')}</Button>}
+            <Button type="SECONDARY" onClick={() => {
                 stage !== QuestionStage.Finished ? modal.fire({
                     translator: store.t,
                     title: t('study_exit'),
@@ -220,11 +250,15 @@ export default function QuestionSet(props: Props) {
                     confirmButtonText: t("study_exit"),
                     type: 'DANGER',
                     onConfirm: () => { result && props.onExit(result) },
+                    onCancel: (closeModal) => {
+                        setIsAnimating(false);
+                        closeModal();
+                    },
+                    didOpen: () => {
+                        setIsAnimating(true);
+                    }
                 }) : (result && props.onExit(result))
             }}>{t('study_exit')}</Button>
-            {stage === QuestionStage.Finished && <Button onClick={() => {
-                result && props.onContinue(result);
-            }}>{t('study_continue')}</Button>}
         </div>
 
     </div> : null;

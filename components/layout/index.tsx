@@ -6,7 +6,7 @@ import client from 'cafe-utils/client';
 import { UserData } from "cafe-types/userData";
 import Navbar from "cafe-components/navbar";
 import styles from './index.module.css';
-import { IoAirplane, IoCafe } from "react-icons/io5";
+import { IoCafe } from "react-icons/io5";
 import cn from "classnames";
 import Head from "next/head";
 import Button from "cafe-ui/button";

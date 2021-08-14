@@ -40,8 +40,8 @@
         "ZH_CN": "开始使用"
     },
     "homepage_subtitle": {
-        "EN_US": "A pure vocabulary learning tool",
-        "ZH_CN": "纯粹的单词背诵工具"
+        "EN_US": "A simple vocabulary learning tool",
+        "ZH_CN": "简易单词背诵工具，痛苦而有效"
     },
     "homepage_subtitle_create": {
         "EN_US": "Create",
@@ -227,9 +227,9 @@
         "EN_US": "Next",
         "ZH_CN": "继续"
     },
-    "study_restudy": {
+    "study_I_forgot": {
         "EN_US": "Forgot",
-        "ZH_CN": "完全忘了"
+        "ZH_CN": "我忘了"
     },
     "study_exit": {
         "EN_US": "Exit",
@@ -239,9 +239,9 @@
         "EN_US": "Your current study progress will be lost.",
         "ZH_CN": "您当前的学习进度将会丢失。"
     },
-    "study_guessed": {
-        "EN_US": "I was lucky",
-        "ZH_CN": "我是瞎蒙的"
+    "study_accident": {
+        "EN_US": "Forgive me",
+        "ZH_CN": "我手滑了"
     },
     "study_skip": {
         "EN_US": "Skip",
@@ -260,7 +260,7 @@
         "ZH_CN": "您已完成 {words_count} 个词条的学习"
     },
     "study_please_repeat": {
-        "EN_US": "Please repeat: ",
+        "EN_US": "Please repeat:",
         "ZH_CN": "请拼写："
     },
     "study_meaning": {
@@ -382,10 +382,6 @@
     "deck_settings_page_study_size": {
         "EN_US": "Number of Words per Study",
         "ZH_CN": "每组学习的单词数量"
-    },
-    "deck_settings_page_study_size_instruction": {
-        "EN_US": "This does not include words in \"Repeat\" stage.",
-        "ZH_CN": "重复练习状态中的单词不计入每组学习单词量内。"
     },
     "deck_settings_page_study_is_random_order": {
         "EN_US": "Random Order",

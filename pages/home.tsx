@@ -190,9 +190,9 @@ export default function Home() {
                     ids: allDecks
                 }
             }, `RPC_GET_DECK_BY_IDS[${allDecks.join(',')}]`, ((result: { data?: Deck[], error: string }) => {
-                setDecks(result.data?.sort((a, b) => (store.user?.progress?.[a.id].updated_at || 0) - (store.user?.progress?.[b.id].updated_at || 0) > 0 ? -1 : 1))
+                setDecks(result.data?.sort((a, b) => (store.user?.progress?.[a.id]?.updated_at || 0) - (store.user?.progress?.[b.id]?.updated_at || 0) > 0 ? -1 : 1))
             })).then((result: { data?: Deck[], error: string }) => {
-                setDecks(result.data?.sort((a, b) => (store.user?.progress?.[a.id].updated_at || 0) - (store.user?.progress?.[b.id].updated_at || 0) > 0 ? -1 : 1))
+                setDecks(result.data?.sort((a, b) => (store.user?.progress?.[a.id]?.updated_at || 0) - (store.user?.progress?.[b.id]?.updated_at || 0) > 0 ? -1 : 1))
             })
         } else {
             setDecks([])

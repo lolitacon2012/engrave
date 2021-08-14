@@ -109,7 +109,7 @@ export default function DeckPage() {
         if (!currentDeckId) {
             return;
         }
-        await Promise.all([client.callRPC({
+        await Promise.all([...(isOwnDeck ? [client.callRPC({
             rpc: RPC.RPC_UPDATE_DECK_BY_ID,
             data: {
                 id: currentDeckId,
@@ -117,7 +117,7 @@ export default function DeckPage() {
                 color: newForm.deckColor || deck?.color,
                 avatar: newForm.deckAvatar || deck?.avatar
             }
-        }), client.callRPC({
+        })] : []), client.callRPC({
             rpc: RPC.RPC_UPDATE_USER_INFO,
             data: {
                 progress: {
@@ -240,7 +240,6 @@ export default function DeckPage() {
             <div className={styles.formRow}>
                 <div className={styles.formRowTitle}>
                     <h3>{t('deck_settings_page_study_size')}</h3>
-                    <h5>{t('deck_settings_page_study_size_instruction')}</h5>
                 </div>
 
                 <div className={styles.formRowController}>

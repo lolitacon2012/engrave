@@ -51,6 +51,7 @@ export default function DeckPage() {
             if (!currentProgress || hasNoWords) {
                 currentProgress = {
                     ...NEW_PROGRESS,
+                    ...(currentProgress),
                     deck_id: currentDeckId,
                     level_0: currentStudyingDeck?.words.map(w => w.id),
                 };

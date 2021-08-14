@@ -88,12 +88,16 @@ const createWords = async (
     await db.collection("words")
       .insertMany(newWords)
 
-    await db.collection("users").updateMany({},
+    await db.collection("users").updateMany({
+
+    },
       {//@ts-ignore
         $push: {
-          "progress.$[].progress.level_0": { $each: newUuids }
+          "progress.$[x].progress.level_0": { $each: newUuids }
         }
-      })
+      },
+      { arrayFilters: [{ "x.id": deck_id }] })
+
     return {
       data: { newIds: newUuids },
       error: ''

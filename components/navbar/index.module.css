@@ -1,7 +1,7 @@
 .container {
     width           : 100vw;
     min-height      : 64px;
-    min-width       : 1280px;
+    min-width       : 1440px;
     max-height      : 64px;
     height          : 64px;
     color           : var(--cafe-black);
