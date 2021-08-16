@@ -2,7 +2,6 @@
 - p0: add "it was an accideng" function
 - Give warning when deleting last word, "this will reset your study progress"
 - p0 test filter out empty words
-- duplication warning
 - flashcard mode
 
 - add "share link"

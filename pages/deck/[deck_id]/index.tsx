@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare } from "react-icons/io5";
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare, IoHelpCircle } from "react-icons/io5";
 
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
@@ -29,6 +29,30 @@ export default function DeckPage() {
     const hasAuthenticated = (store.authenticatingInProgress === false);
 
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
+    const [duplicatedWordIdsSet, setDuplicatedWordIdsSet] = useState<Set<string>>();
+    useEffect(() => {
+        const newWordSet = new Set<string>();
+        const newDuplicatedWordIdsSet = new Set<string>();
+        const newDuplicatedWordsSet = new Set<string>();
+        const pairs = (deck?.words?.map(w => ({ id: w.id, word: decodeRubyWithFallback(w.content.word || '').mainOnlyText })) || []);
+        for (let i = 0; i < pairs.length; i++) {
+            const index = i;
+            const currentPair = pairs[index];
+            if (newWordSet.has(currentPair.word)) {
+                newDuplicatedWordIdsSet.add(currentPair.id)
+                newDuplicatedWordsSet.add(currentPair.word)
+            }
+            newWordSet.add(currentPair.word);
+        }
+        for (let i = 0; i < pairs.length; i++) {
+            const index = pairs.length - 1 - i;
+            const currentPair = pairs[index];
+            if (newDuplicatedWordsSet.has(currentPair.word)) {
+                newDuplicatedWordIdsSet.add(currentPair.id)
+            }
+        }
+        setDuplicatedWordIdsSet(newDuplicatedWordIdsSet);
+    }, [deck?.words])
     const [searchKeyword, setSearchKeyword] = useState<string>('');
     const [debouncedSearchKeyword, setDebouncedSearchKeyword] = useState<string>('');
     const [editing, setEditing] = useState(false);
@@ -100,6 +124,7 @@ export default function DeckPage() {
                     addWordDeletePool(wordId);
                     batchUpdateDeck(currentDeckId);
                     closeModal();
+                    setEditingWord(undefined);
                 }
             }
         })
@@ -156,6 +181,9 @@ export default function DeckPage() {
         batchUpdateDeck(currentDeckId);
         setEditingWord(undefined);
     }, 500), [])
+    const onCheckDuplication = useCallback(debounce((keyword: string) => {
+        return
+    }, 300), [deck?.words])
     const batchUpdateDeck = useCallback(debounce((currentDeckId?: string) => {
         currentDeckId && commitDeckChange(currentDeckId, () => store.updateUser());
     }, 300), [])
@@ -263,13 +291,14 @@ export default function DeckPage() {
         const isEditingThisWord = editingWord?.id === wordId;
         const isLastWord = wordId === sortedFilteredWordList[sortedFilteredWordList.length - 1].id;
         const highlight = index === scrollToIndex;
+        const isDuplicated = duplicatedWordIdsSet?.has(wordId);
         const isDev = (process.env.NODE_ENV) === 'development';
         return (
             <div key={key} style={style} data-word-id={isDev ? wordId : undefined} className={cn(styles.wordRowOuterContainer, highlight && styles.highlightWord)}>
                 <div className={cn(styles.wordRow, 'withSmallShadow')}>
                     {<div className={styles.wordWord}>{(editing || isEditingThisWord) ? <input id={isEditingThisWord ? 'editing_word_input' : undefined} value={content.word} onChange={(e) => {
                         onEditWord(e.target.value, content.meaning, wordId)
-                    }} /> : decodeRubyWithFallback(content.word).element}</div>}
+                    }} /> : decodeRubyWithFallback(content.word).element}{isDuplicated && <span className={styles.duplicationIndicator}><span><IoHelpCircle className={styles.duplicationIndicatorIcon} /></span><span>{t('deck_page_has_duplication')}</span></span>}</div>}
                     {<div className={styles.wordMeaning}>{(editing || isEditingThisWord) ? <input className={`editing_meaning_input${isLastWord ? '_last' : ''}`} value={content.meaning} onChange={(e) => {
                         onEditWord(content.word, e.target.value, wordId)
                     }} /> : <span>{content.meaning}</span>}</div>}

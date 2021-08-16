@@ -139,6 +139,10 @@
         "EN_US": "No result found for keyword \"{keyword}\".",
         "ZH_CN": "找不到包含“{keyword}”的单词。"
     },
+    "deck_page_has_duplication": {
+        "EN_US": "Duplicated with existing word",
+        "ZH_CN": "和已有词汇重复"
+    },
     "general_delete": {
         "EN_US": "Delete",
         "ZH_CN": "删除"

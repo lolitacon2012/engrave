@@ -54,7 +54,7 @@
 .footer {
     width           : 100vw;
     min-width       : 1440px;
-    height          : 100px;
+    height          : 48px;
     border-top      : 1px solid #eaeaea;
     display         : flex;
     flex-direction  : column;
