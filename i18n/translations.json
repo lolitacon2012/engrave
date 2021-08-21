@@ -420,7 +420,7 @@
         "ZH_CN": "最近更新"
     },
     "general_update_whatsnew_20210821": {
-        "EN_US": "- Improved algorithm to decide what words to be reviewed;\n- Prevent learning new words if many words are stuck in review stage;\n- Shortkeys improvement (TAB) on word list edit mode;",
-        "ZH_CN": "- 改进挑选复习单词的算法；\n- 当过多单词处于复习状态时，停止新单词的学习；\n- 改进单词编辑模式下TAB快捷键的行为；"
+        "EN_US": "- Duplication indicator for words;\n- Improved algorithm to decide what words to be reviewed;\n- Prevent learning new words if many words are stuck in review stage;\n- Shortkeys improvement (TAB) on word list edit mode;",
+        "ZH_CN": "- 新增功能：添加单词时若有重复会提示；\n- 功能改进：优化学习单词时挑选“复习”类单词的算法；\n- 功能改进：若复习状态的单词量过多，暂停新单词学习；\n- 问题修复：修复单词编辑模式下TAB快捷键的行为；"
     }
 }
