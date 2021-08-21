@@ -414,5 +414,13 @@
     "deck_settings_page_back_to_deck": {
         "EN_US": "Back to Deck",
         "ZH_CN": "返回单词集"
+    },
+    "general_update": {
+        "EN_US": "Latest Updates",
+        "ZH_CN": "最近更新"
+    },
+    "general_update_whatsnew_20210821": {
+        "EN_US": "- Improved algorithm to decide what words to be reviewed;\n- Prevent learning new words if many words are stuck in review stage;\n- Shortkeys improvement (TAB) on word list edit mode;",
+        "ZH_CN": "- 改进挑选复习单词的算法；\n- 当过多单词处于复习状态时，停止新单词的学习；\n- 改进单词编辑模式下TAB快捷键的行为；"
     }
 }

@@ -56,8 +56,11 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
 
     numberOfQuestions -= questionSet.length;
 
-    //2. in the rest of space, fill in 20% new words.
-    !progress.use_random_order && newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
+    // if too many words are in review state or study stage, do not learn new words.
+    const noNewWordToLearn = toReview.length >= numberOfQuestions;
+
+    //2. in the rest of space, fill in 20% new words
+    !noNewWordToLearn && !progress.use_random_order && newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
@@ -67,7 +70,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
     });
 
     //2.5 if random order, fill in randomly instead of picking from front
-    progress.use_random_order && sampleSize(newWords, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
+    !noNewWordToLearn && progress.use_random_order && sampleSize(newWords, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
@@ -76,8 +79,10 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
+    // if too many words are in review state or study stage, 70% Review.
+
     //3. fill in 50% to Review
-    toReview.slice(0, Math.ceil(numberOfQuestions * 0.5)).forEach(w => {
+    toReview.slice(0, Math.ceil(numberOfQuestions * (noNewWordToLearn ? 0.7 : 0.5))).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,

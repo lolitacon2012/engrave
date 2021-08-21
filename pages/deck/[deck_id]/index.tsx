@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare, IoHelpCircle } from "react-icons/io5";
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare, IoHelpCircle, IoRocket, IoMegaphoneSharp, IoStar } from "react-icons/io5";
 
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
@@ -20,6 +20,7 @@ import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
 import modal, { alertDeveloping } from 'cafe-ui/modal';
 
+const WHATS_NEW_TIMESTAMP = 'whatsnew_20210822';
 
 export default function DeckPage() {
     useAuthGuard();
@@ -30,6 +31,33 @@ export default function DeckPage() {
 
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [duplicatedWordIdsSet, setDuplicatedWordIdsSet] = useState<Set<string>>();
+    useEffect(() => {
+        const markAsRead = (c: () => void) => {
+            localStorage.setItem(WHATS_NEW_TIMESTAMP, WHATS_NEW_TIMESTAMP);
+            c();
+        }
+        if (!localStorage.getItem(WHATS_NEW_TIMESTAMP)) {
+            setTimeout(() => {
+                for (let i = 0, len = localStorage.length; i < len; ++i) {
+                    if (localStorage.key(i) && localStorage.key(i)?.includes('whatsnew_')) {
+                        localStorage.removeItem(localStorage.key(i) || '');
+                    }
+                }
+                modal.fire({
+                    translator: t,
+                    hideCancelButton: true,
+                    title: t('general_update'),
+                    contentRenderer: () => {
+                        return <div>{t('general_update_whatsnew_20210821').split('\n').map(s => <p key={Math.random()} style={{textAlign: 'left'}}>{s}</p>)}</div>
+                    },
+                    onConfirm: (closeModal) => markAsRead(closeModal),
+                    onCancel: (closeModal) => markAsRead(closeModal),
+                    disableClickOutside: true,
+                    contentIconRenderer: () => <IoStar></IoStar>,
+                })
+            }, 300)
+        }
+    }, [])
     useEffect(() => {
         const newWordSet = new Set<string>();
         const newDuplicatedWordIdsSet = new Set<string>();
