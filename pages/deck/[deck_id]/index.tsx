@@ -20,7 +20,7 @@ import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
 import modal, { alertDeveloping } from 'cafe-ui/modal';
 
-const WHATS_NEW_TIMESTAMP = 'whatsnew_20210822';
+const WHATS_NEW_TIMESTAMP = 'whatsnew_20210821';
 
 export default function DeckPage() {
     useAuthGuard();
@@ -48,7 +48,7 @@ export default function DeckPage() {
                     hideCancelButton: true,
                     title: t('general_update'),
                     contentRenderer: () => {
-                        return <div>{t('general_update_whatsnew_20210821').split('\n').map(s => <p key={Math.random()} style={{textAlign: 'left'}}>{s}</p>)}</div>
+                        return <div>{t('general_update_' + WHATS_NEW_TIMESTAMP).split('\n').map(s => <p key={Math.random()} style={{textAlign: 'left'}}>{s}</p>)}</div>
                     },
                     onConfirm: (closeModal) => markAsRead(closeModal),
                     onCancel: (closeModal) => markAsRead(closeModal),
