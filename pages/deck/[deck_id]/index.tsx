@@ -48,7 +48,7 @@ export default function DeckPage() {
                     hideCancelButton: true,
                     title: t('general_update'),
                     contentRenderer: () => {
-                        return <div>{t('general_update_' + WHATS_NEW_TIMESTAMP).split('\n').map(s => <p key={Math.random()} style={{textAlign: 'left'}}>{s}</p>)}</div>
+                        return <div>{t('general_update_' + WHATS_NEW_TIMESTAMP).split('\n').map(s => <p key={Math.random()} style={{ textAlign: 'left' }}>{s}</p>)}</div>
                     },
                     onConfirm: (closeModal) => markAsRead(closeModal),
                     onCancel: (closeModal) => markAsRead(closeModal),
@@ -62,7 +62,11 @@ export default function DeckPage() {
         const newWordSet = new Set<string>();
         const newDuplicatedWordIdsSet = new Set<string>();
         const newDuplicatedWordsSet = new Set<string>();
-        const pairs = (deck?.words?.map(w => ({ id: w.id, word: decodeRubyWithFallback(w.content.word || '').mainOnlyText })) || []);
+        const pairs = (deck?.words?.map(w => {
+            const decodedWord = decodeRubyWithFallback(w.content.word || '');
+            return { id: w.id, word: decodedWord.mainOnlyText + decodedWord.rubyOnlyText }
+        }) || []
+        );
         for (let i = 0; i < pairs.length; i++) {
             const index = i;
             const currentPair = pairs[index];
