@@ -419,8 +419,12 @@
         "EN_US": "Latest Updates",
         "ZH_CN": "最近更新"
     },
-    "general_update_whatsnew_20210821": {
+    "general_update_whatsnew_20210823": {
         "EN_US": "- Duplication indicator for words;\n- Improved algorithm to decide what words to be reviewed;\n- Prevent learning new words if many words are stuck in review stage;\n- Shortkeys improvement (TAB) on word list edit mode;",
         "ZH_CN": "- 新增功能：添加单词时若有重复会提示；\n- 功能改进：优化学习单词时挑选“复习”类单词的算法；\n- 功能改进：若复习状态的单词量过多，暂停新单词学习；\n- 问题修复：修复单词编辑模式下TAB快捷键的行为；"
+    },
+    "footer": {
+        "EN_US": "DISCLAIMER: This website is still in alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Use it at your own risk.",
+        "ZH_CN": "声明：本网站仍处于早期开发中。一切储存于该网站的数据和用户信息都不保证100%安全，亦随时可能因开发变动而丢失。阁下使用本服务的风险须自行承担。"
     }
 }

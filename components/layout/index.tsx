@@ -21,6 +21,12 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     const isReadyToDisplay = store.hasError || !store.loading;
     const router = useRouter();
     useEffect(() => {
+        // remove all RPC localstorage cache
+        for (let i = 0, len = localStorage.length; i < len; ++i) {
+            if (localStorage.key(i) && localStorage.key(i)?.indexOf('RPC_') === 0) {
+                localStorage.removeItem(localStorage.key(i) || '');
+            }
+        }
         store.setLocale(localStorage.getItem('locale') || '');
         client.setRpcOnErrorMessage((e: string) => {
             store.pushErrorMessageStack(e);
@@ -85,7 +91,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         </div>}
         {store.hasError ? renderError() : <div className={(styles.childContainer)}>{children}</div>}
         <footer className={styles.footer}>
-            <span className={styles.disclaimer}>DISCLAIMER: This website is still at pre-alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Please use it at your own risk.</span>
+            <span className={styles.disclaimer}>{t('footer')}</span>
         </footer>
     </>;
 }

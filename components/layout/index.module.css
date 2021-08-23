@@ -52,15 +52,19 @@
 
 
 .footer {
+    position        : fixed;
+    bottom          : 0;
     width           : 100vw;
     min-width       : 1440px;
-    height          : 48px;
+    height          : 24px;
     border-top      : 1px solid #eaeaea;
     display         : flex;
     flex-direction  : column;
     justify-content : center;
     align-items     : center;
-    background-color: white;
+    color           : white;
+    background-color: var(--cafe-black);
+    user-select     : none;
 }
 
 .version {
