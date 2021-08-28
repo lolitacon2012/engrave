@@ -6,7 +6,6 @@ import { Switch } from "cafe-ui/switch";
 import getConjugationSet, { getAllConjugationOfAWord } from "cafe-utils/japaneseVerbConjugation";
 import { decodeRubyWithFallback } from "cafe-utils/ruby";
 import classNames from "classnames";
-import useAuthGuard from "hooks/useAuthGuard";
 import debounce from "lodash/debounce";
 import { useRouter } from "next/router";
 import React, { useCallback, useContext, useEffect } from "react";
@@ -18,7 +17,6 @@ const ALL_CONJUGATIONS = getConjugationSet();
 
 
 export default function Katsuyou() {
-    useAuthGuard();
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     const t = store.t;
@@ -61,8 +59,8 @@ export default function Katsuyou() {
         }
     }, [])
     useEffect(() => {
-        store.setLoading(store.isLocaleLoading || store.isUserLoading);
-    }, [store.isLocaleLoading || store.isUserLoading])
+        store.setLoading(false);
+    }, [])
 
     const generateQuestion = (_katsuyous: any) => {
         return ALL_CONJUGATIONS.sort(() => Math.random() > 0.5 ? 1 : -1).map(w => {
