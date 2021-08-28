@@ -1,8 +1,10 @@
 - p0 (WIP) allow user to share decks via invite code
 - p0: allow select language for font issue
+- p0: Do not update other progress when updating 1 progress
 - Give warning when deleting last word, "this will reset your study progress"
 - p0 test filter out empty words
 - flashcard mode
+
 
 - add "share link"
 - sign in via facebook

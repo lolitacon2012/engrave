@@ -8,7 +8,7 @@ import client from "cafe-utils/client";
 import { RPC } from "cafe-rpc/rpc";
 import { useCallback } from "react";
 import debounce from "lodash/debounce";
-import { IoLanguage, IoLogIn } from "react-icons/io5";
+import { IoBuild, IoLanguage, IoLogIn } from "react-icons/io5";
 import classNames from "classnames";
 import { useEffect } from "react";
 import { useState } from "react";
@@ -71,12 +71,23 @@ const Navbar = () => {
                             <div className={styles.navBarRoundButton}><img className={styles.avatar} alt={name} src={avatar || "/assets/default_avatar.jpg"} /></div>}
                     </DropdownMenu>)}
             {(
+                <DropdownMenu onItemClicked={(action: string) => {
+                    switch (action) {
+                        case 'verbConjugation': {
+                            router.push('/tools/japanese_verb_katsuyou');
+                        }
+                    }
+                }} items={[{ key: 'verbConjugation', title: t('navbar_tools_conjugation') }]}>
+                    <div className={styles.navBarRoundButton}><IoBuild /></div>
+                </DropdownMenu>)}
+            {(
                 <DropdownMenu onItemClicked={(locale: string) => {
                     store.setLocale(locale);
                     id && debouncedSetUserLocale(locale);
                 }} items={[{ key: 'EN_US', title: 'English' }, { key: 'ZH_CN', title: '简体中文' }]}>
                     <div className={styles.navBarRoundButton}><IoLanguage /></div>
                 </DropdownMenu>)}
+
         </div>}
     </div>
 }

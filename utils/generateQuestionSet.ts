@@ -57,7 +57,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
     numberOfQuestions -= questionSet.length;
 
     // if too many words are in review state or study stage, do not learn new words.
-    const noNewWordToLearn = (toRandomReview.length + toReview.length + toFinalReview.length) >= (numberOfQuestions * 1.618);
+    const noNewWordToLearn = (toRandomReview.length + toReview.length + toFinalReview.length) >= (numberOfQuestions * 1.25);
 
     //2. in the rest of space, fill in 20% new words
     !noNewWordToLearn && !progress.use_random_order && newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {

@@ -90,4 +90,11 @@ const updateUserInfo = async (
   }
 }
 
+
+// const updateProgress = async (
+//   data: UpdateUserInfoRequestData,
+//   req: NextApiRequest,
+// ) => {
+// }
+
 export { getUserInfo, updateUserInfo };

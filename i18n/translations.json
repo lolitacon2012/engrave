@@ -87,6 +87,10 @@
         "EN_US": "My Profile",
         "ZH_CN": "我的账户"
     },
+    "navbar_tools_conjugation": {
+        "EN_US": "Japanese Verb\nConjugation",
+        "ZH_CN": "日语动词活用练习"
+    },
     "navbar_signout": {
         "EN_US": "Sign Out",
         "ZH_CN": "退出登录"
@@ -158,6 +162,10 @@
     "general_back_to_homepage": {
         "EN_US": "Back to Homepage",
         "ZH_CN": "返回首页"
+    },
+    "general_back": {
+        "EN_US": "Back",
+        "ZH_CN": "返回"
     },
     "deck_page_list": {
         "EN_US": "Deck",
@@ -426,5 +434,85 @@
     "footer": {
         "EN_US": "DISCLAIMER: This website is still in alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Use it at your own risk.",
         "ZH_CN": "声明：本网站仍处于早期开发中。一切储存于该网站的数据和用户信息都不保证100%安全，亦随时可能因开发变动而丢失。阁下使用本服务的风险须自行承担。"
+    },
+    "tools_button_change_a_set": {
+        "EN_US": "Change",
+        "ZH_CN": "换一组"
+    },
+    "tools_button_verb_category_tips": {
+        "EN_US": "Category {category}",
+        "ZH_CN": "第 {category} 类动词"
+    },
+    "tools_button_show_verb_category": {
+        "EN_US": "Show category",
+        "ZH_CN": "显示动词分类"
+    },
+    "tools_button_verb_category_tips_special": {
+        "EN_US": "Special conjugation",
+        "ZH_CN": "特殊活用动词"
+    },
+    "tools_button_show_verb_original": {
+        "EN_US": "Show 連体形 form",
+        "ZH_CN": "显示动词連体形"
+    },
+    "tools_button_show_verb_current_form": {
+        "EN_US": "Show current form",
+        "ZH_CN": "显示当前活用"
+    },
+    "tools_button_show_verb_conjugation_rule": {
+        "EN_US": "Show conjugation rule",
+        "ZH_CN": "显示活用规则"
+    },
+    "tools_katsuyou_exercise": {
+        "EN_US": "Japanese Verb Conjugation Exercise",
+        "ZH_CN": "日语动词活用练习"
+    },
+    "tools_japanese_katsuyou_RT": {
+        "EN_US": "連体形",
+        "ZH_CN": "連体形"
+    },
+    "tools_japanese_katsuyou_RY": {
+        "EN_US": "連用形",
+        "ZH_CN": "連用形"
+    },
+    "tools_japanese_katsuyou_TE": {
+        "EN_US": "て形",
+        "ZH_CN": "て形"
+    },
+    "tools_japanese_katsuyou_KK": {
+        "EN_US": "過去形",
+        "ZH_CN": "過去形"
+    },
+    "tools_japanese_katsuyou_HT": {
+        "EN_US": "否定形",
+        "ZH_CN": "否定形"
+    },
+    "tools_japanese_katsuyou_ML": {
+        "EN_US": "命令形",
+        "ZH_CN": "命令形"
+    },
+    "tools_japanese_katsuyou_HTML": {
+        "EN_US": "否定命令形",
+        "ZH_CN": "否定命令形"
+    },
+    "tools_japanese_katsuyou_KN": {
+        "EN_US": "可能形",
+        "ZH_CN": "可能形"
+    },
+    "tools_japanese_katsuyou_KT": {
+        "EN_US": "仮定形",
+        "ZH_CN": "仮定形"
+    },
+    "tools_japanese_katsuyou_IK": {
+        "EN_US": "意向形",
+        "ZH_CN": "意向形"
+    },
+    "tools_japanese_katsuyou_UM": {
+        "EN_US": "受身形",
+        "ZH_CN": "受身形"
+    },
+    "tools_japanese_katsuyou_SE": {
+        "EN_US": "使役形",
+        "ZH_CN": "使役形"
     }
 }
