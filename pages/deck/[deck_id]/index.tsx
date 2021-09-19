@@ -242,7 +242,7 @@ export default function DeckPage() {
         }
     }
 
-    const onTabKeyDown = (e: KeyboardEvent) => {
+    const onTabKeyPress = (e: KeyboardEvent) => {
         const key = e.key || e.keyCode;
         if (key === 9 || key === "Tab") {
             onTabWithWordListLastWord(e);
@@ -251,8 +251,8 @@ export default function DeckPage() {
 
     // shortkeys
     useEffect(() => {
-        document.addEventListener('keydown', onTabKeyDown)
-        return () => { document.removeEventListener('keydown', onTabKeyDown) }
+        document.addEventListener('keypress', onTabKeyPress)
+        return () => { document.removeEventListener('keypress', onTabKeyPress) }
     }, [sortedFilteredWordList, editingWord, editing])
 
     // listening on new word's new id

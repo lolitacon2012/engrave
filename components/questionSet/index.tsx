@@ -7,7 +7,7 @@ import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import { useContext } from "react";
 import { GlobalStoreContext } from "cafe-store/index";
 import { useEffect } from "react";
-import { debounce, includes } from "lodash";
+import { debounce } from "lodash";
 import { useRef } from "react";
 import { AutoSizer, List } from "react-virtualized";
 import modal from "cafe-ui/modal";
@@ -54,7 +54,7 @@ export default function QuestionSet(props: Props) {
     const answer = (rubyOnly ? <span>{decodedWord.rubyOnlyText}</span> : decodedWord.element);
     const shouldShowAnser = isRepeating || (!isLearningNewWord && (stage !== QuestionStage.Question));
     // shortkeys
-    const onKeyDown = useCallback(debounce((e: KeyboardEvent) => {
+    const onKeyPress = useCallback(debounce((e: KeyboardEvent) => {
         if (isAnimating) {
             return;
         }
@@ -63,7 +63,7 @@ export default function QuestionSet(props: Props) {
             switch (stage) {
                 case QuestionStage.Question: {
 
-                    !isRepeating && ((isLearningNewWord) || (answerInput)) && evaluateAnswer()
+                    ((isLearningNewWord) || (answerInput)) && evaluateAnswer()
                     break;
                 }
                 // case QuestionStage.Finished: {
@@ -78,12 +78,12 @@ export default function QuestionSet(props: Props) {
             }
         }
         // dependency should be same as keyboard listener useEffect
-    }, 300), [stage, questionIndex, wordContent, answerInput, result, isAnimating, isRepeating]);
+    }, 300), [stage, questionIndex, wordContent, answerInput, result, isAnimating]);
 
     useEffect(() => {
-        document.addEventListener('keydown', onKeyDown)
-        return () => { document.removeEventListener('keydown', onKeyDown) }
-    }, [stage, questionIndex, wordContent, answerInput, result, isAnimating, isRepeating])
+        document.addEventListener('keypress', onKeyPress)
+        return () => { document.removeEventListener('keypress', onKeyPress) }
+    }, [stage, questionIndex, wordContent, answerInput, result, isAnimating])
 
     useEffect(() => {
         setTimeout(() => {
@@ -141,7 +141,7 @@ export default function QuestionSet(props: Props) {
             }
         } else {
             setStage(QuestionStage.Fail);
-            changeResultWordRank(isLongTermReview ? -2 : -1);
+            changeResultWordRank(isRepeating ? 0 : (isLongTermReview ? -2 : -1));
         }
     }
 
@@ -161,7 +161,7 @@ export default function QuestionSet(props: Props) {
                 showFinalResult();
             }
         }, 350)
-        
+
         setTimeout(() => {
             setIsAnimating(false);
         }, 400)
@@ -188,18 +188,15 @@ export default function QuestionSet(props: Props) {
             <div className={styles.questionTips}><h3>{tips}</h3>&nbsp;<h3>{shouldShowAnser && answer}</h3></div>
             {isLearningNewWord ? <span className={styles.newWord}>{t('study_meaning')}{wordContent.meaning || ''}</span> : <input ref={inputRef} disabled={stage !== QuestionStage.Question} className={cn(styles.answerInput)} placeholder={isRepeating ? correctAnswers.join(' / ') : ''} value={answerInput} onChange={(e) => {
                 setAnswerInput(e.target.value);
-                if ((correctAnswers.some(a => isConsideredAsCorrect((e.target.value || ''), a))) && isRepeating) {
-                    evaluateAnswer(e.target.value, true);
-                }
             }} />}
             <div className={styles.buttonContainer}>
                 {stage === QuestionStage.Question && <Button type="SECONDARY" onClick={() => {
                     moveToNextQuestion();
                 }}>{t('study_skip')}</Button>}
-                {stage === QuestionStage.Question && !isRepeating && <Button onClick={() => {
+                {stage === QuestionStage.Question && <Button onClick={() => {
                     evaluateAnswer();
                 }}>{t(isLearningNewWord ? 'study_i_remembered' : 'study_confirm')}</Button>}
-                {stage === QuestionStage.Fail && <Button　type="SECONDARY"  onClick={() => {
+                {stage === QuestionStage.Fail && <Button type="SECONDARY" onClick={() => {
                     changeResultWordRank(-9999);
                     moveToNextQuestion();
                 }}>{t('study_I_forgot')}</Button>}
@@ -207,7 +204,7 @@ export default function QuestionSet(props: Props) {
                     changeResultWordRank(0);
                     moveToNextQuestion();
                 }}>{t('study_accident')}</Button>}
-                {stage !== QuestionStage.Question && !isRepeating && <Button onClick={() => {
+                {stage !== QuestionStage.Question && <Button onClick={() => {
                     moveToNextQuestion();
                 }}>{t('study_next')}</Button>}
             </div></>}
