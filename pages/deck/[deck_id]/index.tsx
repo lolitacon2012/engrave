@@ -251,8 +251,8 @@ export default function DeckPage() {
 
     // shortkeys
     useEffect(() => {
-        document.addEventListener('keypress', onTabKeyPress)
-        return () => { document.removeEventListener('keypress', onTabKeyPress) }
+        document.addEventListener('keydown', onTabKeyPress)
+        return () => { document.removeEventListener('keydown', onTabKeyPress) }
     }, [sortedFilteredWordList, editingWord, editing])
 
     // listening on new word's new id
