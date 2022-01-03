@@ -111,7 +111,8 @@ const createDeck = async (
       deck_id: newDeckId,
       started_at: new Date().getTime(),
       updated_at: new Date().getTime(),
-      ...NEW_PROGRESS_TEMPLATE
+      ...NEW_PROGRESS_TEMPLATE,
+      level_0: newDeckWordsIds,
     }
     const { db } = await connectToDatabase();
     let error = await deckChecker(newDeck, hashedEmail, db);
