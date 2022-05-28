@@ -181,9 +181,29 @@ export default function QuestionSet(props: Props) {
             </div>) : null;
     }
 
-
-    return normalizedStudySet ? <div id={'MAIN_QUESTION_STAGE'} className={cn(styles.card, isAnimating && styles.cardHiddenBottom, 'withNormalShadow', (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
-        {wordContent && stage !== QuestionStage.Finished && <><h3 className={styles.questionTitle}>{questionIndex + 1}/{normalizedStudySet.questions.length}</h3>
+    const renderQuestionTypeTag = () => {
+        switch (questionType) {
+            case 'NEW_WORD': {
+                return t('study_progress_new')
+            }
+            case 'REPEAT': {
+                return t('study_progress_repeat')
+            }
+            case 'REVIEW': {
+                return t('study_progress_review')
+            }
+            case 'LONG_TERM_REVIEW': {
+                return t('study_progress_random_review')
+            }
+        }
+        return t('study_progress_unknown')
+    }
+    return normalizedStudySet ? <div id={MAIN_QUESTION_STAGE_ID} className={cn(styles.card, isAnimating && styles.cardHiddenBottom, 'withNormalShadow', (stage === QuestionStage.Fail || stage === QuestionStage.Skip) && styles.incorrect, (stage === QuestionStage.Success) && styles.correct)}>
+        {wordContent && stage !== QuestionStage.Finished && <>
+            <div className={styles.questionTitleContainer}>
+                <h3>{questionIndex + 1}/{normalizedStudySet.questions.length}</h3>
+                <h3>{renderQuestionTypeTag()}</h3>
+            </div>
             <h1 className={styles.questionBody}>{isLearningNewWord ? (decodeRubyWithFallback(wordContent.word).element) : (wordContent.meaning || '')}</h1>
             <div className={styles.questionTips}><h3>{tips}</h3>&nbsp;<h3>{shouldShowAnser && answer}</h3></div>
             {isLearningNewWord ? <span className={styles.newWord}>{t('study_meaning')}{wordContent.meaning || ''}</span> : <input ref={inputRef} disabled={stage !== QuestionStage.Question} className={cn(styles.answerInput)} placeholder={isRepeating ? correctAnswers.join(' / ') : ''} value={answerInput} onChange={(e) => {
@@ -212,9 +232,11 @@ export default function QuestionSet(props: Props) {
             {stage === QuestionStage.Finished && <>
                 <h1>{t('study_finished_title', { words_count: (result?.questions.length || 0) + '' })}</h1>
                 <div style={{ flex: 1, width: '100%' }}>
+                    {/* @ts-ignore AutoSizer is not fully compativle with react 18 */}
                     <AutoSizer>
                         {({ height, width }) => {
                             return (
+                                /* @ts-ignore AutoSizer is not fully compativle with react 18 */
                                 <List
                                     width={width}
                                     height={height}

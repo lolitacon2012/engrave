@@ -11,7 +11,7 @@ const sampleSize = ([...arr], n = 1) => {
     return arr.slice(0, n);
 };
 
-export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<StudyProgress>, size: number): StudySet => {
+export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<StudyProgress>, originalSize: number): StudySet => {
     const questionSet: {
         word?: Word, rank_delta: number, question_type: 'NEW_WORD' | 'REPEAT' | 'REVIEW' | 'LONG_TERM_REVIEW', word_id: string
     }[] = [];
@@ -19,18 +19,23 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
     deck.words?.forEach(w => {
         wordIdToWord.set(w.id, w);
     })
-
-    let numberOfQuestions = size || DEFAULT_STUDY_SET_SIZE;
+    const size = originalSize || DEFAULT_STUDY_SET_SIZE;
+    let numberOfQuestionsToFill = size;
+    // to learn
     const newWords = progress.level_0 || [];
+    // to repeat
     const toRepeat = [...progress.level_1 || [], ...progress.level_2 || []];
+    // to review
     const toReview = [...progress.level_3 || [], ...progress.level_4 || [], ...progress.level_5 || []];
-    const toRandomReview = [...progress.level_6 || [], ...progress.level_7 || [], ...progress.level_8 || []];
-    const toFinalReview = progress.level_9 || [];
+    // for further review
+    const toRandomReview = [...progress.level_6 || [], ...progress.level_7 || []];
+    // almost there
+    const toFinalReview = [...progress.level_8 || [], ...progress.level_9 || []];
     const finished = progress.level_10 || [];
 
     // review lesson
-    if ((toFinalReview.length > size) || (((newWords.length + toRepeat.length + toReview.length + toRandomReview.length) === 0) && !!toFinalReview.length)) {
-        toFinalReview.forEach(w => {
+    if ((toFinalReview.length > numberOfQuestionsToFill) || (((newWords.length + toRepeat.length + toReview.length + toRandomReview.length) === 0) && !!toFinalReview.length)) {
+        sampleSize(toFinalReview, numberOfQuestionsToFill).forEach(w => {
             questionSet.push({
                 word: wordIdToWord.get(w),
                 rank_delta: 0,
@@ -54,13 +59,13 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
-    numberOfQuestions -= questionSet.length;
+    numberOfQuestionsToFill -= questionSet.length;
 
     // if too many words are in review state or study stage, do not learn new words.
-    const noNewWordToLearn = (toRandomReview.length + toReview.length + toFinalReview.length) >= (numberOfQuestions * 1.25);
+    const noNewWordToLearn = (toRandomReview.length + toReview.length + toFinalReview.length) >= (numberOfQuestionsToFill * 1.25);
 
-    //2. in the rest of space, fill in 20% new words
-    !noNewWordToLearn && !progress.use_random_order && newWords.slice(0, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
+    //2. in the rest of space, fill in 25% new words
+    !noNewWordToLearn && !progress.use_random_order && newWords.slice(0, Math.floor(numberOfQuestionsToFill * 0.25)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
@@ -70,7 +75,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
     });
 
     //2.5 if random order, fill in randomly instead of picking from front
-    !noNewWordToLearn && progress.use_random_order && sampleSize(newWords, Math.ceil(numberOfQuestions * 0.2)).forEach(w => {
+    !noNewWordToLearn && progress.use_random_order && sampleSize(newWords, Math.floor(numberOfQuestionsToFill * 0.25)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
@@ -79,10 +84,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
-    // if too many words are in review state or study stage, 70% Review.
-
-    //3. fill in 50% to Review
-    toReview.slice(0, Math.ceil(numberOfQuestions * (noNewWordToLearn ? 0.7 : 0.5))).forEach(w => {
+    //3. fill in 60% / 85% to Review
+    toReview.slice(0, Math.floor(numberOfQuestionsToFill * (noNewWordToLearn ? 0.85 : 0.6))).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
@@ -91,8 +94,9 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
-    //4. fill in toRandomReview, 20%.
-    sampleSize(toRandomReview, Math.min(Math.ceil(numberOfQuestions * 0.2), toRandomReview.length)).forEach(w => {
+    //4. fill in toRandomReview when its size is over size || DEFAULT_STUDY_SET_SIZE, 15%.
+    const shouldRandomReview = toRandomReview.length >= (size);
+    shouldRandomReview && sampleSize(toRandomReview, Math.min(Math.floor(numberOfQuestionsToFill * 0.15), toRandomReview.length)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
             rank_delta: 0,
@@ -111,7 +115,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
-    //5. shuffle question order;
+    //6. shuffle question order;
     const shuffled = questionSet.sort(() => Math.random() > 0.5 ? 1 : -1);
     return {
         questions: shuffled,

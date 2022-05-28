@@ -5,7 +5,7 @@ import { GetDeckByIdsRequestData } from 'cafe-types/rpc/deck';
 import { Deck, Word } from 'cafe-types/deck';
 import { connectToDatabase } from 'cafe-utils/mongodb';
 import type { NextApiRequest } from 'next';
-import { getSession } from 'next-auth/client'
+import { getSession } from 'next-auth/react'
 import { v4 as uuid } from 'uuid';
 import { Db } from 'mongodb';
 import { RPCError } from 'cafe-types/rpc/error';
@@ -137,7 +137,7 @@ const createDeck = async (
       ...error,
       data: newDeck,
     };
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }
@@ -179,7 +179,7 @@ const updateDeckById = async (
     )
 
     return { error: '' }
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }
@@ -219,7 +219,7 @@ const getDeckByIds = async (
       data: decksWithWords,
       error: '',
     };
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }
@@ -237,7 +237,7 @@ const getDeckByInvideCode = async (
     }
     const { db } = await connectToDatabase();
     const now = new Date().getTime();
-    const inviteCodeData = await db.collection("inviteCodes")
+    const inviteCodeData = await db.collection<{ deck_id: string, code: string, expire: number }>("inviteCodes")
       .findOne({ code: data.code }) as { deck_id: string, code: string, expire: number } | undefined;
     if (!inviteCodeData || (((inviteCodeData?.expire) || 0) < now) || (!inviteCodeData?.deck_id)) {
       return {
@@ -261,7 +261,7 @@ const getDeckByInvideCode = async (
     return {
       error: '',
     };
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }

@@ -1,6 +1,6 @@
 import { GlobalStoreContext } from "cafe-store/index";
 import React, { useEffect, useState } from "react";
-import { useSession } from "next-auth/client";
+import { useSession } from "next-auth/react";
 import { RPC } from 'cafe-rpc/rpc';
 import client from 'cafe-utils/client';
 import { UserData } from "cafe-types/userData";
@@ -16,7 +16,8 @@ import modal from "cafe-ui/modal";
 export default function Layout({ children }: { children: React.ReactNode }) {
     const store = React.useContext(GlobalStoreContext);
     const t = store.t;
-    const [session, loading] = useSession();
+    const { data: session, status } = useSession();
+    const loading = status === "loading";
     const [showLoadingScreen, setShowLoadingScreen] = useState(true);
     const isReadyToDisplay = store.hasError || !store.loading;
     const router = useRouter();

@@ -19,6 +19,7 @@ export const NEW_PROGRESS_TEMPLATE = {
     level_9: [],
     level_10: [],
 }
+
 // 連体　連用　て形　過去　否定　可能　意向　命令　否定命令　仮定　使役　受身
 // RT   RY    TE    KK   HT    KN   IK    ML   HTML     KT   SE    UM
 export enum JAPANESE_VERB_KATSUYOU {

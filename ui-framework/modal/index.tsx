@@ -23,7 +23,7 @@ interface FireParameters {
     hideCancelButton?: boolean;
     disableClickOutside?: boolean;
     type?: 'PRIMARY' | 'DANGER' | 'INFO' | 'WARNING' | 'SUCCESS'
-    buttonRenders?: (() => void)[];
+    buttonRenders?: (() => React.ReactNode)[];
     buttonPosition?: 'CENTER' | 'RIGHT';
     translator: (k: string, o?: any) => string;
     didOpen?: () => void;
@@ -76,7 +76,9 @@ const ModalReactComponent = (props: FireParameters & { id: string, unmountSelf: 
                     marginBottom: 0
                 })
             }}>{props.contentRenderer ? props.contentRenderer(closeModal) : props.contentText && <p>{props.contentText}</p>}</div>
-            {!props.hideButtons && <div className={classNames(styles.buttonContainer, props.buttonPosition === 'RIGHT' && styles.buttonToRight)}>{props.buttonRenders ? props.buttonRenders.map((r) => r()) : renderControlButtons()}</div>}
+            {!props.hideButtons && <div className={classNames(styles.buttonContainer, props.buttonPosition === 'RIGHT' && styles.buttonToRight)}>
+                {props.buttonRenders ? props.buttonRenders.map((r) => r()) : renderControlButtons()}
+            </div>}
         </div>
     </div>
 }

@@ -1,10 +1,11 @@
 import { GlobalStoreContext } from "cafe-store/index";
-import { signIn, useSession } from "next-auth/client";
+import { signIn, useSession } from "next-auth/react";
 
 import { useContext, useEffect } from "react";
 
 const useAuthGuard = () => {
-    const [session, loading] = useSession();
+    const { data: session, status } = useSession();
+    const loading = status === "loading";
     const store = useContext(GlobalStoreContext)
     useEffect(() => {
         if (loading === false) {

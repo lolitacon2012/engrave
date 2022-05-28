@@ -20,7 +20,7 @@ import { decodeRubyWithFallback } from 'cafe-utils/ruby';
 import useAuthGuard from 'hooks/useAuthGuard';
 import modal, { alertDeveloping } from 'cafe-ui/modal';
 
-const WHATS_NEW_TIMESTAMP = 'whatsnew_20210821';
+const WHATS_NEW_TIMESTAMP = 'whatsnew_20220528';
 
 export default function DeckPage() {
     useAuthGuard();
@@ -31,18 +31,22 @@ export default function DeckPage() {
 
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [duplicatedWordIdsSet, setDuplicatedWordIdsSet] = useState<Set<string>>();
+    useEffect(()=>{
+        console.log('DeckPage loaded')
+    }, [])
     useEffect(() => {
         const markAsRead = (c: () => void) => {
             localStorage.setItem(WHATS_NEW_TIMESTAMP, WHATS_NEW_TIMESTAMP);
             c();
         }
         if (!localStorage.getItem(WHATS_NEW_TIMESTAMP)) {
-            setTimeout(() => {
-                for (let i = 0, len = localStorage.length; i < len; ++i) {
-                    if (localStorage.key(i) && localStorage.key(i)?.includes('whatsnew_')) {
-                        localStorage.removeItem(localStorage.key(i) || '');
-                    }
+            markAsRead(()=>{});
+            for (let i = 0, len = localStorage.length; i < len; ++i) {
+                if (localStorage.key(i) && localStorage.key(i)?.includes('whatsnew_')) {
+                    localStorage.removeItem(localStorage.key(i) || '');
                 }
+            }
+            setTimeout(() => {
                 modal.fire({
                     translator: t,
                     hideCancelButton: true,
@@ -428,10 +432,12 @@ export default function DeckPage() {
                         })}</h3> : <h3 className={styles.searchTitle}>{t("deck_page_search_result_empty_title", {
                             keyword: debouncedSearchKeyword
                         })}</h3>)}
+                        {/* @ts-ignore AutoSizer is not fully compativle with react 18 */}
                         <AutoSizer>
                             {({ height, width }) => {
                                 const heightDelta = debouncedSearchKeyword ? 52 : 0;
                                 return (
+                                    /* @ts-ignore AutoSizer is not fully compativle with react 18 */
                                     <List
                                         width={width}
                                         height={height - heightDelta}

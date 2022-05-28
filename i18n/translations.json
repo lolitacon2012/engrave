@@ -219,6 +219,22 @@
         "EN_US": "Updated",
         "ZH_CN": "上次学习"
     },
+    "study_progress_new": {
+        "EN_US": "New",
+        "ZH_CN": "新出单词"
+    },
+    "study_progress_repeat": {
+        "EN_US": "Repeat",
+        "ZH_CN": "重复练习"
+    },
+    "study_progress_review": {
+        "EN_US": "Review",
+        "ZH_CN": "加深复习"
+    },
+    "study_progress_random_review": {
+        "EN_US": "Random review",
+        "ZH_CN": "随机抽测"
+    },
     "study_your_answer": {
         "EN_US": "Your answer:",
         "ZH_CN": "您的回答："
@@ -427,9 +443,9 @@
         "EN_US": "Latest Updates",
         "ZH_CN": "最近更新"
     },
-    "general_update_whatsnew_20210823": {
-        "EN_US": "- Duplication indicator for words;\n- Improved algorithm to decide what words to be reviewed;\n- Prevent learning new words if many words are stuck in review stage;\n- Shortkeys improvement (TAB) on word list edit mode;",
-        "ZH_CN": "- 新增功能：添加单词时若有重复会提示；\n- 功能改进：优化学习单词时挑选“复习”类单词的算法；\n- 功能改进：若复习状态的单词量过多，暂停新单词学习；\n- 问题修复：修复单词编辑模式下TAB快捷键的行为；"
+    "general_update_whatsnew_20220528": {
+        "EN_US": "- System upgrade & refactor;\n- Improved algorithm to decide what words to be reviewed;",
+        "ZH_CN": "- 技术升级以及一些组件的重写；\n- 功能改进：优化复习算法；"
     },
     "footer": {
         "EN_US": "DISCLAIMER: This website is still in alpha stage. Any data and information stored on this website is neither guaranteed to be safe, nor persistent. Use it at your own risk.",

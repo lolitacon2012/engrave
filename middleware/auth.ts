@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/client'
+import { getSession } from 'next-auth/react'
 import type { NextApiRequest, NextApiResponse, NextApiHandler } from 'next';
 
 const withAuth = (handler: NextApiHandler) => {

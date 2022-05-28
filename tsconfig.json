@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "es5",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -16,16 +20,39 @@
     "jsx": "preserve",
     "baseUrl": "./",
     "paths": {
-      "cafe-types/*": ["types/*"],
-      "cafe-components/*": ["components/*"],
-      "cafe-utils/*": ["utils/*"],
-      "cafe-ui/*": ["ui-framework/*"],
-      "cafe-rpc/*": ["rpcHandlers/*"],
-      "cafe-middleware/*": ["middleware/*"],
-      "cafe-store/*": ["storeContext/*"],
-      "cafe-constants/*": ["cafe-constants/*"]
-    }
+      "cafe-types/*": [
+        "types/*"
+      ],
+      "cafe-components/*": [
+        "components/*"
+      ],
+      "cafe-utils/*": [
+        "utils/*"
+      ],
+      "cafe-ui/*": [
+        "ui-framework/*"
+      ],
+      "cafe-rpc/*": [
+        "rpcHandlers/*"
+      ],
+      "cafe-middleware/*": [
+        "middleware/*"
+      ],
+      "cafe-store/*": [
+        "storeContext/*"
+      ],
+      "cafe-constants/*": [
+        "cafe-constants/*"
+      ]
+    },
+    "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

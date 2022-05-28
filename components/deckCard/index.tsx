@@ -8,7 +8,7 @@ import { generateColorTheme } from 'cafe-utils/generateColorTheme';
 import { IoTime, IoPricetags, IoGolfOutline } from 'react-icons/io5';
 import { getTimeString } from 'cafe-utils/getTimeTillNow';
 
-export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlaceholder, isMiniCard, externali18n }: { isMiniCard?: boolean, isPlaceholder?: boolean, deck?: Deck | undefined, progress?: StudyProgress | undefined, externali18n?: (s: string, k: any)=>string, onClickEnter?: () => void, shadow: 'NORMAL' | 'SMALL' }) {
+export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlaceholder, isMiniCard, externali18n }: { isMiniCard?: boolean, isPlaceholder?: boolean, deck?: Deck | undefined, progress?: StudyProgress | undefined, externali18n?: (s: string, k: any) => string, onClickEnter?: () => void, shadow: 'NORMAL' | 'SMALL' }) {
     const { t: storeT, user } = useContext(GlobalStoreContext);
     const t = externali18n || storeT;
     const totalWord = deck?.words.length || 0;
@@ -17,8 +17,11 @@ export default function DeckCard({ deck, onClickEnter, progress, shadow, isPlace
     const isOwnDeck = deck?.creator_id === user?.id;
     const themeColor = deck?.color || '#000000';
     const themeColorSet = generateColorTheme(themeColor);
-    const inRepeatStage = (progress?.level_1.length || 0) + (progress?.level_2.length || 0);
-    const inReviewStage = (progress?.level_3.length || 0) + (progress?.level_4.length || 0) + (progress?.level_5.length || 0) + (progress?.level_6.length || 0) + (progress?.level_7.length || 0) + (progress?.level_8.length || 0) + (progress?.level_9.length || 0);
+    // learning
+    const inRepeatStage = (progress?.level_1.length || 0) + (progress?.level_2.length || 0) + (progress?.level_3.length || 0) + (progress?.level_4.length || 0) + (progress?.level_5.length || 0);
+    // reviewing
+    const inReviewStage = (progress?.level_6.length || 0) + (progress?.level_7.length || 0) + (progress?.level_8.length || 0) + (progress?.level_9.length || 0);
+    // mastered
     const inFinalStage = progress?.level_10.length || 0;
     const isNew = Math.max(0, totalWord - inRepeatStage - inReviewStage - inFinalStage);
     const noStudyProgress = inRepeatStage + inReviewStage + inFinalStage === 0;

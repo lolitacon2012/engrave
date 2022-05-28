@@ -1,4 +1,4 @@
-import { signIn, signOut } from "next-auth/client"
+import { signIn, signOut } from "next-auth/react"
 import React, { useContext } from "react";
 import { GlobalStoreContext } from "cafe-store/index";
 import styles from './index.module.css';

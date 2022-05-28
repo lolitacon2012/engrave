@@ -7,6 +7,7 @@ const DECK_WORD_ID_LIST = 'DECK_WORD_ID_LIST';
 const WORDS_TO_DELETE_ID_LIST = 'WORDS_TO_DELETE_ID_LIST';
 
 export const addDeckWordUpdatePool = (wordId: string, content: WordContent) => {
+    // Word modification insert into update pending pool
     const existingPendingWord = JSON.parse(localStorage.getItem(wordId) || '{}');
     existingPendingWord.content = content;
     localStorage.setItem(wordId, JSON.stringify(existingPendingWord));

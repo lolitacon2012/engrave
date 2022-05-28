@@ -1,9 +1,9 @@
 import NextAuth from "next-auth"
-import Providers from "next-auth/providers"
+import Google from "next-auth/providers/google"
 
 export default NextAuth({
   providers: [
-    Providers.Google({
+    Google({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
@@ -12,4 +12,8 @@ export default NextAuth({
     //   clientSecret: process.env.GITHUB_CLIENT_SECRET
     // }),
   ],
+  jwt: {
+    secret: process.env.NEXTAUTH_SECRET,
+    maxAge: 60 * 60 * 24 * 180,
+  }
 })

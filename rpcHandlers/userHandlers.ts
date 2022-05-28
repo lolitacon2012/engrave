@@ -3,7 +3,7 @@ import { getHashedEmail } from 'cafe-utils/hash';
 import { getLocaleFromAcceptLanguagesHeader } from 'cafe-utils/i18n';
 import { connectToDatabase } from 'cafe-utils/mongodb';
 import type { NextApiRequest } from 'next';
-import { getSession } from 'next-auth/client'
+import { getSession } from 'next-auth/react'
 
 const getUserInfo = async (
   _: any,
@@ -43,12 +43,14 @@ const getUserInfo = async (
       newUserProgress[p.id] = p.progress;
     })
     user.progress = newUserProgress;
+    // @ts-ignore
     user.avatar = avatar;
+    // @ts-ignore
     user.name = name;
     return {
       data: user, error: ''
     };
-  } catch (err) {
+  } catch (err: any) {
     return {
       error: err.toString()
     }
@@ -85,7 +87,7 @@ const updateUserInfo = async (
           }
         })
     return { error: '' }
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }

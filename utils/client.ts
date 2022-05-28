@@ -28,6 +28,8 @@ class HttpClient {
     this._handleRpcErrorMessage = (err: string) => (callback(err));
   }
 
+  // callRPC that can do local cache
+  // Todo: use indexDB
   public callRPC = async (data: {
     rpc: string, data: any
   }, uniqueRequestId?: string, onNewResultReceived?: (newResult: {

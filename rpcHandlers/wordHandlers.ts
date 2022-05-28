@@ -9,7 +9,7 @@ import { Db } from 'mongodb';
 import type { NextApiRequest } from 'next';
 import { v4 as uuid } from 'uuid';
 import { getDeckByIds } from './deckHandlers';
-import { getSession } from 'next-auth/client';
+import { getSession } from 'next-auth/react';
 import { getHashedEmail } from 'cafe-utils/hash';
 
 const MAX_WORD_FIELD_LENGTH = 128;
@@ -102,7 +102,7 @@ const createWords = async (
       data: { newIds: newUuids },
       error: ''
     };
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }
@@ -161,7 +161,7 @@ const updateWordsByIds = async (
         })
     }
     return { error: '' }
-  } catch (err) {
+  } catch (err: any) {
     return { error: err.toString() }
   }
 }
