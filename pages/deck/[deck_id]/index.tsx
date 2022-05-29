@@ -23,24 +23,20 @@ import modal, { alertDeveloping } from 'cafe-ui/modal';
 const WHATS_NEW_TIMESTAMP = 'whatsnew_20220528';
 
 export default function DeckPage() {
-    useAuthGuard();
+    const hasAuthenticated = useAuthGuard();
     const router = useRouter();
     const store = useContext(GlobalStoreContext);
     const t = store.t;
-    const hasAuthenticated = (store.authenticatingInProgress === false);
 
     const [deck, setDeck] = useState<Partial<Deck> | undefined>(undefined);
     const [duplicatedWordIdsSet, setDuplicatedWordIdsSet] = useState<Set<string>>();
-    useEffect(()=>{
-        console.log('DeckPage loaded')
-    }, [])
     useEffect(() => {
         const markAsRead = (c: () => void) => {
             localStorage.setItem(WHATS_NEW_TIMESTAMP, WHATS_NEW_TIMESTAMP);
             c();
         }
         if (!localStorage.getItem(WHATS_NEW_TIMESTAMP)) {
-            markAsRead(()=>{});
+            markAsRead(() => { });
             for (let i = 0, len = localStorage.length; i < len; ++i) {
                 if (localStorage.key(i) && localStorage.key(i)?.includes('whatsnew_')) {
                     localStorage.removeItem(localStorage.key(i) || '');
@@ -300,7 +296,7 @@ export default function DeckPage() {
             }
         }
         // Fetch current deck
-        if (currentDeckId) {
+        if (currentDeckId && store.user?.id) {
             client.callRPC({
                 rpc: RPC.RPC_GET_DECK_BY_IDS, data: {
                     ids: [currentDeckId]
@@ -312,10 +308,6 @@ export default function DeckPage() {
             })
         }
     }, [store.user?.id, currentDeckId])
-
-    useEffect(() => {
-        deck?.id && cleanCache();
-    }, [deck?.id])
 
     useEffect(() => {
         store.setLoading(store.isLocaleLoading || store.isUserLoading || !deck || deck.id !== currentDeckId);
@@ -365,7 +357,8 @@ export default function DeckPage() {
             </div>
         );
     }
-    return hasAuthenticated && <Container fullHeight>
+    const pageReady = hasAuthenticated && deck;
+    return pageReady && <Container fullHeight>
         <div className={styles.titleRow}>
             <h1>{deck?.name} - {t('deck_page_list')}</h1>
         </div>

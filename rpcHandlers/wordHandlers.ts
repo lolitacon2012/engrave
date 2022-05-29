@@ -49,7 +49,7 @@ const wordChecker = async (deckId: string, userId: string, contents: WordContent
 const checkWordOwnership = async (wordIds: string[], userId: string, db: Db) => {
   const allWords = await db.collection("words")
     .find({ id: { $in: wordIds } }).toArray();
-
+    
   const isOwnWords = allWords.every((w) => w.creator_id === userId);
   return {
     error: isOwnWords ? '' : 'error_user_does_now_own_some_words'

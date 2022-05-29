@@ -6,6 +6,7 @@ import { useContext, useEffect } from "react";
 const useAuthGuard = () => {
     const { data: session, status } = useSession();
     const loading = status === "loading";
+    const authenticated = status === "authenticated";
     const store = useContext(GlobalStoreContext)
     useEffect(() => {
         if (loading === false) {
@@ -18,6 +19,7 @@ const useAuthGuard = () => {
             store.setAuthenticatingInProgress(true);
         }
     }, [loading, session])
+    return authenticated;
 }
 
 export default useAuthGuard;

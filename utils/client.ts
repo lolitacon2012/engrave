@@ -45,7 +45,8 @@ class HttpClient {
         result.data?.error && this._handleRpcErrorMessage(result.data?.error);
         try {
           !hasError && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
-        } catch {
+        } catch (e: any) {
+          console.error(e)
           localStorage.clear();
           // TODO: use memory
         }
@@ -59,7 +60,8 @@ class HttpClient {
           try {
             !hasError && uniqueRequestId && localStorage.setItem(`${uniqueRequestId}`, JSON.stringify({ data: result.data }));
             hasError && localStorage.setItem(`${uniqueRequestId}`, '');
-          } catch {
+          } catch (e: any) {
+            console.error(e)
             // TODO: use memory
             localStorage.clear();
           }
