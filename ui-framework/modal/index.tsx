@@ -2,8 +2,8 @@ import Button from 'cafe-ui/button';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import ReactDOM from 'react-dom';
-import { IoAccessibility, IoAlertCircle, IoCheckmarkCircle, IoInformationCircle, IoWarning } from 'react-icons/io5';
+import { createRoot } from 'react-dom/client';
+import { IoAlertCircle, IoCheckmarkCircle, IoInformationCircle, IoWarning } from 'react-icons/io5';
 import { v4 as uuid } from 'uuid';
 import styles from './index.module.css';
 
@@ -104,13 +104,14 @@ class Modal {
         const thisModalContainer = document.createElement("div");
         thisModalContainer.id = newId;
         document.getElementById(MODAL_MOUNT_POINT_ID)?.appendChild(thisModalContainer);
-        ReactDOM.render(<><ModalReactComponent id={newId} {...fireParameters} unmountSelf={() => {
-            ReactDOM.unmountComponentAtNode(thisModalContainer);
+        const root = createRoot(thisModalContainer);
+        root.render(<><ModalReactComponent id={newId} {...fireParameters} unmountSelf={() => {
+            root.unmount();
             thisModalContainer.remove();
             delete this.instanceIdToCloseModal[newId];
         }} onMounted={(id: string, closeModal: () => void) => {
             this.addToInstanceIdToCloseModal(id, closeModal)
-        }} /></>, thisModalContainer);
+        }} /></>);
     }
     public closeAll = () => {
         Object.keys(this.instanceIdToCloseModal).forEach(id => {
