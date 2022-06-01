@@ -55,7 +55,7 @@
     position        : fixed;
     bottom          : 0;
     width           : 100vw;
-    min-width       : 1440px;
+    min-width       : var(--min-width);
     height          : 24px;
     border-top      : 1px solid #eaeaea;
     display         : flex;
@@ -65,6 +65,7 @@
     color           : white;
     background-color: var(--cafe-black);
     user-select     : none;
+    opacity    : 0.5;
 }
 
 .version {
@@ -74,7 +75,7 @@
 
 .disclaimer {
     line-height: 1;
-    font-size  : 0.3rem;
+    font-size  : 1rem;
 }
 
 .childContainer {

@@ -3,8 +3,6 @@ import React, { useState } from "react";
 import getTranslation from "cafe-utils/i18n";
 import { Locale } from "cafe-types/i18n";
 import { DEFAULT_LOCALE } from "cafe-constants/index";
-import { Deck } from "cafe-types/deck";
-import { StudyProgress } from "cafe-types/study";
 import client from "cafe-utils/client";
 import { RPC } from "cafe-rpc/rpc";
 const NOOP = () => undefined;
@@ -65,6 +63,7 @@ export default function GlobalStoreProvider({ children }: { children: React.Reac
     localStorage?.setItem('locale', locale || DEFAULT_LOCALE)
   }
   const updateUser = () => {
+    // Todo: reduce rpc call
     client.callRPC({ rpc: RPC.RPC_GET_USER_INFO, data: {} }).then(({ data, error }: { data?: Partial<UserData>, error: string }) => {
       setUser({
         ...user, ...data

@@ -93,10 +93,10 @@ const updateUserInfo = async (
 }
 
 
-// const updateProgress = async (
-//   data: UpdateUserInfoRequestData,
-//   req: NextApiRequest,
-// ) => {
-// }
+const updateProgress = async (
+  data: UpdateUserInfoRequestData,
+  req: NextApiRequest,
+) => {
+}
 
-export { getUserInfo, updateUserInfo };
+export { getUserInfo, updateUserInfo, updateProgress };

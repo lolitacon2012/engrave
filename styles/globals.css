@@ -40,32 +40,32 @@ h2 {
 }
 
 h3 {
-  font-size: 1.2rem;
-  margin   : 0;
+  font-size  : 1.2rem;
+  margin     : 0;
   font-weight: normal;
 }
 
 h4 {
-  font-size: 1rem;
-  margin   : 0;
+  font-size  : 1rem;
+  margin     : 0;
   font-weight: normal;
 }
 
 h5 {
-  font-size: 0.8rem;
-  margin   : 0;
+  font-size  : 0.8rem;
+  margin     : 0;
   font-weight: normal;
 }
 
 h6 {
-  font-size: 0.7rem;
-  margin   : 0;
+  font-size  : 0.7rem;
+  margin     : 0;
   font-weight: normal;
 }
 
 p {
-  font-size: 1rem;
-  margin   : 1rem 0;
+  font-size  : 1rem;
+  margin     : 1rem 0;
   font-weight: normal;
 }
 
@@ -92,6 +92,8 @@ p {
   --cafe-yellow      : rgb(255, 225, 56);
   --cafe-green       : rgb(60, 189, 77);
   --font-hei         : 'Red Hat Display', -apple-system, "Noto Sans", "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", "PingFang SC", "Hiragino Sans GB", "Noto Sans CJK SC", "Source Han Sans SC", "Source Han Sans CN", "Microsoft YaHei", "Wenquanyi Micro Hei", "WenQuanYi Zen Hei", "ST Heiti", SimHei, "WenQuanYi Zen Hei Sharp", sans-serif;
+
+  --min-width: 1280px;
 }
 
 .withSmallShadow {

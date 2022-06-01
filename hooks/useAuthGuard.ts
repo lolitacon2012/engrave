@@ -18,7 +18,7 @@ const useAuthGuard = () => {
         } else {
             store.setAuthenticatingInProgress(true);
         }
-    }, [loading, session])
+    }, [loading, session, authenticated])
     return authenticated;
 }
 

@@ -105,13 +105,11 @@ export default function DeckPage() {
             newProgress.has_started = true;
         }
         client.callRPC({
-            rpc: RPC.RPC_UPDATE_USER_INFO,
+            rpc: RPC.RPC_UPDATE_PROGRESS,
             data: {
                 progress: {
-                    ...store.user?.progress,
                     [currentDeckId]: newProgress
-                },
-                setLastStudied: true,
+                }
             }
         })
         store.updateUserLocally({
@@ -127,7 +125,7 @@ export default function DeckPage() {
         {currentDeckProgress && <QuestionSet progress={currentDeckProgress} key={currentQuestionSet.temp_id} onResultConfirmed={(result) => {
             updateProgress(result);
         }} questionSet={currentQuestionSet} onExit={() => {
-            router.replace(`/deck/${currentDeckId}`)
+            router.push(`/deck/${currentDeckId}`)
         }} onContinue={() => {
             const questionSet = generateQuestionSet(currentStudyingDeck!, currentDeckProgress!, currentDeckProgress!.section_size);
             setCurrentQuestionSet(questionSet);

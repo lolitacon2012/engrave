@@ -12,6 +12,7 @@ import { useRef } from "react";
 import { AutoSizer, List } from "react-virtualized";
 import modal from "cafe-ui/modal";
 import isConsideredAsCorrect from "cafe-utils/compareAnswer";
+import Router, { useRouter } from "next/router";
 const MAIN_QUESTION_STAGE_ID = 'MAIN_QUESTION_STAGE';
 interface Props {
     questionSet: StudySet,
@@ -107,6 +108,49 @@ export default function QuestionSet(props: Props) {
         setNormalizedStudySet(newSet)
         setResult(newSet)
     }, [])
+
+    const onExitBeforeFinish = (onConfirm: () => void) => modal.fire({
+        translator: store.t,
+        title: t('study_exit'),
+        contentText: t('study_exit_warning'),
+        confirmButtonText: t("study_exit"),
+        type: 'DANGER',
+        onConfirm,
+        onCancel: (closeModal) => {
+            setIsAnimating(false);
+            closeModal();
+        },
+        didOpen: () => {
+            setIsAnimating(true);
+        }
+    })
+
+    const router = useRouter();
+    // prevent accidently leave page
+    useEffect(() => {
+        const handleRouteChange = (path: string) => {
+            if (stage !== QuestionStage.Finished) {
+                onExitBeforeFinish(() => {
+                    console.log(path)
+                    setStage(QuestionStage.Finished);
+                    setTimeout(() => {
+                        router.push(path)
+                    })
+                })
+                Router.events.emit('routeChangeError');
+                throw "Cancel navigation";
+            }
+        }
+
+        router.events.on('routeChangeStart', handleRouteChange)
+
+        // If the component is unmounted, unsubscribe
+        // from the event with the `off` method:
+        return () => {
+            router.events.off('routeChangeStart', handleRouteChange)
+        }
+    }, [stage])
+
 
     const showFinalResult = () => {
         let finalScore = 0;
@@ -262,20 +306,11 @@ export default function QuestionSet(props: Props) {
                 }, 1000)
             }}>{t('study_continue')}</Button>}
             <Button type="SECONDARY" onClick={() => {
-                stage !== QuestionStage.Finished ? modal.fire({
-                    translator: store.t,
-                    title: t('study_exit'),
-                    contentText: t('study_exit_warning'),
-                    confirmButtonText: t("study_exit"),
-                    type: 'DANGER',
-                    onConfirm: () => { result && props.onExit(result) },
-                    onCancel: (closeModal) => {
-                        setIsAnimating(false);
-                        closeModal();
-                    },
-                    didOpen: () => {
-                        setIsAnimating(true);
-                    }
+                stage !== QuestionStage.Finished ? onExitBeforeFinish(() => {
+                    setStage(QuestionStage.Finished);
+                    setTimeout(() => {
+                        result && props.onExit(result);
+                    })
                 }) : (result && props.onExit(result))
             }}>{t('study_exit')}</Button>
         </div>
