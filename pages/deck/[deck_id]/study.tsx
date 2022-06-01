@@ -97,6 +97,7 @@ export default function DeckPage() {
             })
             // @ts-ignore
             newProgress['level_' + (lv)] = currentLevel.filter(id => !toRemoveFromCurrentLevel.includes(id));
+            // this is actually being overwritten in backend.
             newProgress.updated_at = new Date().getTime();
 
             // sort lv0 words
@@ -107,9 +108,8 @@ export default function DeckPage() {
         client.callRPC({
             rpc: RPC.RPC_UPDATE_PROGRESS,
             data: {
-                progress: {
-                    [currentDeckId]: newProgress
-                }
+                progress: newProgress,
+                setLastStudied: true,
             }
         })
         store.updateUserLocally({

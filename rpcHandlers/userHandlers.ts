@@ -1,4 +1,4 @@
-import { UpdateUserInfoRequestData } from 'cafe-types/rpc/user';
+import { UpdateProgressData, UpdateUserInfoRequestData } from 'cafe-types/rpc/user';
 import { getHashedEmail } from 'cafe-utils/hash';
 import { getLocaleFromAcceptLanguagesHeader } from 'cafe-utils/i18n';
 import { connectToDatabase } from 'cafe-utils/mongodb';
@@ -94,9 +94,37 @@ const updateUserInfo = async (
 
 
 const updateProgress = async (
-  data: UpdateUserInfoRequestData,
+  data: UpdateProgressData,
   req: NextApiRequest,
 ) => {
+  try {
+    const session = await getSession({ req });
+    const hashedEmail = getHashedEmail(session?.user?.email || '');
+    const { db } = await connectToDatabase();
+
+    // get progress
+    const originalProgress = { ...data.progress };
+    const progressWithUpdatedUpdatedAt = {
+      ...originalProgress,
+      ...(data.setLastStudied ? { updated_at: new Date().getTime() } : {})
+    }
+    const { deck_id } = data.progress;
+    if (!deck_id) {
+      return {
+        error: 'error_deck_id_missing'
+      }
+    }
+    await db.collection("users")
+      .updateOne({ id: hashedEmail, "progress.id": deck_id },
+        {
+          $set: {
+            "progress.$.progress": progressWithUpdatedUpdatedAt
+          }
+        })
+    return { error: '' }
+  } catch (err: any) {
+    return { error: err.toString() }
+  }
 }
 
 export { getUserInfo, updateUserInfo, updateProgress };

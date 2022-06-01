@@ -9,7 +9,7 @@
 .widthLimiter {
   padding        : 64px 128px 64px 128px;
   max-width      : 1920px;
-  min-height     : 100vh;
+  min-height     : 720px;
   width          : 100%;
   height         : 100%;
   margin         : 0 auto;

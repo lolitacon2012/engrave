@@ -118,18 +118,15 @@ export default function DeckPage() {
                 avatar: newForm.deckAvatar || deck?.avatar
             }
         })] : []), client.callRPC({
-            rpc: RPC.RPC_UPDATE_USER_INFO,
+            rpc: RPC.RPC_UPDATE_PROGRESS,
             data: {
                 progress: {
-                    ...store.user?.progress,
-                    [currentDeckId]: {
-                        ...store.user?.progress?.[currentDeckId],
-                        ...{
-                            section_size: newForm.studySize || DEFAULT_STUDY_SET_SIZE,
-                            use_random_order: !!newForm.isRandomOrder,
-                            use_easy_mode: !!newForm.isEasyMode,
-                            use_ruby_only: !!newForm.isRubyOnly,
-                        }
+                    ...store.user?.progress?.[currentDeckId],
+                    ...{
+                        section_size: newForm.studySize || DEFAULT_STUDY_SET_SIZE,
+                        use_random_order: !!newForm.isRandomOrder,
+                        use_easy_mode: !!newForm.isEasyMode,
+                        use_ruby_only: !!newForm.isRubyOnly,
                     }
                 },
             }
