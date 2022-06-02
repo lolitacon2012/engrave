@@ -1,5 +1,5 @@
-- p0 (WIP) allow user to share decks via invite code
-- p0: allow select language for font issue
+- p0: allow user to unfollow a deck
+- p0: allow user to share decks via invite code
 - Give warning when deleting last word, "this will reset your study progress"
 - p0 test filter out empty words
 - flashcard mode

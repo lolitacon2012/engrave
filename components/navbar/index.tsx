@@ -62,7 +62,7 @@ const Navbar = () => {
                                 break;
                             }
                             case 'PROFILE': {
-                                alertDeveloping(t);
+                                router.push("/profile")
                                 break;
                             }
                         }

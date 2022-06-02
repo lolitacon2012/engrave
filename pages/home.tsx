@@ -89,7 +89,7 @@ const CreateDeckForm = (props: { closeModal: () => void, onSubmit: (newDeck: New
     </>
 };
 
-const InvitationCodeForm = (props: { closeModal: () => void, onFollowDeck: (id: string) => void; t: (key: string) => string; followingDeckIds: string[], owningDeckIds: string[] }) => {
+const InvitationCodeForm = (props: { closeModal: () => void, onFollowDeck: (deck: Deck) => void; t: (key: string) => string; followingDeckIds: string[], owningDeckIds: string[] }) => {
     const { t } = props;
     const [code, setCode] = useState('');
     const [result, setResult] = useState<Deck>();
@@ -131,7 +131,7 @@ const InvitationCodeForm = (props: { closeModal: () => void, onFollowDeck: (id: 
 
             {!error && !!result && <Button onClick={async () => {
                 setIsLoading(true);
-                await result && props.onFollowDeck(result?.id);
+                await result && props.onFollowDeck(result);
                 setIsLoading(false);
                 props.closeModal();
             }}>{t('home_search_code_follow')}</Button>}
@@ -208,7 +208,9 @@ export default function Home() {
         store.setLoading(store.isLocaleLoading || store.isUserLoading || !decks);
     }, [decks, store.isLocaleLoading || store.isUserLoading])
 
-    const followDeck = async (id: string) => {
+    const followDeck = async (deck: Deck) => {
+        const id = deck.id;
+        const wasOwnDeck = deck.creator_id === store.user?.id;
         const NEW_PROGRESS = {
             started_at: new Date().getTime(),
             updated_at: new Date().getTime(),
@@ -217,7 +219,8 @@ export default function Home() {
         await client.callRPC({
             rpc: RPC.RPC_UPDATE_USER_INFO,
             data: {
-                followingDeckIds: [...store.user?.followingDeckIds || [], id],
+                owningDeckIds: [...(store.user?.owningDeckIds || []), ...(wasOwnDeck ? [id] : [])],
+                followingDeckIds: [...(store.user?.followingDeckIds || []), ...(wasOwnDeck ? [] : [id])],
                 progress: {
                     ...store.user?.progress,
                     [id]: {
@@ -289,7 +292,7 @@ export default function Home() {
                                     contentRendererWillRenderButton: true,
                                     disableClickOutside: true,
                                     title: t('home_join_via_code'),
-                                    contentRenderer: (closeModal) => <InvitationCodeForm closeModal={closeModal} onFollowDeck={(id: string) => followDeck(id)} t={store.t} owningDeckIds={store.user?.owningDeckIds || []} followingDeckIds={store.user?.followingDeckIds || []} />,
+                                    contentRenderer: (closeModal) => <InvitationCodeForm closeModal={closeModal} onFollowDeck={(deck: Deck) => followDeck(deck)} t={store.t} owningDeckIds={store.user?.owningDeckIds || []} followingDeckIds={store.user?.followingDeckIds || []} />,
                                     didOpen: () => {
                                         document.getElementById(INVITATION_CODE_INPUT_ID)?.focus();
                                     }

@@ -16,7 +16,7 @@ import { Switch } from 'cafe-ui/switch';
 import { ImageUploader } from 'cafe-ui/imageUploader';
 import { generateColorTheme } from 'cafe-utils/generateColorTheme';
 import { DEFAULT_STUDY_SET_SIZE } from 'cafe-constants/index';
-import { IoArrowBack, IoTrashBin } from 'react-icons/io5';
+import { IoArrowBack, IoTrashBin, IoHeartDislike } from 'react-icons/io5';
 import modal, { alertDeveloping } from 'cafe-ui/modal';
 
 interface Form {
@@ -101,11 +101,26 @@ export default function DeckPage() {
     }, [deck, store.isLocaleLoading || store.isUserLoading])
 
     const deleteDeck = async () => {
-        await client.callRPC({
-            rpc: RPC.RPC_DELETE_DECK_BY_ID, data: {
-                id: currentDeckId
-            }
-        })
+        if (isOwnDeck) {
+            await client.callRPC({
+                rpc: RPC.RPC_DELETE_DECK_BY_ID, data: {
+                    id: currentDeckId
+                }
+            })
+        } else {
+            const progress = {
+                ...store.user?.progress,
+            };
+            delete progress[currentDeckId];
+            await client.callRPC({
+                rpc: RPC.RPC_UPDATE_USER_INFO,
+                data: {
+                    followingDeckIds: [...(store.user?.followingDeckIds || []).filter(v => v !== currentDeckId)],
+                    progress,
+                }
+            })
+        }
+        await store.updateUser();
         router.push('/home');
     }
 
@@ -143,8 +158,33 @@ export default function DeckPage() {
         Object.keys(form).length && hasChanges && saveChanges(form);
     }, [Object.values(form)]);
 
+    const renderDeleteSection = () => <>
+        <h4 className={styles.formDivider}>{t(isOwnDeck ? 'deck_settings_page_delete_deck' : 'deck_settings_page_unfollow_deck')}</h4>
+        <div className={styles.formRow}>
+            <div className={styles.formRowTitle}>
+                <h3>{t(isOwnDeck ? 'deck_settings_page_delete_deck' : 'deck_settings_page_unfollow_deck')}</h3>
+                <h5>{t(isOwnDeck ? 'deck_settings_page_delete_deck_instruction' : 'deck_settings_page_unfollow_deck_instruction')}</h5>
+            </div>
+
+            <div className={styles.formRowController}>
+                <Button onClick={() => {
+                    modal.fire({
+                        translator: t,
+                        type: 'DANGER',
+                        confirmButtonText: t(isOwnDeck ? 'general_delete' : 'deck_settings_page_unfollow_deck'),
+                        onConfirm: () => {
+                            deleteDeck()
+                        },
+                        contentText: t(isOwnDeck ? 'deck_settings_page_delete_deck_warning' : 'deck_settings_page_unfollow_deck_instruction')
+                    })
+                }} iconRenderer={() => isOwnDeck ? <IoTrashBin /> : <IoHeartDislike />} type="DANGER">{t(isOwnDeck ? 'deck_settings_page_delete_deck' : 'deck_settings_page_unfollow_deck')}</Button>
+            </div>
+        </div></>
+
+
     const renderBackButton = useCallback(() => <Button iconRenderer={() => <IoArrowBack />} onClick={() => { router.push(`/deck/${currentDeckId}`) }}>{t('deck_settings_page_back_to_deck')}</Button>, [store.currentLocale, currentDeckId])
     const normalizedAvatarSrc = (form.deckAvatar || '').indexOf('data:') !== 0 ? ((form.deckAvatar || '').indexOf('https://') !== 0 ? '' : form.deckAvatar) : form.deckAvatar;
+
     return hasAuthenticated && <Container>
         <div className={styles.titleRow}>
             <h1>{deck?.name} - {t('deck_page_settings')}</h1>
@@ -215,27 +255,8 @@ export default function DeckPage() {
                             }} /></div>
                     </div>
                 </div>
-                <div className={styles.formRow}>
-                    <div className={styles.formRowTitle}>
-                        <h3>{t('deck_settings_page_delete_deck')}</h3>
-                        <h5>{t('deck_settings_page_delete_deck_instruction')}</h5>
-                    </div>
-
-                    <div className={styles.formRowController}>
-                        <Button onClick={() => {
-                            modal.fire({
-                                translator: t,
-                                type: 'DANGER',
-                                confirmButtonText: t('general_delete'),
-                                onConfirm: () => {
-                                    deleteDeck()
-                                },
-                                contentText: t('deck_settings_page_delete_deck_warning')
-                            })
-                        }} iconRenderer={() => <IoTrashBin />} type="DANGER">{t('deck_settings_page_delete_deck')}</Button>
-                    </div>
-                </div>
             </>}
+
 
             <h4 className={styles.formDivider}>{t('deck_settings_page_progress_section')}</h4>
             <div className={styles.formRow}>
@@ -300,6 +321,8 @@ export default function DeckPage() {
                     <div className={styles.rubyExample} ><span><ruby>祝詞<rt>のりと</rt></ruby></span>&nbsp;⇒&nbsp;祝詞&nbsp;{!form.isRubyOnly ? '✔' : '✖'}&nbsp;&nbsp;&nbsp;&nbsp;のりと&nbsp;✔</div>
                 </div>
             </div>
+
+            {renderDeleteSection()}
             <div className={styles.formBottomControlRow}>
                 {renderBackButton()}
             </div>

@@ -385,11 +385,15 @@
     },
     "deck_settings_page_delete_deck_warning": {
         "EN_US": "Are you sure to delete this Deck? All your progress and words will be lost.",
-        "ZH_CN": "您确定要删除这个单词集么？这是一个不可逆的操作。"
+        "ZH_CN": "您确定要删除这个单词集么？\n您会丢失所有的学习进度。"
     },
     "deck_settings_page_delete_deck_instruction": {
-        "EN_US": "If there are other users folloging this deck, it will be archived instead.",
-        "ZH_CN": "若尚有其他用户关注此单词集，它将会被归档而非删除。"
+        "EN_US": "If there are other users folloging this deck, it will be archived instead. You can still retrive this set by invitation code.",
+        "ZH_CN": "若尚有其他用户关注此单词集，它将会被归档而非彻底删除。您仍可通过邀请码找回此单词集。"
+    },
+    "deck_settings_page_unfollow_deck_instruction": {
+        "EN_US": "You will lose all saved progress.",
+        "ZH_CN": "您会丢失所有的学习进度。"
     },
     "deck_settings_page_unfollow_deck": {
         "EN_US": "Unfollow",

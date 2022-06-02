@@ -11,7 +11,6 @@ type CronLog = {
 const cronLog: CronLog[] = [];
 
 cron.schedule('* 15 * * * *', (now) => {
-    console.log(now);
     cronLog.unshift({
         [now.toISOString()]: "cron executed"
     })

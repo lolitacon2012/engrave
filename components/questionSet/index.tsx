@@ -131,7 +131,6 @@ export default function QuestionSet(props: Props) {
         const handleRouteChange = (path: string) => {
             if (stage !== QuestionStage.Finished) {
                 onExitBeforeFinish(() => {
-                    console.log(path)
                     setStage(QuestionStage.Finished);
                     setTimeout(() => {
                         router.push(path)

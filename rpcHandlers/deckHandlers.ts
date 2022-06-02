@@ -12,6 +12,7 @@ import { RPCError } from 'cafe-types/rpc/error';
 import { getHashedEmail } from 'cafe-utils/hash';
 import { NEW_PROGRESS_TEMPLATE } from 'cafe-constants/index';
 import { StudyProgress } from 'cafe-types/study';
+import { UserData } from 'cafe-types/userData';
 
 const MAX_WORD_SIZE = 1000;
 
@@ -67,6 +68,12 @@ const deckChecker = async (deck: Partial<Deck>, userId: string, db: Db): Promise
   }
 
   return { error: '' }
+}
+
+const getUsersInfo = async (userIds: string[], db: Db) => {
+  const users = await db.collection("users")
+    .find({ id: { "$in": userIds || [] } }).toArray();
+  return users;
 }
 
 const createDeck = async (
@@ -198,8 +205,9 @@ const getDeckByIds = async (
     const { db } = await connectToDatabase();
     const decks = await db.collection("decks")
       .find({ id: { $in: data.ids } }).toArray();
-
-    const decksWithWords = await Promise.all(decks.map(async (deck: any) => {
+    const authors = await getUsersInfo((decks || []).map(d => d.creator_id), db);
+    // Todo: support updating creator avatar on decks
+    const decksWithWords = await Promise.all(decks.map(async (deck: any, deck_index: number) => {
       const wordsToQuery: string[] = [];
       const weightMap: { [key: string]: number } = {};
       (deck.words || []).forEach((wid: string, index: number) => {
@@ -213,6 +221,9 @@ const getDeckByIds = async (
       deck.words = allWords.sort((a, b) => {
         return weightMap[a.id] - weightMap[b.id];
       });
+      // overwrite deck creator's name
+      const author = authors.find(a => a.id === deck.creator_id) || {} as any;
+      deck.creator_name = author.alias || author.name || deck.creator_name;
       return deck;
     }));
     return {
@@ -223,8 +234,6 @@ const getDeckByIds = async (
     return { error: err.toString() }
   }
 }
-
-
 
 const getDeckByInvideCode = async (
   data: { code: string }
@@ -266,7 +275,7 @@ const getDeckByInvideCode = async (
   }
 }
 
-// Delete the deck only if noone is following. Else dont delete.
+// Delete the deck only if no one is following. Else, dont delete deck and words, only stop following.
 // Also delete all related words.
 const deleteDeckById = async (
   data: DeleteDeckByIdRequestData,
@@ -278,27 +287,36 @@ const deleteDeckById = async (
     const { db } = await connectToDatabase();
     const hashedEmail = getHashedEmail(session?.user?.email || '');
 
-    // delete all words
-    await db.collection("words").deleteMany(
-      { "deck_id": id });
+    const [user] = await getUsersInfo([hashedEmail], db) as any;
 
-    // delete the deck
-    await db.collection("decks").deleteOne(
-      { "id": id },
-    )
+    // a user can only delete his own deck
+    if ((user.owningDeckIds || []).indexOf(id) < 0) {
+      return {
+        error: 'error_user_does_now_own_this_deck'
+      }
+    }
 
-    // unconnect deck from creator
+    // check followers
+    const result = await db.collection("users").find({ followingDeckIds: id }).toArray();
+    if (!result?.length) {
+      // delete words
+      await db.collection("words").deleteMany(
+        { "deck_id": id });
+
+      // delete decks 
+      await db.collection("decks").deleteOne(
+        { "id": id },
+      )
+    }
+
+    // unconnect deck from creator and clean progress
     await db.collection("users").updateOne(
       { "id": hashedEmail }, {
       "$pull": {
         owningDeckIds: id,
         progress: { id }
       }
-    }
-    )
-
-    // clean up progress
-
+    })
 
     return { error: '' }
   } catch (err: any) {

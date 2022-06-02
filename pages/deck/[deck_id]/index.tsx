@@ -397,7 +397,7 @@ export default function DeckPage() {
                 batchUpdateDeck(deck?.id);
 
             }} iconRenderer={() => <IoSave />}>{t('deck_page_exit_edit')}</Button>}
-            {!editing && <Button type={'PRIMARY'} onClick={() => {
+            {!editing && isOwnDeck && <Button type={'PRIMARY'} onClick={() => {
                 alertDeveloping(t);
             }} iconRenderer={() => <IoShare />}>{t('deck_generate_code')}</Button>}
 
