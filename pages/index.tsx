@@ -24,7 +24,7 @@ export default function Home() {
           }}>
             {t('homepage_title')}
           </h1>
-          <p className={styles.version}>pre-alpha 0.0.2</p>
+          <p className={styles.version}>pre-alpha 0.0.3</p>
           <h2 className={styles.description}>
             {t('homepage_subtitle')}
           </h2>

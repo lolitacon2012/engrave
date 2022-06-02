@@ -100,9 +100,13 @@ export default function DeckPage() {
         store.setLoading(store.isLocaleLoading || store.isUserLoading || !deck || deck.id !== currentDeckId);
     }, [deck, store.isLocaleLoading || store.isUserLoading])
 
-    const deleteDeck = () => {
-        // words need to be deleted as well.
-        alertDeveloping(t);
+    const deleteDeck = async () => {
+        await client.callRPC({
+            rpc: RPC.RPC_DELETE_DECK_BY_ID, data: {
+                id: currentDeckId
+            }
+        })
+        router.push('/home');
     }
 
     const saveChanges = useCallback(debounce(async (newForm: Partial<Form>) => {

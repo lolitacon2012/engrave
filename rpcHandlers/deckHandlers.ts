@@ -1,5 +1,5 @@
 
-import { CreateDeckRequestData, UpdateDeckRequestData } from 'cafe-types/rpc/deck';
+import { CreateDeckRequestData, DeleteDeckByIdRequestData, UpdateDeckRequestData } from 'cafe-types/rpc/deck';
 
 import { GetDeckByIdsRequestData } from 'cafe-types/rpc/deck';
 import { Deck, Word } from 'cafe-types/deck';
@@ -266,4 +266,44 @@ const getDeckByInvideCode = async (
   }
 }
 
-export { createDeck, updateDeckById, getDeckByIds, getDeckByInvideCode };
+// Delete the deck only if noone is following. Else dont delete.
+// Also delete all related words.
+const deleteDeckById = async (
+  data: DeleteDeckByIdRequestData,
+  req: NextApiRequest
+) => {
+  try {
+    const { id } = data;
+    const session = await getSession({ req });
+    const { db } = await connectToDatabase();
+    const hashedEmail = getHashedEmail(session?.user?.email || '');
+
+    // delete all words
+    await db.collection("words").deleteMany(
+      { "deck_id": id });
+
+    // delete the deck
+    await db.collection("decks").deleteOne(
+      { "id": id },
+    )
+
+    // unconnect deck from creator
+    await db.collection("users").updateOne(
+      { "id": hashedEmail }, {
+      "$pull": {
+        owningDeckIds: id,
+        progress: { id }
+      }
+    }
+    )
+
+    // clean up progress
+
+
+    return { error: '' }
+  } catch (err: any) {
+    return { error: err.toString() }
+  }
+}
+
+export { createDeck, updateDeckById, getDeckByIds, getDeckByInvideCode, deleteDeckById };

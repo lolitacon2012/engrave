@@ -46,7 +46,7 @@ const Navbar = () => {
     return <div className={classNames(styles.container, errorStyle && styles.error)}>
         <span className={styles.logo} onClick={() => {
             router.push('/')
-        }}>{store.t('global_app_name')}</span>
+        }}><span>{store.t('global_app_name')}</span><span className={styles.logo_version}>pre-alpha 0.0.3</span></span>
         <span className={classNames(styles.errorMessage, errorStyle && styles.error)}>{
             errorMessage
         }</span>
