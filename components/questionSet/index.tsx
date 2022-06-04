@@ -42,6 +42,7 @@ export default function QuestionSet(props: Props) {
     const questionType = normalizedStudySet?.questions?.[questionIndex].question_type;
     const isLearningNewWord = questionType === 'NEW_WORD';
     const isRepeating = questionType === 'REPEAT';
+    const isReviewing = questionType === 'REVIEW';
     const isLongTermReview = questionType === 'LONG_TERM_REVIEW';
     const [result, setResult] = useState(normalizedStudySet);
     const [isAnimating, setIsAnimating] = useState(true);
@@ -184,7 +185,7 @@ export default function QuestionSet(props: Props) {
             }
         } else {
             setStage(QuestionStage.Fail);
-            changeResultWordRank(isRepeating ? 0 : (isLongTermReview ? -2 : -1));
+            changeResultWordRank(isRepeating ? 0 : (isLongTermReview ? 0 : -1));
         }
     }
 
@@ -267,6 +268,10 @@ export default function QuestionSet(props: Props) {
                     changeResultWordRank(0);
                     moveToNextQuestion();
                 }}>{t('study_accident')}</Button>}
+                {isReviewing && stage === QuestionStage.Success && <Button type="SECONDARY" onClick={() => {
+                    changeResultWordRank(9999);
+                    moveToNextQuestion();
+                }}>{t('study_I_know')}</Button>}
                 {stage !== QuestionStage.Question && <Button onClick={() => {
                     moveToNextQuestion();
                 }}>{t('study_next')}</Button>}

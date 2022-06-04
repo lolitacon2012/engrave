@@ -14,6 +14,10 @@ type WordContent =
         word: string;
         meaning: string;
         customized_fields: CustomizedField[];
+        morphology?: {
+            morphology_id: string,
+            content: string[][]
+        };
     }
 
 

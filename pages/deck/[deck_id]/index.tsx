@@ -12,7 +12,7 @@ import { AutoSizer, List } from 'react-virtualized';
 import debounce from 'lodash/debounce';
 import DeckCard from 'cafe-components/deckCard';
 import { addDeckWordUpdatePool, addDeckWordInsertPool, commitDeckChange, addWordDeletePool, cleanCache } from 'cafe-utils/deckUpdatePoolUtils';
-import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare, IoHelpCircle, IoRocket, IoMegaphoneSharp, IoStar } from "react-icons/io5";
+import { IoAddCircle, IoTrashBin, IoPencil, IoSave, IoLocate, IoClipboardOutline, IoArrowBack, IoGolf, IoSettings, IoShare, IoHelpCircle, IoRocket, IoMegaphoneSharp, IoStar, IoPricetags } from "react-icons/io5";
 
 import cn from 'classnames';
 import { v4 as uuid } from 'uuid';
@@ -391,6 +391,9 @@ export default function DeckPage() {
                 setEditingWord(undefined);
                 batchUpdateDeck(deck?.id);
             }} iconRenderer={() => <IoPencil />}>{t('deck_page_edit')}</Button>}
+            {isOwnDeck && !editing && <Button type={'PRIMARY'} onClick={() => {
+                router.push(`/deck/${currentDeckId}/morphology`);
+            }} iconRenderer={() => <IoPricetags />}>{t('deck_page_morphology')}</Button>}
             {isOwnDeck && editing && <Button type={'PRIMARY'} onClick={() => {
                 setEditing(false)
                 setEditingWord(undefined);

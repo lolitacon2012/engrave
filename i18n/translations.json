@@ -96,7 +96,7 @@
         "ZH_CN": "退出登录"
     },
     "deck_page_continue_study": {
-        "EN_US": "Continue Study",
+        "EN_US": "Continue",
         "ZH_CN": "继续学习"
     },
     "deck_page_begin_study": {
@@ -118,6 +118,10 @@
     "deck_page_edit": {
         "EN_US": "Edit Deck",
         "ZH_CN": "编辑词库"
+    },
+    "deck_page_morphology": {
+        "EN_US": "Morphology",
+        "ZH_CN": "变形"
     },
     "deck_page_exit_edit": {
         "EN_US": "Save & Exit",
@@ -259,6 +263,10 @@
         "EN_US": "Forgot",
         "ZH_CN": "我忘了"
     },
+    "study_I_know": {
+        "EN_US": "Set as Learned",
+        "ZH_CN": "已牢记"
+    },
     "study_exit": {
         "EN_US": "Exit",
         "ZH_CN": "退出学习"
@@ -316,7 +324,7 @@
         "ZH_CN": "全部单词集"
     },
     "home_join_via_code": {
-        "EN_US": "Invitation Code",
+        "EN_US": "Invitation",
         "ZH_CN": "邀请码"
     },
     "home_search_code": {

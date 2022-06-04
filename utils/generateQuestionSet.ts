@@ -26,28 +26,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
     // to repeat
     const toRepeat = [...progress.level_1 || [], ...progress.level_2 || []];
     // to review
-    const toReview = [...progress.level_3 || [], ...progress.level_4 || [], ...progress.level_5 || []];
-    // for further review
-    const toRandomReview = [...progress.level_6 || [], ...progress.level_7 || []];
-    // almost there
-    const toFinalReview = [...progress.level_8 || [], ...progress.level_9 || []];
+    const toReview = [...progress.level_3 || [], ...progress.level_4 || [], ...progress.level_5 || [], ...progress.level_6 || [], ...progress.level_7 || [], ...progress.level_8 || [], ...progress.level_9 || []];
     const finished = progress.level_10 || [];
-
-    // review lesson
-    if ((toFinalReview.length > numberOfQuestionsToFill) || (((newWords.length + toRepeat.length + toReview.length + toRandomReview.length) === 0) && !!toFinalReview.length)) {
-        sampleSize(toFinalReview, numberOfQuestionsToFill).forEach(w => {
-            questionSet.push({
-                word: wordIdToWord.get(w),
-                rank_delta: 0,
-                question_type: 'REVIEW',
-                word_id: w,
-            })
-        });
-        return {
-            questions: questionSet,
-            temp_id: uuid(),
-        }
-    }
 
     //1. add in all "to Repeat".
     toRepeat.forEach(w => {
@@ -58,11 +38,12 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
             word_id: w,
         })
     });
+    console.log(`Add ${toRepeat.length} to repeat`);
 
     numberOfQuestionsToFill -= questionSet.length;
 
     // if too many words are in review state or study stage, do not learn new words.
-    const noNewWordToLearn = (toRandomReview.length + toReview.length + toFinalReview.length) >= (numberOfQuestionsToFill * 1.25);
+    const noNewWordToLearn = (toReview.length) >= (numberOfQuestionsToFill * 1.25);
 
     //2. in the rest of space, fill in 25% new words
     !noNewWordToLearn && !progress.use_random_order && newWords.slice(0, Math.floor(numberOfQuestionsToFill * 0.25)).forEach(w => {
@@ -84,6 +65,8 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
+    console.log(`Add ${noNewWordToLearn ? 0 : Math.floor(numberOfQuestionsToFill * 0.25)} new words`);
+
     //3. fill in 60% / 85% to Review
     toReview.slice(0, Math.floor(numberOfQuestionsToFill * (noNewWordToLearn ? 0.85 : 0.6))).forEach(w => {
         questionSet.push({
@@ -94,18 +77,10 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
-    //4. fill in toRandomReview when its size is over size || DEFAULT_STUDY_SET_SIZE, 15%.
-    const shouldRandomReview = toRandomReview.length >= (size);
-    shouldRandomReview && sampleSize(toRandomReview, Math.min(Math.floor(numberOfQuestionsToFill * 0.15), toRandomReview.length)).forEach(w => {
-        questionSet.push({
-            word: wordIdToWord.get(w),
-            rank_delta: 0,
-            question_type: 'REVIEW',
-            word_id: w,
-        })
-    });
+    console.log(`Add ${Math.floor(numberOfQuestionsToFill * (noNewWordToLearn ? 0.85 : 0.6))} to review`);
 
-    //5. ramdomly fill in final stage words for final space.
+    console.log(`Add ${Math.max(0, size - questionSet.length)} to random review`);
+    //4. ramdomly fill in final stage words for final space.
     sampleSize(finished, Math.max(0, size - questionSet.length)).forEach(w => {
         questionSet.push({
             word: wordIdToWord.get(w),
@@ -115,7 +90,7 @@ export const generateQuestionSet = (deck: Partial<Deck>, progress: Partial<Study
         })
     });
 
-    //6. shuffle question order;
+    //5. shuffle question order;
     const shuffled = questionSet.sort(() => Math.random() > 0.5 ? 1 : -1);
     return {
         questions: shuffled,

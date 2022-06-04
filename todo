@@ -1,4 +1,3 @@
-- p0: allow user to unfollow a deck
 - p0: allow user to share decks via invite code
 - Give warning when deleting last word, "this will reset your study progress"
 - p0 test filter out empty words
