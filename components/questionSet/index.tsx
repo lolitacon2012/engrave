@@ -177,7 +177,7 @@ export default function QuestionSet(props: Props) {
             return;
         } else if ((correctAnswers.some(a => isConsideredAsCorrect(input || '', a))) || (correctAnswers.some(a => isConsideredAsCorrect((answerInput || ''), a)))) {
             setStage(QuestionStage.Success);
-            changeResultWordRank(2);
+            changeResultWordRank(3);
             if (autoMoveOnCorrect) {
                 setTimeout(() => {
                     moveToNextQuestion();
@@ -185,7 +185,7 @@ export default function QuestionSet(props: Props) {
             }
         } else {
             setStage(QuestionStage.Fail);
-            changeResultWordRank(isRepeating ? 0 : (isLongTermReview ? 0 : -1));
+            changeResultWordRank(isRepeating ? 0 : (isLongTermReview ? -2 : -1));
         }
     }
 
