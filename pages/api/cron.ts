@@ -11,11 +11,13 @@ type CronLog = {
 const cronLog: CronLog[] = [];
 
 cron.schedule('* 15 * * * *', (now) => {
-    cronLog.unshift({
-        [now.toISOString()]: "cron executed"
-    })
-    if (cronLog.length > 100) {
-        cronLog.pop();
+    if (typeof now !== 'string') {
+        cronLog.unshift({
+            [now.toISOString()]: "cron executed"
+        })
+        if (cronLog.length > 100) {
+            cronLog.pop();
+        }
     }
 });
 
