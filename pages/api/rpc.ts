@@ -25,3 +25,11 @@ const handler = async (
 }
 
 export default withAuth(handler);
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '20mb',
+    },
+  },
+}
